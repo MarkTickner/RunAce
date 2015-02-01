@@ -1,0 +1,31 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.mtickner.runningmotivator.HomeActivity">
+
+    <item
+        android:id="@+id/menu_challenges"
+        android:orderInCategory="1"
+        android:title="@string/home_menu_challenges"
+        app:actionLayout="@layout/activity_home_challenges_count"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_about"
+        android:orderInCategory="2"
+        android:title="@string/home_menu_about"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_settings"
+        android:orderInCategory="3"
+        android:title="@string/home_menu_settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_logout"
+        android:orderInCategory="4"
+        android:title="@string/home_menu_logout"
+        app:showAsAction="never" />
+
+</menu>

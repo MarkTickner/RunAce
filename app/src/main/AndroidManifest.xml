@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.mtickner.runningmotivator">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/RunAceTheme">
+        <service
+            android:name=".ChallengeService"
+            android:enabled="true" />
+
+        <receiver android:name=".ChallengeReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/settings_activity_title" />
+        <activity
+            android:name=".RegisterActivity"
+            android:label="@string/register_activity_title"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/login_activity_title"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".HomeActivity"
+            android:label="" />
+        <activity
+            android:name=".ChallengeListActivity"
+            android:label="@string/challenge_list_activity_title"
+            android:parentActivityName=".HomeActivity" />
+        <activity
+            android:name=".ChallengeViewActivity"
+            android:label="@string/challenge_view_activity_title"
+            android:parentActivityName=".ChallengeListActivity" />
+        <activity
+            android:name=".ChallengeFriendActivity"
+            android:label="@string/challenge_friend_activity_title"
+            android:parentActivityName=".RunListActivity" />
+        <activity
+            android:name=".RunActivity"
+            android:label="@string/run_activity_title"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RunCompleteActivity"
+            android:label="@string/run_complete_activity_title"
+            android:parentActivityName=".HomeActivity" />
+        <activity
+            android:name=".RunListActivity"
+            android:label="@string/run_list_activity_title"
+            android:parentActivityName=".HomeActivity" />
+        <activity
+            android:name=".FriendListActivity"
+            android:label="@string/friend_list_activity_title"
+            android:parentActivityName=".HomeActivity" />
+        <activity
+            android:name=".ProfileActivity"
+            android:label="@string/profile_activity_title"
+            android:parentActivityName=".HomeActivity" />
+        <activity
+            android:name=".ProfileFriendActivity"
+            android:label="@string/title_activity_profile_friend"
+            android:parentActivityName=".FriendListActivity" />
+        <activity
+            android:name=".RunChallengeCompleteActivity"
+            android:label="@string/run_challenge_complete_activity_title"
+            android:parentActivityName=".ChallengeViewActivity" />
+        <activity
+            android:name=".FriendListPickerActivity"
+            android:label="@string/friend_list_picker_activity_title" />
+
+    </application>
+
+</manifest>

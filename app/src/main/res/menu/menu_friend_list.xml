@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.mtickner.runningmotivator.FriendListActivity">
+
+    <item
+        android:id="@+id/menu_add_friend"
+        android:checkable="true"
+        android:icon="@drawable/ic_action_add_person"
+        android:orderInCategory="1"
+        android:title="@string/friend_list_menu_add_friend"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_include_pending"
+        android:checkable="true"
+        android:orderInCategory="2"
+        android:title="@string/friend_list_menu_include_pending_requests"
+        app:showAsAction="never" />
+
+</menu>

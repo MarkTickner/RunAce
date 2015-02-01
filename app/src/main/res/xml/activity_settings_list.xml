@@ -1,0 +1,38 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/settings_activity_general_subheading">
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/settings_activity_general_distance_unit_titles"
+            android:entryValues="@array/settings_activity_general_distance_unit_values"
+            android:key="com.mtickner.runningmotivator.distance_unit"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/settings_activity_general_distance_unit_title" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="com.mtickner.runningmotivator.enable_notifications"
+            android:summary="@string/settings_activity_general_enable_notifications_summary"
+            android:title="@string/settings_activity_general_enable_notifications_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_activity_developer_subheading">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="com.mtickner.runningmotivator.enable_location_logging"
+            android:summary="@string/settings_activity_developer_enable_location_logging_summary"
+            android:title="@string/settings_activity_developer_enable_location_logging_title" />
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="com.mtickner.runningmotivator.enable_simulated_running"
+            android:summary="@string/settings_activity_developer_enable_simulated_running_summary"
+            android:title="@string/settings_activity_developer_enable_simulated_running_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
