@@ -26,6 +26,8 @@ public class ProfileFriendActivity extends ActionBarActivity {
         // Display friend details
         ((TextView) findViewById(R.id.name)).setText(friend.GetUser().GetName().toUpperCase());
         ((TextView) findViewById(R.id.date_friends_since)).setText("Friends since: " + MiscHelper.FormatDateForDisplay(friend.GetStatusDate()));
+
+
     }
 
     // Initialise the contents of the Activity's standard options menu
