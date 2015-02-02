@@ -84,6 +84,16 @@ public class MiscHelper {
         return (paceInMinutesPerKilometre / 0.621371192);
     }
 
+    // Method that converts density-independent pixels to pixels
+    public static int ConvertDpToPx(Context context, int dp) {
+        // Source: http://developer.android.com/guide/practices/screens_support.html#DensityConsiderations
+        // Get the screen's density scale
+        final float scale = context.getResources().getDisplayMetrics().density;
+
+        // Convert the dps to pixels, based on density scale
+        return ((int) (dp * scale + 0.5f));
+    }
+
 
     // Methods that are used for challenge notifications
     // Method that starts the challenges service

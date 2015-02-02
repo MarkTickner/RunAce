@@ -2199,10 +2199,10 @@ containing a value of this type.
         public static final int Base_V14_Theme_AppCompat_Dialog=0x7f0e00e9;
         public static final int Base_V14_Theme_AppCompat_Light=0x7f0e00ea;
         public static final int Base_V14_Theme_AppCompat_Light_Dialog=0x7f0e00eb;
-        public static final int Base_V21_Theme_AppCompat=0x7f0e00f2;
-        public static final int Base_V21_Theme_AppCompat_Dialog=0x7f0e00f3;
-        public static final int Base_V21_Theme_AppCompat_Light=0x7f0e00f4;
-        public static final int Base_V21_Theme_AppCompat_Light_Dialog=0x7f0e00f5;
+        public static final int Base_V21_Theme_AppCompat=0x7f0e00f0;
+        public static final int Base_V21_Theme_AppCompat_Dialog=0x7f0e00f1;
+        public static final int Base_V21_Theme_AppCompat_Light=0x7f0e00f2;
+        public static final int Base_V21_Theme_AppCompat_Light_Dialog=0x7f0e00f3;
         public static final int Base_V7_Theme_AppCompat=0x7f0e0038;
         public static final int Base_V7_Theme_AppCompat_Dialog=0x7f0e0039;
         public static final int Base_V7_Theme_AppCompat_Light=0x7f0e003a;
@@ -2261,7 +2261,7 @@ containing a value of this type.
         public static final int RtlOverlay_Widget_AppCompat_Search_DropDown_Query=0x7f0e006e;
         public static final int RtlOverlay_Widget_AppCompat_Search_DropDown_Text=0x7f0e006f;
         public static final int RtlOverlay_Widget_AppCompat_SearchView_MagIcon=0x7f0e0070;
-        /**  Base application theme 
+        /**  Base application theme for API 14+ 
          */
         public static final int RunAceTheme=0x7f0e00ed;
         /**  Button style 
@@ -2329,7 +2329,6 @@ containing a value of this type.
         public static final int ThemeOverlay_AppCompat_Dark=0x7f0e00aa;
         public static final int ThemeOverlay_AppCompat_Dark_ActionBar=0x7f0e00ab;
         public static final int ThemeOverlay_AppCompat_Light=0x7f0e00ac;
-        public static final int ThemeOverlay_MyApp_ActionBar=0x7f0e00f0;
         public static final int WalletFragmentDefaultButtonTextAppearance=0x7f0e00ad;
         public static final int WalletFragmentDefaultDetailsHeaderTextAppearance=0x7f0e00ae;
         public static final int WalletFragmentDefaultDetailsTextAppearance=0x7f0e00af;
@@ -2385,7 +2384,6 @@ containing a value of this type.
         public static final int Widget_AppCompat_Spinner_DropDown_ActionBar=0x7f0e00e1;
         public static final int Widget_AppCompat_Toolbar=0x7f0e00e2;
         public static final int Widget_AppCompat_Toolbar_Button_Navigation=0x7f0e00e3;
-        public static final int Widget_MyApp_ActionBar=0x7f0e00f1;
     }
     public static final class xml {
         public static final int activity_settings_list=0x7f050000;

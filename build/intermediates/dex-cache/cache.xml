@@ -23,18 +23,18 @@
         <dex dex="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/build/intermediates/pre-dexed/debug/classes-16923ea5ded1d8effb6b5e0b48a482aa8d6f9e39.jar" />
     </item>
     <item
-        jar="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/libs/gson-2.3.1.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
-        <dex dex="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/build/intermediates/pre-dexed/debug/gson-2.3.1-f73da7b2b84751a5a48f204607f2bdf52a964493.jar" />
-    </item>
-    <item
         jar="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
         jumboMode="false"
         revision="21.1.1"
         sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
         <dex dex="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-708115f05f6812b5906954b363c70bc01d1f4a3b.jar" />
+    </item>
+    <item
+        jar="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/libs/gson-2.3.1.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/build/intermediates/pre-dexed/debug/gson-2.3.1-f73da7b2b84751a5a48f204607f2bdf52a964493.jar" />
     </item>
     <item
         jar="/Applications/Eclipse/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"

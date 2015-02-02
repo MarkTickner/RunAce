@@ -1,12 +1,7 @@
 <resources>
 
-    <!--
-        Base application theme for API 14+. This theme completely replaces AppBaseTheme
-        from BOTH res/values/styles.xml and res/values-v11/styles.xml on API 14+ devices.
-    -->
-
     <style name="RunAceTheme" parent="RunAceTheme.Base">
-        <!-- Base application theme -->
+        <!-- Base application theme for API 14+ -->
     </style>
 
     <style name="RunAceTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -18,7 +13,7 @@
         <item name="colorPrimaryDark">@color/runace_blue_dark</item>
 
         <!-- Accent colour used in widgets -->
-        <item name="colorAccent">@color/runace_red_primary</item>
+        <item name="colorAccent">@color/runace_grey_primary</item>
 
         <!-- TextView style -->
         <item name="android:textViewStyle">@style/TextViewStyle</item>
@@ -34,19 +29,6 @@
 
     <style name="ButtonStyle" parent="android:Widget.Button">
         <item name="android:background">@color/runace_blue_dark</item>
-    </style>
-
-
-
-
-    <style name="Widget.MyApp.ActionBar" parent="Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/runace_green_dark</item>
-        <item name="theme">@style/ThemeOverlay.MyApp.ActionBar</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-    </style>
-
-    <style name="ThemeOverlay.MyApp.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
-        <item name="android:textColorPrimary">@color/white</item>
     </style>
 
 </resources>
