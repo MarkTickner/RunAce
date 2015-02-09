@@ -349,4 +349,47 @@ public class JsonHelper {
         // Return true if the challenge was saved or false if error
         return challengeSaved;
     }
+
+
+    // Method that returns an array list of badges
+    public static ArrayList<Badge> GetBadges(String jsonResult) {
+        ArrayList<Badge> badgeArrayList = null;
+
+        // Check server connection was successful
+        if (jsonResult != null) {
+            // Server connection was successful
+            try {
+                // Instantiate array list
+                badgeArrayList = new ArrayList<>();
+
+                // Create JSON object from server response
+                JSONObject resultObject = new JSONObject(jsonResult);
+
+                // Get 'OutputType'
+                if (resultObject.getString("OutputType").equals("Success")) {
+                    // Badges retrieved successfully, no error in PHP
+                    // Get 'Details' array
+                    JSONArray resultDetailsArray = resultObject.getJSONArray("Details");
+
+                    // Add badge objects to array list
+                    for (int i = 0; i < resultDetailsArray.length(); i++) {
+                        JSONObject badgeDetailsObject = resultDetailsArray.getJSONObject(i);
+
+                        Badge badge = new Badge(
+                                (badgeDetailsObject.getString("TYPE").equals("R")) ? Badge.Type.RUN : (badgeDetailsObject.getString("TYPE").equals("C")) ? Badge.Type.CHALLENGE : null,
+                                badgeDetailsObject.getInt("LEVEL"),
+                                MiscHelper.FormatDateFromDatabase(badgeDetailsObject.getString("DATE_AWARDED"))
+                        );
+
+                        badgeArrayList.add(badge);
+                    }
+                }
+            } catch (Exception e) {
+                // Catches exceptions including JSONException when creating JSON objects
+                e.printStackTrace();
+            }
+        }
+
+        return badgeArrayList;
+    }
 }

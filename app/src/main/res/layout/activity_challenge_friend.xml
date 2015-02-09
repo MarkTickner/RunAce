@@ -10,13 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.mtickner.runningmotivator.ChallengeFriendActivity">
 
-    <!--<TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="UNDER CONSTRUCTION"
-        android:textAppearance="?android:attr/textAppearanceLarge" />-->
-
     <LinearLayout
         android:id="@+id/time_container"
         android:layout_width="match_parent"
@@ -97,7 +90,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="ChooseFriend"
-        android:text="@string/challenge_friend_activity_choose_friend_button_text" />
+        android:text="@string/challenge_friend_activity_choose_friend_button_text"
+        android:textAllCaps="true" />
 
     <LinearLayout
         android:id="@+id/friend_container"
@@ -150,6 +144,7 @@
             android:layout_height="wrap_content"
             android:onClick="SendChallenge"
             android:text="@string/challenge_friend_activity_button_text_send_challenge"
+            android:textAllCaps="true"
             android:textSize="25sp" />
 
         <TextView

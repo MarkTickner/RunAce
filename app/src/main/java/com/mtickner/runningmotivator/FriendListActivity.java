@@ -276,6 +276,7 @@ public class FriendListActivity extends ActionBarActivity {
                                     swipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
                                 }
                             });
+                            //todo crashes
                             listView.addHeaderView(MiscHelper.CreateListViewHeader(FriendListActivity.this, getString(R.string.friend_list_activity_header)), null, false);
 
                             firstDisplay = false;

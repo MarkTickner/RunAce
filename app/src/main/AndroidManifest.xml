@@ -84,7 +84,7 @@
             android:parentActivityName=".HomeActivity" />
         <activity
             android:name=".ProfileFriendActivity"
-            android:label="@string/title_activity_profile_friend"
+            android:label="@string/profile_friend_activity_title"
             android:parentActivityName=".FriendListActivity" />
         <activity
             android:name=".RunChallengeCompleteActivity"

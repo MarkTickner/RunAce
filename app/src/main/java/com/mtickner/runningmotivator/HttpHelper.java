@@ -287,4 +287,28 @@ public class HttpHelper {
             return DoPost(urlPrefix + "challenge-save.php", postData);
         }
     }
+
+
+    // Asynchronous inner class that returns a user's badges
+    public static class GetBadges extends AsyncTask<Void, Void, String> {
+
+        int userId;
+
+        // Constructor to instantiate object
+        public GetBadges(int userId) {
+            this.userId = userId;
+        }
+
+        // Method which executes the background task
+        @Override
+        protected String doInBackground(Void... params) {
+            // Create POST data
+            ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>() {{
+                add(new BasicNameValuePair("requestFromApplication", "true"));
+                add(new BasicNameValuePair("userId", Integer.toString(userId)));
+            }};
+
+            return DoPost(urlPrefix + "badges-get.php", postData);
+        }
+    }
 }

@@ -21,15 +21,13 @@ public class RunChallengeCompleteActivity extends ActionBarActivity {
     private Run run;
     private Challenge challenge;
     private int challengeComplete;
+    private boolean challengeSuccess;
 
     // Called when the activity is first created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_run_challenge_complete);
-
-        // Display progress dialog to user
-        progressHandler.postDelayed(progressRunnable, 500);
 
         String distanceUnit = Preferences.GetSettingDistanceUnit(this);
         Intent intent = getIntent();
@@ -79,7 +77,6 @@ public class RunChallengeCompleteActivity extends ActionBarActivity {
         SetDistanceUnits(distanceUnit);
 
         // Display correct message
-        boolean challengeSuccess;
         if (challengeComplete == 1) {
             challengeSuccess = true;
 
@@ -91,6 +88,32 @@ public class RunChallengeCompleteActivity extends ActionBarActivity {
             // Hide success layout
             findViewById(R.id.challenge_success_layout).setVisibility(View.GONE);
         }
+    }
+
+    // Called whenever an item in the options menu is selected
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // Respond to the action bar up button
+                GoBackToChallenge();
+
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    // Called when the activity has detected the user's press of the back key
+    @Override
+    public void onBackPressed() {
+        GoBackToChallenge();
+    }
+
+    // Method that is called when the save run button is pressed
+    public void SaveRun(View view) {
+        // Display progress dialog to user
+        progressHandler.postDelayed(progressRunnable, 500);
 
         // Save run and mark challenge as complete
         new HttpHelper.SaveRun((Preferences.GetLoggedInUser(RunChallengeCompleteActivity.this)).GetId(), run.GetDistanceTotal(), run.GetTotalTime(), challenge.GetId(), challengeSuccess) {
@@ -108,6 +131,10 @@ public class RunChallengeCompleteActivity extends ActionBarActivity {
                     // Run saved successfully
                     // Display success toast to user
                     Toast.makeText(RunChallengeCompleteActivity.this, getString(R.string.run_complete_activity_saving_run_saved_toast), Toast.LENGTH_SHORT).show();
+
+                    // Remove the save run button and show challenge friend button
+                    (findViewById(R.id.save_run_button)).setVisibility(View.GONE);
+                    (findViewById(R.id.challenge_friend_button)).setVisibility(View.VISIBLE);
                 } else {
                     // Error saving run
                     // Display error retry dialog to user
@@ -130,26 +157,6 @@ public class RunChallengeCompleteActivity extends ActionBarActivity {
                 }
             }
         }.execute();
-    }
-
-    // Called whenever an item in the options menu is selected
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // Respond to the action bar up button
-                GoBackToChallenge();
-
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    // Called when the activity has detected the user's press of the back key
-    @Override
-    public void onBackPressed() {
-        GoBackToChallenge();
     }
 
     // Method that is called when the challenge friend button is pressed

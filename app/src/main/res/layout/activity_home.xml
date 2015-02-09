@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:onClick="GoToProfile"
         android:text="@string/home_activity_profile_button_text"
+        android:textAllCaps="true"
         android:textSize="25sp" />
 
     <Button
@@ -32,6 +33,7 @@
         android:layout_height="wrap_content"
         android:onClick="GoToFriendsList"
         android:text="@string/home_activity_friends_button_text"
+        android:textAllCaps="true"
         android:textSize="25sp" />
 
     <Button
@@ -40,6 +42,7 @@
         android:layout_height="wrap_content"
         android:onClick="GoToRunList"
         android:text="@string/home_activity_run_history_button_text"
+        android:textAllCaps="true"
         android:textSize="25sp" />
 
     <Button
@@ -48,6 +51,7 @@
         android:layout_height="wrap_content"
         android:onClick="StartRun"
         android:text="@string/home_activity_start_button_text"
+        android:textAllCaps="true"
         android:textSize="55sp" />
 
 </LinearLayout>

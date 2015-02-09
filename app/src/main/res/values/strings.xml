@@ -2,7 +2,8 @@
 <resources>
 
     <string name="app_name">RunAce</string>
-    <string name="main_activity_welcome_text">Welcome to RunAce!</string>
+
+    <string name="main_activity_welcome_text">Welcome to RunAce</string>
     <string name="main_activity_welcome_subtext">You are one step away from increasing your running motivation!</string>
     <string name="main_activity_image_description">RunAce trainers logo</string>
     <string name="main_activity_register_button_text">Register</string>
@@ -54,6 +55,7 @@
     <string name="home_activity_friends_button_text">Friends</string>
     <string name="home_activity_run_history_button_text">Run History</string>
     <string name="home_activity_start_button_text">Start Running</string>
+    <string name="home_activity_about_dialog_version_text">" (Build: "</string>
     <string name="home_activity_about_dialog_text">Created by Mark Tickner\n\nSubmitted in partial fulfilment of the University of Greenwich BSc (Hons) Computer Science undergraduate degree programme COMP1682.</string>
     <string name="home_activity_about_dialog_close_button_text">Close</string>
     <string name="home_activity_user_logged_out_toast">You are now logged out</string>
@@ -105,13 +107,13 @@
     <string name="run_activity_run_complete_activity_pace_distance_unit_miles_placeholder">min/m</string>
 
 
-
     <string name="run_activity_run_complete_activity_pace_distance_placeholder">-.--</string>
 
 
     <string name="run_activity_run_complete_activity_distance_placeholder">0.00</string>
     <string name="run_complete_activity_title">Run Results</string>
-    <string name="run_complete_activity_challenge_friend_button_text">Send as Challenge</string>
+    <string name="run_complete_activity_save_run_button_text">Save Run</string>
+    <string name="run_complete_activity_challenge_friend_button_text">Send Challenge</string>
     <string name="run_complete_activity_saving_run_dialog_text">Saving run</string>
     <string name="run_complete_activity_saving_run_saved_toast">Run saved</string>
     <string name="run_complete_activity_saving_run_error_text">There was an error while saving your run. Check your internet connection and retry.</string>
@@ -142,6 +144,7 @@
     <string name="profile_activity_title">Profile</string>
     <string name="friend_list_picker_activity_title">Choose Friend</string>
 
-    <string name="title_activity_profile_friend">Profile</string>
+    <string name="profile_friend_activity_title">Profile</string>
+    <string name="profile_friend_activity_badges_heading">BADGES</string>
 
 </resources>

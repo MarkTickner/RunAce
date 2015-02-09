@@ -235,6 +235,7 @@
         android:layout_height="wrap_content"
         android:onClick="AcceptChallenge"
         android:text="@string/challenge_view_activity_accept_button_text"
+        android:textAllCaps="true"
         android:textSize="30sp" />
 
 </LinearLayout>

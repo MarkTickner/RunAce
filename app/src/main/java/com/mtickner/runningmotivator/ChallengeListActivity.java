@@ -197,6 +197,7 @@ public class ChallengeListActivity extends ActionBarActivity {
                                     swipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
                                 }
                             });
+                            //todo crashes
                             listView.addHeaderView(MiscHelper.CreateListViewHeader(ChallengeListActivity.this, getString(R.string.challenge_list_activity_header)), null, false);
 
                             firstDisplay = false;

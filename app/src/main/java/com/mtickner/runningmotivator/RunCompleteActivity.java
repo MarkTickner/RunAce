@@ -25,9 +25,6 @@ public class RunCompleteActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_run_complete);
 
-        // Display progress dialog to user
-        progressHandler.postDelayed(progressRunnable, 500);
-
         String distanceUnit = Preferences.GetSettingDistanceUnit(this);
         Intent intent = getIntent();
         run = new Gson().fromJson(intent.getStringExtra(Run.RUN_GSON), Run.class);
@@ -53,42 +50,6 @@ public class RunCompleteActivity extends ActionBarActivity {
         }
 
         SetDistanceUnits(distanceUnit);
-
-        // Save run
-        new HttpHelper.SaveRun((Preferences.GetLoggedInUser(RunCompleteActivity.this)).GetId(), run.GetDistanceTotal(), run.GetTotalTime(), 0, false) {
-            // Called after the background task finishes
-            @Override
-            protected void onPostExecute(String jsonResult) {
-                // Dismiss progress dialog
-                progressHandler.removeCallbacks(progressRunnable);
-                if (savingRunProgressDialog != null) {
-                    savingRunProgressDialog.dismiss();
-                }
-
-                // Check server connection was successful
-                if (JsonHelper.GetRun(jsonResult) != null) {
-                    // Run saved successfully
-                    // Display success toast to user
-                    Toast.makeText(RunCompleteActivity.this, getString(R.string.run_complete_activity_saving_run_saved_toast), Toast.LENGTH_SHORT).show();
-                } else {
-                    // Error saving run
-                    // Display error retry dialog to user
-                    new AlertDialog.Builder(RunCompleteActivity.this)
-                            .setMessage(getString(R.string.run_complete_activity_saving_run_error_text))
-                            .setPositiveButton(getString(R.string.run_complete_activity_saving_run_error_retry_button_text), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // Try saving again
-                                    Intent intent = new Intent(RunCompleteActivity.this, RunCompleteActivity.class);
-                                    intent.putExtra(Run.RUN_GSON, new Gson().toJson(run));
-                                    startActivity(intent);
-
-                                    finish();
-                                }
-                            })
-                            .setNegativeButton(getString(R.string.run_complete_activity_saving_run_error_cancel_button_text), null).show();
-                }
-            }
-        }.execute();
     }
 
     // Called whenever an item in the options menu is selected
@@ -111,6 +72,52 @@ public class RunCompleteActivity extends ActionBarActivity {
     public void onBackPressed() {
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
+    }
+
+    // Method that is called when the save run button is pressed
+    public void SaveRun(View view) {
+        // Display progress dialog to user
+        progressHandler.postDelayed(progressRunnable, 500);
+
+        // Save run
+        new HttpHelper.SaveRun((Preferences.GetLoggedInUser(RunCompleteActivity.this)).GetId(), run.GetDistanceTotal(), run.GetTotalTime(), 0, false) {
+            // Called after the background task finishes
+            @Override
+            protected void onPostExecute(String jsonResult) {
+                // Dismiss progress dialog
+                progressHandler.removeCallbacks(progressRunnable);
+                if (savingRunProgressDialog != null) {
+                    savingRunProgressDialog.dismiss();
+                }
+
+                // Check server connection was successful
+                if (JsonHelper.GetRun(jsonResult) != null) {
+                    // Run saved successfully
+                    // Display success toast to user
+                    Toast.makeText(RunCompleteActivity.this, getString(R.string.run_complete_activity_saving_run_saved_toast), Toast.LENGTH_SHORT).show();
+
+                    // Remove the save run button and show challenge friend button
+                    (findViewById(R.id.save_run_button)).setVisibility(View.GONE);
+                    (findViewById(R.id.challenge_friend_button)).setVisibility(View.VISIBLE);
+                } else {
+                    // Error saving run
+                    // Display error retry dialog to user
+                    new AlertDialog.Builder(RunCompleteActivity.this)
+                            .setMessage(getString(R.string.run_complete_activity_saving_run_error_text))
+                            .setPositiveButton(getString(R.string.run_complete_activity_saving_run_error_retry_button_text), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Try saving again
+                                    Intent intent = new Intent(RunCompleteActivity.this, RunCompleteActivity.class);
+                                    intent.putExtra(Run.RUN_GSON, new Gson().toJson(run));
+                                    startActivity(intent);
+
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.run_complete_activity_saving_run_error_cancel_button_text), null).show();
+                }
+            }
+        }.execute();
     }
 
     // Method that is called when the challenge friend button is pressed

@@ -2,6 +2,8 @@ package com.mtickner.runningmotivator;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -26,6 +28,9 @@ public class HomeActivity extends ActionBarActivity {
 
         // Start the challenges service
         MiscHelper.StartChallengeService(HomeActivity.this);
+
+        // Set profile button text to user's name
+        ((Button) findViewById(R.id.profile_button)).setText(Preferences.GetLoggedInUser(this).GetName());
     }
 
     // Called when the activity starts interacting with the user
@@ -91,8 +96,17 @@ public class HomeActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_about:
+                String versionDetails = "";
+                try {
+                    // Source: http://envyandroid.com/archives/94/get-android-versioncode-and-versionname
+                    PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                    versionDetails = " " + packageInfo.versionName + getString(R.string.home_activity_about_dialog_version_text) + packageInfo.versionCode + ")";
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+
                 new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.app_name))
+                        .setTitle(getString(R.string.app_name) + versionDetails)
                         .setMessage(getString(R.string.home_activity_about_dialog_text))
                         .setPositiveButton(getString(R.string.home_activity_about_dialog_close_button_text), null).show();
 

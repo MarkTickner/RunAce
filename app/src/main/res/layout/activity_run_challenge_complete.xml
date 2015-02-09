@@ -301,11 +301,22 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/save_run_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="SaveRun"
+        android:text="@string/run_complete_activity_save_run_button_text"
+        android:textAllCaps="true"
+        android:textSize="30sp" />
+
+    <Button
         android:id="@+id/challenge_friend_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="ChallengeFriend"
         android:text="@string/run_complete_activity_challenge_friend_button_text"
-        android:textSize="30sp" />
+        android:textAllCaps="true"
+        android:textSize="30sp"
+        android:visibility="gone" />
 
 </LinearLayout>

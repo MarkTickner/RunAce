@@ -41,6 +41,7 @@
         android:layout_height="wrap_content"
         android:onClick="GoToRegister"
         android:text="@string/main_activity_register_button_text"
+        android:textAllCaps="true"
         android:textSize="20sp" />
 
     <Button
@@ -49,6 +50,7 @@
         android:layout_height="wrap_content"
         android:onClick="GoToLogin"
         android:text="@string/main_activity_login_button_text"
+        android:textAllCaps="true"
         android:textSize="20sp" />
 
     <TextView

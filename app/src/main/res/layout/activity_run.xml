@@ -195,6 +195,7 @@
         android:layout_height="wrap_content"
         android:onClick="StopRun"
         android:text="@string/run_activity_stop_running_button_text"
+        android:textAllCaps="true"
         android:textSize="30sp" />
 
 </LinearLayout>

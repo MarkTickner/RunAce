@@ -171,6 +171,7 @@ public class RunListActivity extends ActionBarActivity {
                                 swipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
                             }
                         });
+                        //todo crashes
                         listView.addHeaderView(MiscHelper.CreateListViewHeader(RunListActivity.this, getString(R.string.run_list_activity_header)), null, false);
 
                         firstDisplay = false;
