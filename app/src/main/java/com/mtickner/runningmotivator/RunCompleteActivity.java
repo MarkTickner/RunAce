@@ -7,12 +7,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 public class RunCompleteActivity extends ActionBarActivity {
 
@@ -96,6 +100,17 @@ public class RunCompleteActivity extends ActionBarActivity {
                     // Display success toast to user
                     Toast.makeText(RunCompleteActivity.this, getString(R.string.run_complete_activity_saving_run_saved_toast), Toast.LENGTH_SHORT).show();
 
+                    // Get newly awarded badges
+                    ArrayList<Badge> awardedBadgeArrayList = JsonHelper.GetNewlyAwardedBadges(jsonResult);
+                    if (awardedBadgeArrayList.size() > 0) {
+                        // Loop over every newly awarded badge
+                        //todo why challenges first, should be runs
+                        for (int i = 0; i < awardedBadgeArrayList.size(); i++) {
+                            // Display dialog for each newly awarded badge
+                            AwardBadge(awardedBadgeArrayList.get(i));
+                        }
+                    }
+
                     // Remove the save run button and show challenge friend button
                     (findViewById(R.id.save_run_button)).setVisibility(View.GONE);
                     (findViewById(R.id.challenge_friend_button)).setVisibility(View.VISIBLE);
@@ -142,6 +157,37 @@ public class RunCompleteActivity extends ActionBarActivity {
 
         // Output distance preferred unit
         ((TextView) findViewById(R.id.distance_unit)).setText(distanceUnit);
+    }
+
+    // Method that displays a dialog for the specified badge
+    public void AwardBadge(Badge badge) {
+        // Get award badge layout
+        View dialogAwardBadgeLayout = (LayoutInflater.from(this)).inflate(R.layout.dialog_badge_award, null);
+
+        // Set badge image
+        LinearLayout badgeLayout = (LinearLayout) dialogAwardBadgeLayout.findViewById(R.id.badgeLayout);
+        badgeLayout.setBackground(getResources().getDrawable(R.drawable.bg_badge_red));//todo
+
+        // Output badge level
+        TextView levelTextView = (TextView) dialogAwardBadgeLayout.findViewById(R.id.levelTextView);
+        levelTextView.setText(Integer.toString(badge.GetLevel()));
+
+        // Output badge type
+        TextView typeTextView = (TextView) dialogAwardBadgeLayout.findViewById(R.id.typeTextView);
+        if (badge.GetLevel() == 1) {
+            // Single badge type
+            typeTextView.setText(badge.GetType().toString());
+        } else {
+            // Plural badge type
+            typeTextView.setText(badge.GetType() + "S");
+        }
+
+        // Display dialog box for newly awarded badge
+        new AlertDialog.Builder(this)
+                .setTitle("Congratulations!")
+                .setMessage("You have been awarded a badge")
+                .setView(dialogAwardBadgeLayout)
+                .setPositiveButton("Close", null).show();
     }
 
     // Display a progress dialog after a 500ms delay, so it does not show if there is a quick connection. Source: http://stackoverflow.com/a/10947069/1164058

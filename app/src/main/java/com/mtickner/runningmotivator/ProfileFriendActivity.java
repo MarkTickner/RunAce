@@ -7,6 +7,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -17,11 +18,9 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-//todo
 public class ProfileFriendActivity extends ActionBarActivity {
 
     private ArrayList<Badge> badgeArrayList = new ArrayList<>();
-
 
     // Called when the activity is first created
     @Override
@@ -31,8 +30,12 @@ public class ProfileFriendActivity extends ActionBarActivity {
         // Display loading layout
         setContentView(R.layout.activity_loading);
 
-        //todo
-        CreateBadgesTable();
+        // Get friend
+        Intent intent = getIntent();
+        Friend friend = new Gson().fromJson(intent.getStringExtra(Friend.FRIEND_GSON), Friend.class);
+
+        // Create and output table of user's badges
+        CreateBadgesTable(friend);
     }
 
     // Initialise the contents of the Activity's standard options menu
@@ -49,7 +52,7 @@ public class ProfileFriendActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_unfriend:
-                //todo
+                //todo unfriend
                 Toast.makeText(this, "Are you sure you want to unfriend [name], etc", Toast.LENGTH_SHORT).show();
 
                 return true;
@@ -58,9 +61,10 @@ public class ProfileFriendActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //todo Method that creates a table of badges
-    private void CreateBadgesTable() {
-        // Get badges todo id should be of friend not me
+    // Method that creates a table of badges
+    private void CreateBadgesTable(final Friend friend) {
+        // Get badges
+        //new HttpHelper.GetBadges(friend.GetUser().GetId()) { todo id should be of friend not me
         new HttpHelper.GetBadges((Preferences.GetLoggedInUser(ProfileFriendActivity.this)).GetId()) {
             // Called after the background task finishes
             @Override
@@ -73,72 +77,103 @@ public class ProfileFriendActivity extends ActionBarActivity {
                     // Set main layout
                     setContentView(R.layout.activity_profile_friend);
 
-                    // Get friend
-                    Intent intent = getIntent();
-                    Friend friend = new Gson().fromJson(intent.getStringExtra(Friend.FRIEND_GSON), Friend.class);
-
                     // Display friend details
                     ((TextView) findViewById(R.id.name)).setText(friend.GetUser().GetName().toUpperCase());
                     ((TextView) findViewById(R.id.date_friends_since)).setText("Friends since: " + MiscHelper.FormatDateForDisplay(friend.GetStatusDate()));
 
-                    //
-                    TableLayout tableLayout = new TableLayout(ProfileFriendActivity.this);
-                    tableLayout.setStretchAllColumns(true);
+                    // Badges container linear layout parameters (for its child elements)
+                    LinearLayout.LayoutParams badgesContainerLayoutParameters = new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-                    LinearLayout.LayoutParams tableLayoutParams = new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    // Check if friend has any badges
+                    if (badgeArrayList.size() > 0) {
+                        // User has badges
+                        // Badges table layout
+                        TableLayout badgesTableLayout = new TableLayout(ProfileFriendActivity.this);
+                        badgesTableLayout.setStretchAllColumns(true);
 
-                    TableLayout.LayoutParams tableRowParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
-                    tableRowParams.setMargins(0, 0, 0, MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, 15));
+                        // Badges table layout parameters (for its child elements)
+                        TableLayout.LayoutParams badgesTableLayoutParams = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+                        badgesTableLayoutParams.setMargins(0, 0, 0, MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, 15));
 
-                    TableRow.LayoutParams badgeLayoutParams = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
-                    badgeLayoutParams.setMargins(MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, 15), 0, MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, 15), 0);
-                    badgeLayoutParams.gravity = Gravity.CENTER_VERTICAL;
+                        // Badges table row layout parameters (for its child elements)
+                        TableRow.LayoutParams badgesTableRowLayoutParams = new TableRow.LayoutParams(MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, 75), MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, 75));
+                        badgesTableRowLayoutParams.setMargins(MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, 15), 0, MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, 15), 0);
+                        badgesTableRowLayoutParams.gravity = Gravity.CENTER_VERTICAL;
 
-                    LinearLayout.LayoutParams levelTextViewLayoutParams = new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    levelTextViewLayoutParams.setMargins(0, MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, -5), 0, 0);
+                        // Badge layout parameters (for the text view child elements)
+                        LinearLayout.LayoutParams badgeLayoutTextViewLayoutParams = new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                        badgeLayoutTextViewLayoutParams.setMargins(0, MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, -5), 0, 0);
 
-                    LinearLayout.LayoutParams typeTextViewLayoutParams = new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    typeTextViewLayoutParams.setMargins(0, MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, -10), 0, 0);
+                        // Loop badges array list, with 3 badges per row
+                        for (int rowNo = 0; rowNo < badgeArrayList.size(); rowNo = rowNo + 3) {
+                            // Badges table row
+                            TableRow badgesTableRow = new TableRow(ProfileFriendActivity.this);
 
-                    //
-                    for (int rowNo = 0; rowNo < badgeArrayList.size(); rowNo = rowNo + 3) {
-                        // Create row
-                        TableRow tableRow = new TableRow(ProfileFriendActivity.this);
+                            // Loop badges array list
+                            for (int columnNo = 0; (columnNo < 3) && ((rowNo + columnNo + 1) <= badgeArrayList.size()); columnNo++) {
+                                // Create column
+                                // Badge layout
+                                LinearLayout badgeLayout = new LinearLayout(ProfileFriendActivity.this);
+                                badgeLayout.setBackground(getResources().getDrawable(R.drawable.bg_border_box));
+                                badgeLayout.setGravity(Gravity.CENTER);
+                                badgeLayout.setOrientation(LinearLayout.VERTICAL);
 
-                        for (int columnNo = 0; (columnNo < 3) && ((rowNo + columnNo + 1) <= badgeArrayList.size()); columnNo++) {
-                            // Create column
-                            //
-                            LinearLayout badgeLayout = new LinearLayout(ProfileFriendActivity.this);
-                            badgeLayout.setBackground(getResources().getDrawable(R.drawable.border_box));
-                            badgeLayout.setGravity(Gravity.CENTER);
-                            badgeLayout.setOrientation(LinearLayout.VERTICAL);
+                                // Get current badge
+                                final Badge currentBadge = badgeArrayList.get(rowNo + columnNo);
 
-                            //
-                            Badge currentBadge = badgeArrayList.get(rowNo + columnNo);
+                                // Output badge level in a text view
+                                TextView levelTextView = new TextView(ProfileFriendActivity.this);
+                                levelTextView.setText(Integer.toString(currentBadge.GetLevel()));
+                                levelTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
+                                levelTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+                                badgeLayout.addView(levelTextView, badgeLayoutTextViewLayoutParams);
 
-                            //
-                            TextView levelTextView = new TextView(ProfileFriendActivity.this);
-                            levelTextView.setText(Integer.toString(currentBadge.GetLevel()));//todo width for single/double digit
-                            levelTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 50);
-                            levelTextView.setGravity(Gravity.CENTER_HORIZONTAL);
-                            badgeLayout.addView(levelTextView, levelTextViewLayoutParams);
+                                // Output badge type in a text view
+                                TextView typeTextView = new TextView(ProfileFriendActivity.this);
+                                if (currentBadge.GetLevel() == 1) {
+                                    // Single badge type
+                                    typeTextView.setText(currentBadge.GetType().toString());
+                                } else {
+                                    // Plural badge type
+                                    typeTextView.setText(currentBadge.GetType() + "S");
+                                }
+                                typeTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                                typeTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+                                badgeLayout.addView(typeTextView, badgeLayoutTextViewLayoutParams);
 
-                            TextView typeTextView = new TextView(ProfileFriendActivity.this);
-                            typeTextView.setText(currentBadge.GetType().toString());//todo format single/plural
-                            typeTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-                            typeTextView.setGravity(Gravity.CENTER_HORIZONTAL);
-                            badgeLayout.addView(typeTextView, typeTextViewLayoutParams);
+                                // Set badge click handler
+                                badgeLayout.setOnClickListener(new View.OnClickListener() {
+                                    // Handler for when the badge is pressed
+                                    @Override
+                                    public void onClick(View view) {
+                                        // Display toast to user
+                                        Toast.makeText(ProfileFriendActivity.this, "Awarded on " + MiscHelper.FormatDateForDisplay(currentBadge.GetDateAwarded()), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
 
-                            // Add column to row
-                            tableRow.addView(badgeLayout, badgeLayoutParams);
+                                // Add column to row
+                                badgesTableRow.addView(badgeLayout, badgesTableRowLayoutParams);
+                            }
+
+                            // Add row to table
+                            badgesTableLayout.addView(badgesTableRow, badgesTableLayoutParams);
                         }
 
-                        // Add row to table
-                        tableLayout.addView(tableRow, tableRowParams);
-                    }
+                        // Add table to badges container linear layout
+                        ((LinearLayout) findViewById(R.id.badges_container)).addView(badgesTableLayout, badgesContainerLayoutParameters);
+                    } else {
+                        // User has no badges
+                        // Create text view to display message
+                        TextView noBadgesTextView = new TextView(ProfileFriendActivity.this);
+                        noBadgesTextView.setText(getString(R.string.profile_friend_activity_badges_none_text));//todo different text for own profile and friend profile
+                        noBadgesTextView.setGravity(Gravity.CENTER_HORIZONTAL);
 
-                    // Add table to linear layout container
-                    ((LinearLayout) findViewById(R.id.badges_container)).addView(tableLayout, tableLayoutParams);
+                        // Set margin of text view
+                        badgesContainerLayoutParameters.setMargins(0, 0, 0, MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, 15));
+
+                        // Add text view to badges container linear layout
+                        ((LinearLayout) findViewById(R.id.badges_container)).addView(noBadgesTextView, badgesContainerLayoutParameters);
+                    }
                 } else {
                     // Error retrieving badges
                     // Set error layout

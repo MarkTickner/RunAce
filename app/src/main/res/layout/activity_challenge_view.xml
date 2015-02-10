@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp"
-        android:background="@drawable/border_box"
+        android:background="@drawable/bg_border_box"
         android:orientation="vertical">
 
         <TextView
@@ -90,7 +90,7 @@
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/border_box"
+        android:background="@drawable/bg_border_box"
         android:orientation="vertical">
 
         <TextView
@@ -119,7 +119,7 @@
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/border_box"
+        android:background="@drawable/bg_border_box"
         android:orientation="vertical">
 
         <TextView
@@ -166,7 +166,7 @@
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/border_box"
+        android:background="@drawable/bg_border_box"
         android:orientation="vertical">
 
         <TextView

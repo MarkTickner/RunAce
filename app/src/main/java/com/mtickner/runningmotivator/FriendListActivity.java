@@ -259,7 +259,7 @@ public class FriendListActivity extends ActionBarActivity {
                                         startActivity(intent);
                                     } else {
                                         // Display toast if still pending
-                                        Toast.makeText(FriendListActivity.this, "Can't view profile until other user has accepted friend request", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(FriendListActivity.this, getString(R.string.friend_list_activity_pending_friend_profile_toast_text), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });

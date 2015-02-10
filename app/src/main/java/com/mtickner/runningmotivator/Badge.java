@@ -9,7 +9,13 @@ public class Badge {
     private Date dateAwarded;
 
 
-    // Constructor for a new badge
+    // Constructor for an awarded badge
+    public Badge(Type type, int level) {
+        SetType(type);
+        SetLevel(level);
+    }
+
+    // Constructor for a badge
     public Badge(Type type, int level, Date dateAwarded) {
         SetType(type);
         SetLevel(level);

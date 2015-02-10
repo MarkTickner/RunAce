@@ -16,7 +16,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:contentDescription="@string/home_activity_runace_text_image_description"
-        android:src="@drawable/runace_text" />
+        android:src="@drawable/runace_logo_text" />
 
     <Button
         android:id="@+id/profile_button"

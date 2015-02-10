@@ -392,4 +392,45 @@ public class JsonHelper {
 
         return badgeArrayList;
     }
+
+    // Method that returns an array list of newly awarded badges
+    public static ArrayList<Badge> GetNewlyAwardedBadges(String jsonResult) {
+        ArrayList<Badge> awardedBadgeArrayList = null;
+
+        // Check server connection was successful
+        if (jsonResult != null) {
+            // Server connection was successful
+            try {
+                // Instantiate array list
+                awardedBadgeArrayList = new ArrayList<>();
+
+                // Create JSON object from server response
+                JSONObject resultObject = new JSONObject(jsonResult);
+
+                // Get 'OutputType'
+                if (resultObject.getString("OutputType").equals("Success")) {
+                    // Badges retrieved successfully, no error in PHP
+                    // Get 'AwardedBadges' array
+                    JSONArray awardedBadgesDetailsArray = resultObject.getJSONArray("AwardedBadges");
+
+                    // Add badge objects to array list
+                    for (int i = 0; i < awardedBadgesDetailsArray.length(); i++) {
+                        JSONObject badgeDetailsObject = awardedBadgesDetailsArray.getJSONObject(i);
+
+                        Badge badge = new Badge(
+                                (badgeDetailsObject.getString("TYPE").equals("R")) ? Badge.Type.RUN : (badgeDetailsObject.getString("TYPE").equals("C")) ? Badge.Type.CHALLENGE : null,
+                                badgeDetailsObject.getInt("LEVEL")
+                        );
+
+                        awardedBadgeArrayList.add(badge);
+                    }
+                }
+            } catch (Exception e) {
+                // Catches exceptions including JSONException when creating JSON objects
+                e.printStackTrace();
+            }
+        }
+
+        return awardedBadgeArrayList;
+    }
 }

@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp"
-        android:background="@drawable/border_box"
+        android:background="@drawable/bg_border_box"
         android:orientation="vertical">
 
         <TextView
@@ -46,7 +46,7 @@
         android:layout_marginLeft="3dp"
         android:layout_marginRight="3dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/border_box"
+        android:background="@drawable/bg_border_box"
         android:orientation="vertical">
 
         <TextView
@@ -109,7 +109,7 @@
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
             android:layout_weight="9"
-            android:background="@drawable/border_box"
+            android:background="@drawable/bg_border_box"
             android:orientation="vertical">
 
             <TextView
@@ -124,7 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:background="@drawable/border_box"
+                android:background="@drawable/bg_border_box"
                 android:gravity="top"
                 android:hint="@string/challenge_friend_activity_hint_message"
                 android:inputType="text|textMultiLine|textCapSentences|textAutoCorrect"

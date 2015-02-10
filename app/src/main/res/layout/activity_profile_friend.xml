@@ -20,12 +20,12 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin">
 
-            <TextView
+            <!--<TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="UNDER CONSTRUCTION, NOT WORKING YET"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:textAppearance="?android:attr/textAppearanceLarge" />-->
 
             <LinearLayout
                 android:id="@+id/details_container"
@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
-                android:background="@drawable/border_box"
+                android:background="@drawable/bg_border_box"
                 android:orientation="vertical">
 
                 <TextView
@@ -62,7 +62,7 @@
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/border_box"
+                android:background="@drawable/bg_border_box"
                 android:orientation="vertical">
 
                 <TextView
@@ -91,7 +91,7 @@
                 android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/border_box"
+                android:background="@drawable/bg_border_box"
                 android:orientation="vertical">
 
                 <TextView

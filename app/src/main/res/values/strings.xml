@@ -139,6 +139,8 @@
     <string name="friend_list_activity_friend_request_sent_toast_text">Friend request sent</string>
     <string name="friend_list_activity_friend_invited_toast_text">Friend invited to join RunAce</string>
     <string name="friend_list_activity_friend_already_added_toast_text">Friend already added</string>
+    <string name="friend_list_activity_pending_friend_profile_toast_text">Can\'t view profile until other user has accepted friend request</string>
+
     <string name="friend_list_menu_add_friend">Add friend</string>
     <string name="friend_list_menu_include_pending_requests">Include pending requests</string>
     <string name="profile_activity_title">Profile</string>
@@ -146,5 +148,6 @@
 
     <string name="profile_friend_activity_title">Profile</string>
     <string name="profile_friend_activity_badges_heading">BADGES</string>
+    <string name="profile_friend_activity_badges_none_text">Complete runs and challenges to earn badges</string>
 
 </resources>
