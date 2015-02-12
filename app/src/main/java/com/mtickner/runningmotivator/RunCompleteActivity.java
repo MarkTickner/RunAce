@@ -103,9 +103,8 @@ public class RunCompleteActivity extends ActionBarActivity {
                     // Get newly awarded badges
                     ArrayList<Badge> awardedBadgeArrayList = JsonHelper.GetNewlyAwardedBadges(jsonResult);
                     if (awardedBadgeArrayList.size() > 0) {
-                        // Loop over every newly awarded badge
-                        //todo why challenges first, should be runs
-                        for (int i = 0; i < awardedBadgeArrayList.size(); i++) {
+                        // Loop over every newly awarded badge. Loop is reversed as alerts are stacked from bottom to top
+                        for (int i = awardedBadgeArrayList.size() - 1; i >= 0; i--) {
                             // Display dialog for each newly awarded badge
                             AwardBadge(awardedBadgeArrayList.get(i));
                         }
@@ -185,7 +184,7 @@ public class RunCompleteActivity extends ActionBarActivity {
         // Display dialog box for newly awarded badge
         new AlertDialog.Builder(this)
                 .setTitle("Congratulations!")
-                .setMessage("You have been awarded a badge")
+                .setMessage("You have been awarded a badge.")
                 .setView(dialogAwardBadgeLayout)
                 .setPositiveButton("Close", null).show();
     }
