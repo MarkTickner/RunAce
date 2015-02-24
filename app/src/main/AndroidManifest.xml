@@ -40,12 +40,12 @@
             android:name=".SettingsActivity"
             android:label="@string/settings_activity_title" />
         <activity
-            android:name=".RegisterActivity"
-            android:label="@string/register_activity_title"
+            android:name=".UserRegisterActivity"
+            android:label="@string/user_register_activity_title"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".LoginActivity"
-            android:label="@string/login_activity_title"
+            android:name=".UserLoginActivity"
+            android:label="@string/user_login_activity_title"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".HomeActivity"
@@ -93,7 +93,10 @@
         <activity
             android:name=".FriendListPickerActivity"
             android:label="@string/friend_list_picker_activity_title" />
-
+        <activity
+            android:name=".UserPasswordResetActivity"
+            android:label="@string/user_password_reset_activity_title"
+            android:parentActivityName=".UserLoginActivity" />
     </application>
 
 </manifest>

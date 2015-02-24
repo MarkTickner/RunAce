@@ -1,10 +1,12 @@
 package com.mtickner.runningmotivator;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 
 public class ProfileFriendActivity extends ActionBarActivity {
 
+    private Friend friend;
     private ArrayList<Badge> badgeArrayList = new ArrayList<>();
 
     // Called when the activity is first created
@@ -32,7 +35,7 @@ public class ProfileFriendActivity extends ActionBarActivity {
 
         // Get friend
         Intent intent = getIntent();
-        Friend friend = new Gson().fromJson(intent.getStringExtra(Friend.FRIEND_GSON), Friend.class);
+        friend = new Gson().fromJson(intent.getStringExtra(Friend.FRIEND_GSON), Friend.class);
 
         // Create and output table of user's badges
         CreateBadgesTable(friend);
@@ -52,8 +55,37 @@ public class ProfileFriendActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_unfriend:
-                //todo unfriend
-                Toast.makeText(this, "Are you sure you want to unfriend [name], etc", Toast.LENGTH_SHORT).show();
+                // Confirm with user
+                new AlertDialog.Builder(this)
+                        .setMessage(getString(R.string.friend_list_activity_remove_friend_dialog_text_start) + friend.GetUser().GetName() + getString(R.string.friend_list_activity_add_remove_friend_dialog_text_end))
+                        .setPositiveButton(getString(R.string.friend_list_activity_add_friend_confirm_button_text), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Send unfriend request
+                                new HttpHelper.Unfriend(Preferences.GetLoggedInUser(ProfileFriendActivity.this).GetId(), friend.GetUser().GetId()) {
+                                    // Called after the background task finishes
+                                    @Override
+                                    protected void onPostExecute(String jsonResult) {
+                                        // Check server connection was successful
+                                        if (JsonHelper.ResultSuccess(jsonResult)) {
+                                            // Friend removed successfully
+                                            // Display success toast to user
+                                            Toast.makeText(ProfileFriendActivity.this, getString(R.string.friend_list_activity_friend_removed_toast_text), Toast.LENGTH_SHORT).show();
+
+                                            // Direct to the friends list activity
+                                            Intent intent = new Intent(ProfileFriendActivity.this, FriendListActivity.class);
+                                            startActivity(intent);
+
+                                            finish();
+                                        } else {
+                                            // Error removing friend
+                                            // Display error toast to user
+                                            Toast.makeText(ProfileFriendActivity.this, getString(R.string.internet_connection_error_message_toast), Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                }.execute();
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.friend_list_activity_add_friend_cancel_button_text), null).show();
 
                 return true;
         }
@@ -77,10 +109,6 @@ public class ProfileFriendActivity extends ActionBarActivity {
                     // Set main layout
                     setContentView(R.layout.activity_profile_friend);
 
-                    // Display friend details
-                    ((TextView) findViewById(R.id.name)).setText(friend.GetUser().GetName().toUpperCase());
-                    ((TextView) findViewById(R.id.date_friends_since)).setText("Friends since: " + MiscHelper.FormatDateForDisplay(friend.GetStatusDate()));
-
                     // Badges container linear layout parameters (for its child elements)
                     LinearLayout.LayoutParams badgesContainerLayoutParameters = new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -96,8 +124,7 @@ public class ProfileFriendActivity extends ActionBarActivity {
                         badgesTableLayoutParams.setMargins(0, 0, 0, MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, 15));
 
                         // Badges table row layout parameters (for its child elements)
-                        TableRow.LayoutParams badgesTableRowLayoutParams = new TableRow.LayoutParams(MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, 75), MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, 75));
-                        badgesTableRowLayoutParams.setMargins(MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, 15), 0, MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, 15), 0);
+                        TableRow.LayoutParams badgesTableRowLayoutParams = new TableRow.LayoutParams(MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, 90), MiscHelper.ConvertDpToPx(ProfileFriendActivity.this, 90));
                         badgesTableRowLayoutParams.gravity = Gravity.CENTER_VERTICAL;
 
                         // Badge layout parameters (for the text view child elements)
@@ -112,24 +139,30 @@ public class ProfileFriendActivity extends ActionBarActivity {
                             // Loop badges array list
                             for (int columnNo = 0; (columnNo < 3) && ((rowNo + columnNo + 1) <= badgeArrayList.size()); columnNo++) {
                                 // Create column
-                                // Badge layout
-                                LinearLayout badgeLayout = new LinearLayout(ProfileFriendActivity.this);
-                                badgeLayout.setBackground(getResources().getDrawable(R.drawable.bg_border_box));
-                                badgeLayout.setGravity(Gravity.CENTER);
-                                badgeLayout.setOrientation(LinearLayout.VERTICAL);
-
                                 // Get current badge
                                 final Badge currentBadge = badgeArrayList.get(rowNo + columnNo);
 
-                                // Output badge level in a text view
-                                TextView levelTextView = new TextView(ProfileFriendActivity.this);
-                                levelTextView.setText(Integer.toString(currentBadge.GetLevel()));
-                                levelTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40);
-                                levelTextView.setGravity(Gravity.CENTER_HORIZONTAL);
-                                badgeLayout.addView(levelTextView, badgeLayoutTextViewLayoutParams);
+                                // Get award badge layout
+                                View dialogAwardBadgeLayout = (LayoutInflater.from(ProfileFriendActivity.this)).inflate(R.layout.dialog_badge_award_small, null);
+                                LinearLayout badgeLayoutContainer = (LinearLayout) dialogAwardBadgeLayout.findViewById(R.id.badgeLayoutContainer);
 
-                                // Output badge type in a text view
-                                TextView typeTextView = new TextView(ProfileFriendActivity.this);
+                                // Set badge image
+                                LinearLayout badgeLayout = (LinearLayout) badgeLayoutContainer.findViewById(R.id.badgeLayout);
+                                switch (currentBadge.GetType()) {
+                                    case CHALLENGE:
+                                        badgeLayout.setBackground(getResources().getDrawable(R.drawable.bg_badge_blue));
+                                        break;
+                                    case RUN:
+                                        badgeLayout.setBackground(getResources().getDrawable(R.drawable.bg_badge_red));
+                                        break;
+                                }
+
+                                // Output badge level
+                                TextView levelTextView = (TextView) dialogAwardBadgeLayout.findViewById(R.id.levelTextView);
+                                levelTextView.setText(Integer.toString(currentBadge.GetLevel()));
+
+                                // Output badge type
+                                TextView typeTextView = (TextView) dialogAwardBadgeLayout.findViewById(R.id.typeTextView);
                                 if (currentBadge.GetLevel() == 1) {
                                     // Single badge type
                                     typeTextView.setText(currentBadge.GetType().toString());
@@ -137,9 +170,6 @@ public class ProfileFriendActivity extends ActionBarActivity {
                                     // Plural badge type
                                     typeTextView.setText(currentBadge.GetType() + "S");
                                 }
-                                typeTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
-                                typeTextView.setGravity(Gravity.CENTER_HORIZONTAL);
-                                badgeLayout.addView(typeTextView, badgeLayoutTextViewLayoutParams);
 
                                 // Set badge click handler
                                 badgeLayout.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +182,7 @@ public class ProfileFriendActivity extends ActionBarActivity {
                                 });
 
                                 // Add column to row
-                                badgesTableRow.addView(badgeLayout, badgesTableRowLayoutParams);
+                                badgesTableRow.addView(badgeLayoutContainer, badgesTableRowLayoutParams);
                             }
 
                             // Add row to table
@@ -179,7 +209,28 @@ public class ProfileFriendActivity extends ActionBarActivity {
                     // Set error layout
                     setContentView(R.layout.activity_connection_error);
                 }
+
+                // Output details
+                OutputName(friend);
+                OutputScore();
+                OutputStats();
             }
         }.execute();
+    }
+
+    // Method that displays friend name details
+    private void OutputName(Friend friend) {
+        ((TextView) findViewById(R.id.name)).setText(friend.GetUser().GetName().toUpperCase());
+        ((TextView) findViewById(R.id.date_friends_since)).setText("Friends since: " + MiscHelper.FormatDateForDisplay(friend.GetStatusDate()));
+    }
+
+    //todo
+    private void OutputScore() {
+        ((TextView) findViewById(R.id.score)).setText("2540");
+    }
+
+    //todo
+    private void OutputStats() {
+
     }
 }

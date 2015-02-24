@@ -69,7 +69,7 @@ public class HomeActivity extends ActionBarActivity {
                 // Check server connection was successful
                 if (jsonResult != null) {
                     // Challenges retrieved successfully
-                    ArrayList<Challenge> challengeArrayList = JsonHelper.GetChallenges(jsonResult);
+                    ArrayList<Challenge> challengeArrayList = JsonHelper.GetChallenges(jsonResult, false);
 
                     int unreadChallengeCount = 0;
 

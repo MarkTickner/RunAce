@@ -143,6 +143,7 @@ public class RunListActivity extends ActionBarActivity {
 
                         // Populate the list view with run list items. Source: http://www.codelearn.org/android-tutorial/android-listview
                         final ListView listView = (ListView) findViewById(R.id.run_list_view);
+                        listView.addHeaderView(MiscHelper.CreateListViewHeader(RunListActivity.this, getString(R.string.run_list_activity_header)), null, false);
                         listView.setEmptyView(findViewById(R.id.empty_list_item));
                         listView.setAdapter(runListViewAdaptor);
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -171,8 +172,6 @@ public class RunListActivity extends ActionBarActivity {
                                 swipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
                             }
                         });
-                        //todo crashes
-                        listView.addHeaderView(MiscHelper.CreateListViewHeader(RunListActivity.this, getString(R.string.run_list_activity_header)), null, false);
 
                         firstDisplay = false;
                     } else {

@@ -20,13 +20,6 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin">
 
-            <!--<TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="UNDER CONSTRUCTION, NOT WORKING YET"
-                android:textAppearance="?android:attr/textAppearanceLarge" />-->
-
             <LinearLayout
                 android:id="@+id/details_container"
                 android:layout_width="match_parent"
@@ -71,7 +64,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal|bottom"
-                    android:text="SCORE" />
+                    android:text="@string/profile_friend_activity_score_heading"
+                    android:textAllCaps="true" />
 
                 <TextView
                     android:id="@+id/score"
@@ -81,6 +75,36 @@
                     android:gravity="center_horizontal"
                     android:text="2530"
                     android:textSize="75sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/stats_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_border_box"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/stats_heading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_horizontal|bottom"
+                    android:text="@string/profile_friend_activity_stats_heading"
+                    android:textAllCaps="true" />
+
+                <TextView
+                    android:id="@+id/stats"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_horizontal"
+                    android:text="Runs: [55]" />
 
             </LinearLayout>
 
@@ -101,7 +125,8 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal|bottom"
-                    android:text="@string/profile_friend_activity_badges_heading" />
+                    android:text="@string/profile_friend_activity_badges_heading"
+                    android:textAllCaps="true" />
 
             </LinearLayout>
 

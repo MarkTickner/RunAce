@@ -7,6 +7,37 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class JsonHelper {
+    // Method that returns a boolean of whether a JSON result string output type is successful
+    public static boolean ResultSuccess(String jsonResult) {
+        boolean resultSuccess = false;
+
+        // Check server connection was successful
+        if (jsonResult != null) {
+            // Server connection was successful
+            try {
+                // Create JSON object from server response
+                JSONObject resultObject = new JSONObject(jsonResult);
+
+                if (ResultSuccess(resultObject)) {
+                    // Result successful, no error in PHP
+                    resultSuccess = true;
+                }
+            } catch (JSONException e) {
+                // Catches exceptions including JSONException when creating JSON objects
+                e.printStackTrace();
+            }
+        }
+
+        // Return true if successful or false if error
+        return resultSuccess;
+    }
+
+    // Method that returns a boolean of whether a JSON result object output type is successful
+    public static boolean ResultSuccess(JSONObject resultObject) throws JSONException {
+        return resultObject.getString("OutputType").equals("Success");
+    }
+
+
     // Method that returns a user after login or null if authentication failed
     public static User GetUserAfterLogin(String jsonResult) {
         User loggedInUser = null;
@@ -16,8 +47,7 @@ public class JsonHelper {
             // Create JSON object from server response
             JSONObject resultObject = new JSONObject(jsonResult);
 
-            // Get 'OutputType'
-            if (resultObject.getString("OutputType").equals("Success")) {
+            if (ResultSuccess(resultObject)) {
                 // Logged in successfully, no error in PHP
                 // Get 'Details' array
                 JSONObject resultDetailsArray = resultObject.getJSONObject("Details");
@@ -52,8 +82,7 @@ public class JsonHelper {
             // Create JSON object from server response
             JSONObject resultObject = new JSONObject(jsonResult);
 
-            // Get 'OutputType'
-            if (resultObject.getString("OutputType").equals("Success")) {
+            if (ResultSuccess(resultObject)) {
                 // Friends retrieved successfully, no error in PHP
                 // Get 'Details' array
                 JSONArray resultDetailsArray = resultObject.getJSONArray("Details");
@@ -104,8 +133,7 @@ public class JsonHelper {
                 // Create JSON object from server response
                 JSONObject resultObject = new JSONObject(jsonResult);
 
-                // Get 'OutputType'
-                if (resultObject.getString("OutputType").equals("Success")) {
+                if (ResultSuccess(resultObject)) {
                     // Friend request sent successfully, no error in PHP
                     // Get 'Details' array
                     JSONArray resultDetailsArray = resultObject.getJSONArray("Details");
@@ -134,8 +162,7 @@ public class JsonHelper {
                 // Create JSON object from server response
                 JSONObject resultObject = new JSONObject(jsonResult);
 
-                // Get 'OutputType'
-                if (resultObject.getString("OutputType").equals("Success")) {
+                if (ResultSuccess(resultObject)) {
                     // Run retrieved successfully, no error in PHP
                     // Get 'Details' array
                     JSONArray resultDetailsArray = resultObject.getJSONArray("Details");
@@ -182,8 +209,7 @@ public class JsonHelper {
                 // Create JSON object from server response
                 JSONObject resultObject = new JSONObject(jsonResult);
 
-                // Get 'OutputType'
-                if (resultObject.getString("OutputType").equals("Success")) {
+                if (ResultSuccess(resultObject)) {
                     // Runs retrieved successfully, no error in PHP
                     // Get 'Details' array
                     JSONArray resultDetailsArray = resultObject.getJSONArray("Details");
@@ -228,8 +254,7 @@ public class JsonHelper {
             // Create JSON object from server response
             JSONObject resultObject = new JSONObject(jsonResult);
 
-            // Get 'OutputType'
-            if (resultObject.getString("OutputType").equals("Success")) {
+            if (ResultSuccess(resultObject)) {
                 // Challenge retrieved successfully, no error in PHP
                 // Get 'Details' array
                 JSONArray resultDetailsArray = resultObject.getJSONArray("Details");
@@ -269,7 +294,7 @@ public class JsonHelper {
     }
 
     // Method that returns an array list of challenges
-    public static ArrayList<Challenge> GetChallenges(String jsonResult) {
+    public static ArrayList<Challenge> GetChallenges(String jsonResult, boolean showCompleted) {
         ArrayList<Challenge> challengeArrayList = null;
 
         // Server connection was successful
@@ -280,8 +305,7 @@ public class JsonHelper {
             // Create JSON object from server response
             JSONObject resultObject = new JSONObject(jsonResult);
 
-            // Get 'OutputType'
-            if (resultObject.getString("OutputType").equals("Success")) {
+            if (ResultSuccess(resultObject)) {
                 // Challenges retrieved successfully, no error in PHP
                 // Get 'Details' array
                 JSONArray resultDetailsArray = resultObject.getJSONArray("Details");
@@ -292,28 +316,34 @@ public class JsonHelper {
                     JSONObject challengeDetailsRunObject = challengeDetailsObject.getJSONObject("RUN_ID");
                     JSONObject challengeDetailsRunUserObject = challengeDetailsRunObject.getJSONObject("USER_ID");
 
-                    Challenge challenge = new Challenge(
-                            challengeDetailsObject.getInt("ID"),
-                            new Run(
-                                    challengeDetailsRunObject.getInt("ID"),
-                                    new User(
-                                            challengeDetailsRunUserObject.getInt("ID"),
-                                            challengeDetailsRunUserObject.getString("NAME"),
-                                            challengeDetailsRunUserObject.getString("EMAIL"),
-                                            MiscHelper.FormatDateFromDatabase(challengeDetailsRunUserObject.getString("DATE_REGISTERED"))
-                                    ),
-                                    challengeDetailsRunObject.getDouble("DISTANCE_TOTAL"),
-                                    challengeDetailsRunObject.getInt("TOTAL_TIME"),
-                                    MiscHelper.FormatDateFromDatabase(challengeDetailsRunObject.getString("DATE_RUN"))
-                            ),
-                            challengeDetailsObject.getString("MESSAGE"),
-                            MiscHelper.FormatDateFromDatabase(challengeDetailsObject.getString("DATE_CREATED")),
-                            (challengeDetailsObject.getInt("IS_NOTIFIED") != 0),
-                            (challengeDetailsObject.getInt("IS_READ") != 0),
-                            MiscHelper.FormatDateFromDatabase(challengeDetailsObject.getString("DATE_COMPLETED"))
-                    );
+                    // Get whether challenge has been completed
+                    boolean challengeCompleted = MiscHelper.FormatDateFromDatabase(challengeDetailsObject.getString("DATE_COMPLETED")) != null;
 
-                    challengeArrayList.add(challenge);
+                    // Only add current challenge if 'show completed' is true or if the current challenge has not been completed
+                    if (showCompleted || !challengeCompleted) {
+                        Challenge challenge = new Challenge(
+                                challengeDetailsObject.getInt("ID"),
+                                new Run(
+                                        challengeDetailsRunObject.getInt("ID"),
+                                        new User(
+                                                challengeDetailsRunUserObject.getInt("ID"),
+                                                challengeDetailsRunUserObject.getString("NAME"),
+                                                challengeDetailsRunUserObject.getString("EMAIL"),
+                                                MiscHelper.FormatDateFromDatabase(challengeDetailsRunUserObject.getString("DATE_REGISTERED"))
+                                        ),
+                                        challengeDetailsRunObject.getDouble("DISTANCE_TOTAL"),
+                                        challengeDetailsRunObject.getInt("TOTAL_TIME"),
+                                        MiscHelper.FormatDateFromDatabase(challengeDetailsRunObject.getString("DATE_RUN"))
+                                ),
+                                challengeDetailsObject.getString("MESSAGE"),
+                                MiscHelper.FormatDateFromDatabase(challengeDetailsObject.getString("DATE_CREATED")),
+                                (challengeDetailsObject.getInt("IS_NOTIFIED") != 0),
+                                (challengeDetailsObject.getInt("IS_READ") != 0),
+                                MiscHelper.FormatDateFromDatabase(challengeDetailsObject.getString("DATE_COMPLETED"))
+                        );
+
+                        challengeArrayList.add(challenge);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -322,32 +352,6 @@ public class JsonHelper {
         }
 
         return challengeArrayList;
-    }
-
-    // Method that saves a challenge
-    public static boolean SaveChallenge(String jsonResult) {
-        boolean challengeSaved = false;
-
-        // Check server connection was successful
-        if (jsonResult != null) {
-            // Server connection was successful
-            try {
-                // Create JSON object from server response
-                JSONObject resultObject = new JSONObject(jsonResult);
-
-                // Get 'OutputType'
-                if (resultObject.getString("OutputType").equals("Success")) {
-                    // Challenge saved successfully, no error in PHP
-                    challengeSaved = true;
-                }
-            } catch (JSONException e) {
-                // Catches exceptions including JSONException when creating JSON objects
-                e.printStackTrace();
-            }
-        }
-
-        // Return true if the challenge was saved or false if error
-        return challengeSaved;
     }
 
 
@@ -365,8 +369,7 @@ public class JsonHelper {
                 // Create JSON object from server response
                 JSONObject resultObject = new JSONObject(jsonResult);
 
-                // Get 'OutputType'
-                if (resultObject.getString("OutputType").equals("Success")) {
+                if (ResultSuccess(resultObject)) {
                     // Badges retrieved successfully, no error in PHP
                     // Get 'Details' array
                     JSONArray resultDetailsArray = resultObject.getJSONArray("Details");
@@ -407,8 +410,7 @@ public class JsonHelper {
                 // Create JSON object from server response
                 JSONObject resultObject = new JSONObject(jsonResult);
 
-                // Get 'OutputType'
-                if (resultObject.getString("OutputType").equals("Success")) {
+                if (ResultSuccess(resultObject)) {
                     // Badges retrieved successfully, no error in PHP
                     // Get 'AwardedBadges' array
                     JSONArray awardedBadgesDetailsArray = resultObject.getJSONArray("AwardedBadges");

@@ -112,7 +112,7 @@ public class ChallengeFriendActivity extends ActionBarActivity {
                 }
 
                 // Check server connection was successful
-                if (JsonHelper.SaveChallenge(jsonResult)) {
+                if (JsonHelper.ResultSuccess(jsonResult)) {
                     // Challenge saved successfully
                     // Display success toast to user
                     Toast.makeText(ChallengeFriendActivity.this, getString(R.string.challenge_friend_activity_challenge_sent_toast_text), Toast.LENGTH_SHORT).show();

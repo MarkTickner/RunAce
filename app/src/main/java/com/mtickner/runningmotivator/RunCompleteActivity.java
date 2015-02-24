@@ -158,14 +158,21 @@ public class RunCompleteActivity extends ActionBarActivity {
         ((TextView) findViewById(R.id.distance_unit)).setText(distanceUnit);
     }
 
-    // Method that displays a dialog for the specified badge
+    // todo add to challenge activity. Method that displays a dialog for the specified badge
     public void AwardBadge(Badge badge) {
         // Get award badge layout
         View dialogAwardBadgeLayout = (LayoutInflater.from(this)).inflate(R.layout.dialog_badge_award, null);
 
         // Set badge image
         LinearLayout badgeLayout = (LinearLayout) dialogAwardBadgeLayout.findViewById(R.id.badgeLayout);
-        badgeLayout.setBackground(getResources().getDrawable(R.drawable.bg_badge_red));//todo
+        switch (badge.GetType()) {
+            case CHALLENGE:
+                badgeLayout.setBackground(getResources().getDrawable(R.drawable.bg_badge_blue));
+                break;
+            case RUN:
+                badgeLayout.setBackground(getResources().getDrawable(R.drawable.bg_badge_red));
+                break;
+        }
 
         // Output badge level
         TextView levelTextView = (TextView) dialogAwardBadgeLayout.findViewById(R.id.levelTextView);

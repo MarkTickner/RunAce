@@ -15,7 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class RegisterActivity extends ActionBarActivity {
+public class UserRegisterActivity extends ActionBarActivity {
 
     private boolean formIsValid = true;
     private ProgressDialog registeringProgressDialog;
@@ -24,7 +24,7 @@ public class RegisterActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_user_register);
 
         // Client-side validation
         SetupFormValidation();
@@ -85,10 +85,10 @@ public class RegisterActivity extends ActionBarActivity {
                                 loggedInUser.SetId(resultDetailsArray.getInt(0));
 
                                 // Login user
-                                Preferences.SetLoggedInUser(RegisterActivity.this, loggedInUser);
+                                Preferences.SetLoggedInUser(UserRegisterActivity.this, loggedInUser);
 
                                 // Direct to the main activity
-                                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                Intent intent = new Intent(UserRegisterActivity.this, MainActivity.class);
                                 startActivity(intent);
 
                                 finish();
@@ -97,7 +97,7 @@ public class RegisterActivity extends ActionBarActivity {
                                 for (int i = 0; i < resultDetailsArray.length(); i++) {
                                     if (resultDetailsArray.getString(i).equals("307")) {
                                         // Email is already registered
-                                        ((EditText) findViewById(R.id.email)).setError(getString(R.string.register_activity_validation_email_already_registered));
+                                        ((EditText) findViewById(R.id.email)).setError(getString(R.string.user_register_activity_validation_email_already_registered));
                                     }
                                 }
                             }
@@ -110,7 +110,7 @@ public class RegisterActivity extends ActionBarActivity {
                     } else {
                         // Error sending registration
                         // Display error toast to user
-                        Toast.makeText(RegisterActivity.this, getString(R.string.internet_connection_error_message_toast), Toast.LENGTH_LONG).show();
+                        Toast.makeText(UserRegisterActivity.this, getString(R.string.internet_connection_error_message_toast), Toast.LENGTH_LONG).show();
                     }
                 }
             }.execute();
@@ -160,7 +160,7 @@ public class RegisterActivity extends ActionBarActivity {
     private void ValidateName(EditText name) {
         if (name.getText().toString().matches("^\\s*$")) {
             formIsValid = false;
-            name.setError(getString(R.string.register_activity_validation_name_not_entered));
+            name.setError(getString(R.string.user_register_activity_validation_name_not_entered));
         } else {
             formIsValid = true;
         }
@@ -170,10 +170,10 @@ public class RegisterActivity extends ActionBarActivity {
     private void ValidateEmail(EditText email) {
         if (email.getText().toString().matches("^$|\\s+")) {
             formIsValid = false;
-            email.setError(getString(R.string.register_activity_login_activity_validation_email_not_entered));
+            email.setError(getString(R.string.user_register_activity_login_activity_validation_email_not_entered));
         } else if (!email.getText().toString().matches("^([\\w\\.\\-])+@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$")) {
             formIsValid = false;
-            email.setError(getString(R.string.register_activity_login_activity_validation_email_not_valid));
+            email.setError(getString(R.string.user_register_activity_login_activity_validation_email_not_valid));
         } else {
             formIsValid = true;
         }
@@ -183,10 +183,10 @@ public class RegisterActivity extends ActionBarActivity {
     private void ValidatePassword(EditText password) {
         if (password.getText().toString().matches("^$|\\s+")) {
             formIsValid = false;
-            password.setError(getString(R.string.register_activity_login_activity_validation_password_not_entered));
+            password.setError(getString(R.string.user_register_activity_login_activity_validation_password_not_entered));
         } else if (password.length() < 8) {
             formIsValid = false;
-            password.setError(getString(R.string.register_activity_validation_password_too_short));
+            password.setError(getString(R.string.user_register_activity_validation_password_too_short));
         } else {
             formIsValid = true;
         }
@@ -197,7 +197,7 @@ public class RegisterActivity extends ActionBarActivity {
     private final Runnable progressRunnable = new Runnable() {
         @Override
         public void run() {
-            registeringProgressDialog = ProgressDialog.show(RegisterActivity.this, null, getString(R.string.register_activity_creating_account_dialog_text));
+            registeringProgressDialog = ProgressDialog.show(UserRegisterActivity.this, null, getString(R.string.user_register_activity_creating_account_dialog_text));
         }
     };
 }

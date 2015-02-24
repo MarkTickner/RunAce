@@ -92,6 +92,13 @@ public class FriendListActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // Called when the activity has detected the user's press of the back key
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
+
     // Called when a launched activity exits, in this case the contacts picker
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -111,9 +118,12 @@ public class FriendListActivity extends ActionBarActivity {
                 final String friendName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 final String friendEmail = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
 
+                // Close cursor object
+                cursor.close();
+
                 // Confirm with user
                 new AlertDialog.Builder(this)
-                        .setMessage(getString(R.string.friend_list_activity_add_friend_dialog_text_start) + friendName + getString(R.string.friend_list_activity_add_friend_dialog_text_end))
+                        .setMessage(getString(R.string.friend_list_activity_add_friend_dialog_text_start) + friendName + getString(R.string.friend_list_activity_add_remove_friend_dialog_text_end))
                         .setPositiveButton(getString(R.string.friend_list_activity_add_friend_confirm_button_text), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // Send friend request
@@ -243,6 +253,7 @@ public class FriendListActivity extends ActionBarActivity {
 
                             // Populate the list view with friend list items. Source: http://www.codelearn.org/android-tutorial/android-listview
                             final ListView listView = (ListView) findViewById(R.id.friend_list_view);
+                            listView.addHeaderView(MiscHelper.CreateListViewHeader(FriendListActivity.this, getString(R.string.friend_list_activity_header)), null, false);
                             listView.setEmptyView(findViewById(R.id.empty_list_item));
                             listView.setAdapter(friendListViewAdaptor);
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -276,8 +287,6 @@ public class FriendListActivity extends ActionBarActivity {
                                     swipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
                                 }
                             });
-                            //todo crashes
-                            listView.addHeaderView(MiscHelper.CreateListViewHeader(FriendListActivity.this, getString(R.string.friend_list_activity_header)), null, false);
 
                             firstDisplay = false;
                         } else {

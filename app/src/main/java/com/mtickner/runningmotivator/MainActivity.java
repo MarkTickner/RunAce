@@ -44,13 +44,13 @@ public class MainActivity extends Activity {
 
     // Handler for the 'Register' button
     public void GoToRegister(View view) {
-        Intent intent = new Intent(this, RegisterActivity.class);
+        Intent intent = new Intent(this, UserRegisterActivity.class);
         startActivity(intent);
     }
 
     // Handler for the 'Login' button
     public void GoToLogin(View view) {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, UserLoginActivity.class);
         startActivity(intent);
     }
 }

@@ -7,27 +7,27 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.mtickner.runningmotivator.RegisterActivity">
+    tools:context="com.mtickner.runningmotivator.UserRegisterActivity">
 
     <EditText
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/register_activity_name_hint"
+        android:hint="@string/user_register_activity_name_hint"
         android:inputType="textCapWords|textPersonName" />
 
     <EditText
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/register_activity_login_activity_email_hint"
+        android:hint="@string/user_register_activity_login_activity_email_hint"
         android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/register_activity_login_activity_password_hint"
+        android:hint="@string/user_register_activity_login_activity_password_hint"
         android:inputType="textPassword" />
 
     <Button
@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="RegisterUser"
-        android:text="@string/register_activity_register_button_text"
+        android:text="@string/user_register_activity_register_button_text"
         android:textAllCaps="true" />
 
 </LinearLayout>

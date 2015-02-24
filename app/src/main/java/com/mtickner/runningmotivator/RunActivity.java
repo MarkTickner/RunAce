@@ -166,7 +166,7 @@ public class RunActivity extends ActionBarActivity implements
         // Log current location
         MiscHelper.AppendLogFile(RunActivity.this, bufferedWriter, Calendar.getInstance().getTimeInMillis() + "," + location.getLatitude() + "," + location.getLongitude());
 
-        // todo Determine new location accuracy in metres
+        // Determine new location accuracy in metres
         if (location.getAccuracy() <= 20) {
             if (previousLocation != null) {
                 // Previous location is not null

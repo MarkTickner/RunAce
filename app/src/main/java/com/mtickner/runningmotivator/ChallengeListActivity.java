@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 public class ChallengeListActivity extends ActionBarActivity {
 
     private ArrayList<Challenge> challengeArrayList = new ArrayList<>();
+    private boolean completedCurrentlyShown = true;
     private final ChallengeListViewAdaptor challengeListViewAdaptor = new ChallengeListViewAdaptor();
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean firstDisplay;
@@ -44,7 +47,38 @@ public class ChallengeListActivity extends ActionBarActivity {
         super.onResume();
 
         // Load challenges
-        challengeListViewAdaptor.refresh();
+        challengeListViewAdaptor.refresh(completedCurrentlyShown);
+    }
+
+    // Initialise the contents of the Activity's standard options menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        getMenuInflater().inflate(R.menu.menu_challenge_list, menu);
+
+        return true;
+    }
+
+    // Called whenever an item in the options menu is selected
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_show_completed:
+                // Determine if check box is checked or not
+                if (item.isChecked()) {
+                    // Do not display completed challenges
+                    challengeListViewAdaptor.refresh(false);
+                    item.setChecked(false);
+                } else {
+                    // Display all challenges included completed ones
+                    challengeListViewAdaptor.refresh(true);
+                    item.setChecked(true);
+                }
+
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     // Called when the activity has detected the user's press of the back key
@@ -138,7 +172,9 @@ public class ChallengeListActivity extends ActionBarActivity {
         }
 
         // Refresh the contents of the list view
-        public void refresh() {
+        public void refresh(final boolean showCompleted) {
+            completedCurrentlyShown = showCompleted;
+
             // Get challenges
             new HttpHelper.GetChallenges((Preferences.GetLoggedInUser(ChallengeListActivity.this)).GetId(), false) {
                 // Called after the background task finishes
@@ -150,7 +186,7 @@ public class ChallengeListActivity extends ActionBarActivity {
                     // Check server connection was successful
                     if (jsonResult != null) {
                         // Challenges retrieved successfully
-                        challengeArrayList = JsonHelper.GetChallenges(jsonResult);
+                        challengeArrayList = JsonHelper.GetChallenges(jsonResult, showCompleted);
 
                         // Determine if this is the first time the method has been called
                         if (firstDisplay) {
@@ -163,12 +199,13 @@ public class ChallengeListActivity extends ActionBarActivity {
                                 // Handler for when a swipe triggers a refresh
                                 @Override
                                 public void onRefresh() {
-                                    refresh();
+                                    refresh(completedCurrentlyShown);
                                 }
                             });
 
                             // Populate the list view with challenge list items. Source: http://www.codelearn.org/android-tutorial/android-listview
                             final ListView listView = (ListView) findViewById(R.id.challenge_list_view);
+                            listView.addHeaderView(MiscHelper.CreateListViewHeader(ChallengeListActivity.this, getString(R.string.challenge_list_activity_header)), null, false);
                             listView.setEmptyView(findViewById(R.id.empty_list_item));
                             listView.setAdapter(challengeListViewAdaptor);
                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -197,8 +234,6 @@ public class ChallengeListActivity extends ActionBarActivity {
                                     swipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
                                 }
                             });
-                            //todo crashes
-                            listView.addHeaderView(MiscHelper.CreateListViewHeader(ChallengeListActivity.this, getString(R.string.challenge_list_activity_header)), null, false);
 
                             firstDisplay = false;
                         } else {

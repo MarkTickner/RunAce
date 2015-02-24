@@ -11,7 +11,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class LoginActivity extends ActionBarActivity {
+public class UserLoginActivity extends ActionBarActivity {
 
     private boolean formIsValid = true;
     private ProgressDialog loggingInProgressDialog;
@@ -20,7 +20,7 @@ public class LoginActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_user_login);
 
         // Client-side validation
         SetupFormValidation();
@@ -68,10 +68,10 @@ public class LoginActivity extends ActionBarActivity {
                         if ((loggedInUser = JsonHelper.GetUserAfterLogin(jsonResult)) != null) {
                             // Authentication was successful
                             // Login user
-                            Preferences.SetLoggedInUser(LoginActivity.this, loggedInUser);
+                            Preferences.SetLoggedInUser(UserLoginActivity.this, loggedInUser);
 
                             // Direct to the main activity
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            Intent intent = new Intent(UserLoginActivity.this, MainActivity.class);
                             startActivity(intent);
 
                             finish();
@@ -81,16 +81,23 @@ public class LoginActivity extends ActionBarActivity {
                             ((EditText) findViewById(R.id.password)).setText("");
 
                             // Set error text
-                            ((EditText) findViewById(R.id.password)).setError(getString(R.string.login_activity_authentication_error_text));
+                            ((EditText) findViewById(R.id.password)).setError(getString(R.string.user_login_activity_authentication_error_text));
                         }
                     } else {
                         // Error sending user login
                         // Display error toast to user
-                        Toast.makeText(LoginActivity.this, getString(R.string.internet_connection_error_message_toast), Toast.LENGTH_LONG).show();
+                        Toast.makeText(UserLoginActivity.this, getString(R.string.internet_connection_error_message_toast), Toast.LENGTH_LONG).show();
                     }
                 }
             }.execute();
         }
+    }
+
+    // Method which is called when the 'Reset Password' text is pressed
+    public void ResetPassword(View view) {
+        // Direct to the password reset activity
+        Intent intent = new Intent(this, UserPasswordResetActivity.class);
+        startActivity(intent);
     }
 
     // Method that sets up validation of the form
@@ -124,10 +131,10 @@ public class LoginActivity extends ActionBarActivity {
     private void ValidateEmail(EditText email) {
         if (email.getText().toString().matches("^$|\\s+")) {
             formIsValid = false;
-            email.setError(getString(R.string.register_activity_login_activity_validation_email_not_entered));
+            email.setError(getString(R.string.user_register_activity_login_activity_validation_email_not_entered));
         } else if (!email.getText().toString().matches("^([\\w\\.\\-])+@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$")) {
             formIsValid = false;
-            email.setError(getString(R.string.register_activity_login_activity_validation_email_not_valid));
+            email.setError(getString(R.string.user_register_activity_login_activity_validation_email_not_valid));
         } else {
             formIsValid = true;
         }
@@ -137,7 +144,7 @@ public class LoginActivity extends ActionBarActivity {
     private void ValidatePassword(EditText password) {
         if (password.getText().toString().matches("^$|\\s+")) {
             formIsValid = false;
-            password.setError(getString(R.string.register_activity_login_activity_validation_password_not_entered));
+            password.setError(getString(R.string.user_register_activity_login_activity_validation_password_not_entered));
         } else {
             formIsValid = true;
         }
@@ -148,7 +155,7 @@ public class LoginActivity extends ActionBarActivity {
     private final Runnable progressRunnable = new Runnable() {
         @Override
         public void run() {
-            loggingInProgressDialog = ProgressDialog.show(LoginActivity.this, null, getString(R.string.login_activity_logging_in_dialog_text));
+            loggingInProgressDialog = ProgressDialog.show(UserLoginActivity.this, null, getString(R.string.user_login_activity_logging_in_dialog_text));
         }
     };
 }

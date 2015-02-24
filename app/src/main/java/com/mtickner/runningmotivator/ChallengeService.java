@@ -33,7 +33,7 @@ public class ChallengeService extends Service {
                     // Check server connection was successful
                     if (jsonResult != null) {
                         // Challenges retrieved successfully
-                        challengeArrayList = JsonHelper.GetChallenges(jsonResult);
+                        challengeArrayList = JsonHelper.GetChallenges(jsonResult, false);
 
                         if (challengeArrayList.size() > 0) {
                             // There are challenges

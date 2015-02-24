@@ -10,7 +10,6 @@ import android.os.Environment;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.BufferedWriter;
@@ -228,10 +227,7 @@ public class MiscHelper {
         headerText.setText(text);
         headerText.setPadding(0, 50, 0, 50);
         headerText.setGravity(Gravity.CENTER_HORIZONTAL);
-        headerText.setLayoutParams(new LinearLayout.LayoutParams(
-                        AbsListView.LayoutParams.MATCH_PARENT,
-                        AbsListView.LayoutParams.WRAP_CONTENT)
-        );
+        headerText.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
 
         return headerText;
     }

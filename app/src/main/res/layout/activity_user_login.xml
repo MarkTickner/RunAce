@@ -7,20 +7,20 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.mtickner.runningmotivator.LoginActivity">
+    tools:context="com.mtickner.runningmotivator.UserLoginActivity">
 
     <EditText
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/register_activity_login_activity_email_hint"
+        android:hint="@string/user_register_activity_login_activity_email_hint"
         android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/register_activity_login_activity_password_hint"
+        android:hint="@string/user_register_activity_login_activity_password_hint"
         android:inputType="textPassword" />
 
     <Button
@@ -28,7 +28,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="LoginUser"
-        android:text="@string/login_activity_login_button_text"
+        android:text="@string/user_login_activity_login_button_text"
         android:textAllCaps="true" />
+
+    <TextView
+        android:id="@+id/reset_password_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="ResetPassword"
+        android:text="Trouble logging in?"
+        android:layout_gravity="right" />
 
 </LinearLayout>
