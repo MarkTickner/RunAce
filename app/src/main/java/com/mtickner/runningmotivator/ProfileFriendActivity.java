@@ -96,8 +96,7 @@ public class ProfileFriendActivity extends ActionBarActivity {
     // Method that creates a table of badges
     private void CreateBadgesTable(final Friend friend) {
         // Get badges
-        //new HttpHelper.GetBadges(friend.GetUser().GetId()) { todo id should be of friend not me
-        new HttpHelper.GetBadges((Preferences.GetLoggedInUser(ProfileFriendActivity.this)).GetId()) {
+        new HttpHelper.GetBadges(friend.GetUser().GetId()) {
             // Called after the background task finishes
             @Override
             protected void onPostExecute(String jsonResult) {
@@ -107,7 +106,7 @@ public class ProfileFriendActivity extends ActionBarActivity {
                     badgeArrayList = JsonHelper.GetBadges(jsonResult);
 
                     // Set main layout
-                    setContentView(R.layout.activity_profile_friend);
+                    setContentView(R.layout.activity_profile);
 
                     // Badges container linear layout parameters (for its child elements)
                     LinearLayout.LayoutParams badgesContainerLayoutParameters = new TableLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -195,7 +194,7 @@ public class ProfileFriendActivity extends ActionBarActivity {
                         // User has no badges
                         // Create text view to display message
                         TextView noBadgesTextView = new TextView(ProfileFriendActivity.this);
-                        noBadgesTextView.setText(getString(R.string.profile_friend_activity_badges_none_text));//todo different text for own profile and friend profile
+                        noBadgesTextView.setText(getString(R.string.profile_friend_activity_badges_none_text));
                         noBadgesTextView.setGravity(Gravity.CENTER_HORIZONTAL);
 
                         // Set margin of text view
@@ -204,6 +203,9 @@ public class ProfileFriendActivity extends ActionBarActivity {
                         // Add text view to badges container linear layout
                         ((LinearLayout) findViewById(R.id.badges_container)).addView(noBadgesTextView, badgesContainerLayoutParameters);
                     }
+
+                    // Output statistics
+                    OutputStats(JsonHelper.GetStatistics(jsonResult));
                 } else {
                     // Error retrieving badges
                     // Set error layout
@@ -212,8 +214,6 @@ public class ProfileFriendActivity extends ActionBarActivity {
 
                 // Output details
                 OutputName(friend);
-                OutputScore();
-                OutputStats();
             }
         }.execute();
     }
@@ -224,13 +224,19 @@ public class ProfileFriendActivity extends ActionBarActivity {
         ((TextView) findViewById(R.id.date_friends_since)).setText("Friends since: " + MiscHelper.FormatDateForDisplay(friend.GetStatusDate()));
     }
 
-    //todo
-    private void OutputScore() {
-        ((TextView) findViewById(R.id.score)).setText("2540");
-    }
+    // Method that displays the users' statistics
+    private void OutputStats(double[] statisticsArray) {
+        ((TextView) findViewById(R.id.score)).setText(Integer.toString((int) statisticsArray[0]));
+        ((TextView) findViewById(R.id.stats_total_runs)).append(Integer.toString((int) statisticsArray[1]));
+        ((TextView) findViewById(R.id.stats_total_challenges)).append(Integer.toString((int) statisticsArray[2]));
+        ((TextView) findViewById(R.id.stats_total_time)).append(MiscHelper.FormatSecondsToHoursMinutesSeconds((int) statisticsArray[4]));
 
-    //todo
-    private void OutputStats() {
-
+        if (Preferences.GetSettingDistanceUnit(ProfileFriendActivity.this).equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres_placeholder))) {
+            // Kilometres
+            ((TextView) findViewById(R.id.stats_total_distance)).append(statisticsArray[3] + "km");
+        } else {
+            // Miles
+            ((TextView) findViewById(R.id.stats_total_distance)).append(statisticsArray[3] + "m");
+        }
     }
 }

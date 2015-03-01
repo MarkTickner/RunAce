@@ -79,7 +79,7 @@ public class RunCompleteActivity extends ActionBarActivity {
     }
 
     // Method that is called when the save run button is pressed
-    public void SaveRun(View view) {
+    public void SaveRun(final View view) {
         // Display progress dialog to user
         progressHandler.postDelayed(progressRunnable, 500);
 
@@ -97,9 +97,6 @@ public class RunCompleteActivity extends ActionBarActivity {
                 // Check server connection was successful
                 if (JsonHelper.GetRun(jsonResult) != null) {
                     // Run saved successfully
-                    // Display success toast to user
-                    Toast.makeText(RunCompleteActivity.this, getString(R.string.run_complete_activity_saving_run_saved_toast), Toast.LENGTH_SHORT).show();
-
                     // Get newly awarded badges
                     ArrayList<Badge> awardedBadgeArrayList = JsonHelper.GetNewlyAwardedBadges(jsonResult);
                     if (awardedBadgeArrayList.size() > 0) {
@@ -109,6 +106,10 @@ public class RunCompleteActivity extends ActionBarActivity {
                             AwardBadge(awardedBadgeArrayList.get(i));
                         }
                     }
+
+                    // Display success toast to user
+                    int points = JsonHelper.GetPoints(jsonResult);
+                    Toast.makeText(RunCompleteActivity.this, getString(R.string.run_complete_activity_saving_run_saved_toast) + points + getString(R.string.run_complete_activity_saving_run_points_toast), Toast.LENGTH_LONG).show();
 
                     // Remove the save run button and show challenge friend button
                     (findViewById(R.id.save_run_button)).setVisibility(View.GONE);
@@ -121,11 +122,7 @@ public class RunCompleteActivity extends ActionBarActivity {
                             .setPositiveButton(getString(R.string.run_complete_activity_saving_run_error_retry_button_text), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // Try saving again
-                                    Intent intent = new Intent(RunCompleteActivity.this, RunCompleteActivity.class);
-                                    intent.putExtra(Run.RUN_GSON, new Gson().toJson(run));
-                                    startActivity(intent);
-
-                                    finish();
+                                    SaveRun(view);
                                 }
                             })
                             .setNegativeButton(getString(R.string.run_complete_activity_saving_run_error_cancel_button_text), null).show();
@@ -158,7 +155,7 @@ public class RunCompleteActivity extends ActionBarActivity {
         ((TextView) findViewById(R.id.distance_unit)).setText(distanceUnit);
     }
 
-    // todo add to challenge activity. Method that displays a dialog for the specified badge
+    // Method that displays a dialog for the specified badge
     public void AwardBadge(Badge badge) {
         // Get award badge layout
         View dialogAwardBadgeLayout = (LayoutInflater.from(this)).inflate(R.layout.dialog_badge_award, null);

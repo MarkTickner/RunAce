@@ -97,6 +97,10 @@
             android:name=".UserPasswordResetActivity"
             android:label="@string/user_password_reset_activity_title"
             android:parentActivityName=".UserLoginActivity" />
+        <activity
+            android:name=".PrivacyPolicyActivity"
+            android:label="@string/home_menu_privacy_policy"
+            android:parentActivityName=".HomeActivity" />
     </application>
 
 </manifest>

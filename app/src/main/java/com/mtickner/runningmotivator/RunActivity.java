@@ -199,9 +199,19 @@ public class RunActivity extends ActionBarActivity implements
                         // End the run
                         EndRun();
 
-                        Intent intent = new Intent(RunActivity.this, RunCompleteActivity.class);
-                        intent.putExtra(Run.RUN_GSON, new Gson().toJson(currentRun));
-                        startActivity(intent);
+                        if (currentChallenge == null) {
+                            // No challenge
+                            Intent intent = new Intent(RunActivity.this, RunCompleteActivity.class);
+                            intent.putExtra(Run.RUN_GSON, new Gson().toJson(currentRun));
+                            startActivity(intent);
+                        } else {
+                            // Define the challenge complete activity
+                            Intent intent = new Intent(RunActivity.this, RunChallengeCompleteActivity.class);
+                            intent.putExtra(Run.RUN_GSON, new Gson().toJson(currentRun));
+                            intent.putExtra(Challenge.CHALLENGE_GSON, new Gson().toJson(currentChallenge));
+                            intent.putExtra(Challenge.CHALLENGE_COMPLETE, challengeComplete);
+                            startActivity(intent);
+                        }
 
                         finish();
                     }

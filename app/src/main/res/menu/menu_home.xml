@@ -17,14 +17,20 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/menu_settings"
+        android:id="@+id/menu_privacy_policy"
         android:orderInCategory="3"
+        android:title="@string/home_menu_privacy_policy"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_settings"
+        android:orderInCategory="4"
         android:title="@string/home_menu_settings"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_logout"
-        android:orderInCategory="4"
+        android:orderInCategory="5"
         android:title="@string/home_menu_logout"
         app:showAsAction="never" />
 

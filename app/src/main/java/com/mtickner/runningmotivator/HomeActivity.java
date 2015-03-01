@@ -111,6 +111,11 @@ public class HomeActivity extends ActionBarActivity {
                         .setPositiveButton(getString(R.string.home_activity_about_dialog_close_button_text), null).show();
 
                 return true;
+            case R.id.menu_privacy_policy:
+                Intent privacyPolicyIntent = new Intent(this, PrivacyPolicyActivity.class);
+                startActivity(privacyPolicyIntent);
+
+                return true;
             case R.id.menu_settings:
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);

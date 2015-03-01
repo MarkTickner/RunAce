@@ -7,7 +7,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
@@ -17,15 +16,15 @@ import java.util.ArrayList;
 public class HttpHelper {
     // Asynchronous methods. Source: http://www.vogella.com/tutorials/AndroidBackgroundProcessing/article.html
 
-    private static final String urlPrefix = "http://stuweb.cms.gre.ac.uk/~tm112/project/services/";
+    private static final String urlPrefix = "https://stuweb.cms.gre.ac.uk/~tm112/project/services/";
 
     // Method that POSTs data to the specified URI and returns an encoded JSON string
     public static String DoPost(String postUri, ArrayList<NameValuePair> postData) {
         String result;
 
         try {
-            // Create objects to execute POST
-            HttpClient httpClient = new DefaultHttpClient();
+            // Create objects to execute POST over HTTPS
+            HttpClient httpClient = CustomSSLSocketFactory.CreateCustomHttpClient();
             HttpPost httpPost = new HttpPost(postUri);
 
             // Set POST data
@@ -174,8 +173,7 @@ public class HttpHelper {
     // Asynchronous inner class that unfriends the specified users
     public static class Unfriend extends AsyncTask<Void, Void, String> {
 
-        int user1Id;
-        int user2Id;
+        int user1Id, user2Id;
 
         // Constructor to instantiate object
         public Unfriend(int user1Id, int user2Id) {
@@ -186,9 +184,6 @@ public class HttpHelper {
         // Method which executes the background task
         @Override
         protected String doInBackground(Void... params) {
-            // Generate verification string
-            final String verificationString = MiscHelper.GenerateRandomString(20);
-
             // Create POST data
             ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>() {{
                 add(new BasicNameValuePair("requestFromApplication", "true"));
@@ -360,7 +355,7 @@ public class HttpHelper {
                 add(new BasicNameValuePair("userId", Integer.toString(userId)));
             }};
 
-            return DoPost(urlPrefix + "badges-get.php", postData);
+            return DoPost(urlPrefix + "profile-get.php", postData);
         }
     }
 }

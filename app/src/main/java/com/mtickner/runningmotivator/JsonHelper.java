@@ -244,6 +244,37 @@ public class JsonHelper {
         return runArrayList;
     }
 
+    // Method that returns the number of points earned in a run
+    public static int GetPoints(String jsonResult) {
+        int points = 0;
+
+        // Check server connection was successful
+        if (jsonResult != null) {
+            // Server connection was successful
+            try {
+                // Create JSON object from server response
+                JSONObject resultObject = new JSONObject(jsonResult);
+
+                if (ResultSuccess(resultObject)) {
+                    // Run retrieved successfully, no error in PHP
+                    // Get 'Details' array
+                    JSONArray resultDetailsArray = resultObject.getJSONArray("Details");
+
+                    // Get points from details array
+                    JSONObject runPointsObject = resultDetailsArray.getJSONObject(1);
+                    points = runPointsObject.getInt("POINTS");
+                }
+
+            } catch (Exception e) {
+                // Catches exceptions including JSONException when creating JSON objects
+                e.printStackTrace();
+            }
+        }
+
+        // Return the run or null if error
+        return points;
+    }
+
 
     // Method that returns a challenge
     public static Challenge GetChallenge(String jsonResult) {
@@ -371,12 +402,15 @@ public class JsonHelper {
 
                 if (ResultSuccess(resultObject)) {
                     // Badges retrieved successfully, no error in PHP
-                    // Get 'Details' array
-                    JSONArray resultDetailsArray = resultObject.getJSONArray("Details");
+                    // Get 'Details' object
+                    JSONObject resultDetailsObject = resultObject.getJSONObject("Details");
+
+                    // Get 'Badges' array
+                    JSONArray resultBadgesArray = resultDetailsObject.getJSONArray("Badges");
 
                     // Add badge objects to array list
-                    for (int i = 0; i < resultDetailsArray.length(); i++) {
-                        JSONObject badgeDetailsObject = resultDetailsArray.getJSONObject(i);
+                    for (int i = 0; i < resultBadgesArray.length(); i++) {
+                        JSONObject badgeDetailsObject = resultBadgesArray.getJSONObject(i);
 
                         Badge badge = new Badge(
                                 (badgeDetailsObject.getString("TYPE").equals("R")) ? Badge.Type.RUN : (badgeDetailsObject.getString("TYPE").equals("C")) ? Badge.Type.CHALLENGE : null,
@@ -434,5 +468,41 @@ public class JsonHelper {
         }
 
         return awardedBadgeArrayList;
+    }
+
+
+    // Method that returns an int array of statistics
+    public static double[] GetStatistics(String jsonResult) {
+        double[] statisticsArray = null;
+
+        // Check server connection was successful
+        if (jsonResult != null) {
+            // Server connection was successful
+            try {
+                // Instantiate array
+                statisticsArray = new double[5];
+
+                // Create JSON object from server response
+                JSONObject resultObject = new JSONObject(jsonResult);
+
+                if (ResultSuccess(resultObject)) {
+                    // Badges retrieved successfully, no error in PHP
+                    // Get 'Details' object
+                    JSONObject resultDetailsObject = resultObject.getJSONObject("Details");
+
+                    // Get user statistics
+                    statisticsArray[0] = resultDetailsObject.getInt("Score");
+                    statisticsArray[1] = resultDetailsObject.getInt("TotalRuns");
+                    statisticsArray[2] = resultDetailsObject.getInt("TotalChallenges");
+                    statisticsArray[3] = resultDetailsObject.getDouble("TotalDistance");
+                    statisticsArray[4] = resultDetailsObject.getInt("TotalTime");
+                }
+            } catch (Exception e) {
+                // Catches exceptions including JSONException when creating JSON objects
+                e.printStackTrace();
+            }
+        }
+
+        return statisticsArray;
     }
 }
