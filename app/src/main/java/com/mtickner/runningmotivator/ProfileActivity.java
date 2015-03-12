@@ -119,7 +119,7 @@ public class ProfileActivity extends ActionBarActivity {
                                     @Override
                                     public void onClick(View view) {
                                         // Display toast to user
-                                        Toast.makeText(ProfileActivity.this, "Awarded on " + MiscHelper.FormatDateForDisplay(currentBadge.GetDateAwarded()), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ProfileActivity.this, getString(R.string.profile_activity_badge_awarded_toast_text) + MiscHelper.FormatDateForDisplay(currentBadge.GetDateAwarded()), Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
@@ -149,14 +149,14 @@ public class ProfileActivity extends ActionBarActivity {
 
                     // Output statistics
                     OutputStats(JsonHelper.GetStatistics(jsonResult));
+
+                    // Output details
+                    OutputName(user);
                 } else {
                     // Error retrieving badges
                     // Set error layout
                     setContentView(R.layout.activity_connection_error);
                 }
-
-                // Output details
-                OutputName(user);
             }
         }.execute();
     }
@@ -164,22 +164,22 @@ public class ProfileActivity extends ActionBarActivity {
     // Method that displays friend name details
     private void OutputName(User user) {
         ((TextView) findViewById(R.id.name)).setText(user.GetName().toUpperCase());
-        ((TextView) findViewById(R.id.date_friends_since)).setText("User since: " + MiscHelper.FormatDateForDisplay(user.GetDateRegistered()));
+        ((TextView) findViewById(R.id.date_friends_since)).setText(getString(R.string.profile_activity_user_since_text) + MiscHelper.FormatDateForDisplay(user.GetDateRegistered()));
     }
 
     // Method that displays the users' statistics
     private void OutputStats(double[] statisticsArray) {
         ((TextView) findViewById(R.id.score)).setText(Integer.toString((int) statisticsArray[0]));
-        ((TextView) findViewById(R.id.stats_total_runs)).append(Integer.toString((int) statisticsArray[1]));
-        ((TextView) findViewById(R.id.stats_total_challenges)).append(Integer.toString((int) statisticsArray[2]));
-        ((TextView) findViewById(R.id.stats_total_time)).append(MiscHelper.FormatSecondsToHoursMinutesSeconds((int) statisticsArray[4]));
+        ((TextView) findViewById(R.id.stats_total_runs)).setText(Integer.toString((int) statisticsArray[1]));
+        ((TextView) findViewById(R.id.stats_total_challenges)).setText(Integer.toString((int) statisticsArray[2]));
+        ((TextView) findViewById(R.id.stats_total_time)).setText(MiscHelper.FormatSecondsToHoursMinutesSeconds((int) statisticsArray[4]));
 
-        if (Preferences.GetSettingDistanceUnit(ProfileActivity.this).equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres_placeholder))) {
+        if (Preferences.GetSettingDistanceUnit(ProfileActivity.this).equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres))) {
             // Kilometres
-            ((TextView) findViewById(R.id.stats_total_distance)).append(statisticsArray[3] + "km");
+            ((TextView) findViewById(R.id.stats_total_distance)).setText(statisticsArray[3] + getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres));
         } else {
             // Miles
-            ((TextView) findViewById(R.id.stats_total_distance)).append(statisticsArray[3] + "m");
+            ((TextView) findViewById(R.id.stats_total_distance)).setText(statisticsArray[3] + getString(R.string.run_activity_run_complete_activity_distance_unit_miles));
         }
     }
 }

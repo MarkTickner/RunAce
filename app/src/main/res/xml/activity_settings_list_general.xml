@@ -19,20 +19,4 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/settings_activity_developer_subheading">
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="com.mtickner.runningmotivator.enable_location_logging"
-            android:summary="@string/settings_activity_developer_enable_location_logging_summary"
-            android:title="@string/settings_activity_developer_enable_location_logging_title" />
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="com.mtickner.runningmotivator.enable_simulated_running"
-            android:summary="@string/settings_activity_developer_enable_simulated_running_summary"
-            android:title="@string/settings_activity_developer_enable_simulated_running_title" />
-
-    </PreferenceCategory>
-
 </PreferenceScreen>

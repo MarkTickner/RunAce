@@ -26,6 +26,13 @@ public class UserLoginActivity extends ActionBarActivity {
         SetupFormValidation();
     }
 
+    // Called when the activity has detected the user's press of the back key
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
     // Method which is called when the 'Login' button is pressed
     public void LoginUser(View view) {
         try {
@@ -81,12 +88,12 @@ public class UserLoginActivity extends ActionBarActivity {
                             ((EditText) findViewById(R.id.password)).setText("");
 
                             // Set error text
-                            ((EditText) findViewById(R.id.password)).setError(getString(R.string.user_login_activity_authentication_error_text));
+                            ((EditText) findViewById(R.id.password)).setError(ErrorCodes.GetErrorMessage(UserLoginActivity.this, 304));
                         }
                     } else {
                         // Error sending user login
                         // Display error toast to user
-                        Toast.makeText(UserLoginActivity.this, getString(R.string.internet_connection_error_message_toast), Toast.LENGTH_LONG).show();
+                        Toast.makeText(UserLoginActivity.this, ErrorCodes.GetErrorMessage(UserLoginActivity.this, 102), Toast.LENGTH_LONG).show();
                     }
                 }
             }.execute();
@@ -131,10 +138,10 @@ public class UserLoginActivity extends ActionBarActivity {
     private void ValidateEmail(EditText email) {
         if (email.getText().toString().matches("^$|\\s+")) {
             formIsValid = false;
-            email.setError(getString(R.string.user_register_activity_login_activity_validation_email_not_entered));
+            email.setError(ErrorCodes.GetErrorMessage(this, 301));
         } else if (!email.getText().toString().matches("^([\\w\\.\\-])+@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$")) {
             formIsValid = false;
-            email.setError(getString(R.string.user_register_activity_login_activity_validation_email_not_valid));
+            email.setError(ErrorCodes.GetErrorMessage(this, 302));
         } else {
             formIsValid = true;
         }
@@ -144,7 +151,7 @@ public class UserLoginActivity extends ActionBarActivity {
     private void ValidatePassword(EditText password) {
         if (password.getText().toString().matches("^$|\\s+")) {
             formIsValid = false;
-            password.setError(getString(R.string.user_register_activity_login_activity_validation_password_not_entered));
+            password.setError(ErrorCodes.GetErrorMessage(this, 303));
         } else {
             formIsValid = true;
         }

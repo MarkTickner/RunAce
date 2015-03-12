@@ -6,7 +6,7 @@
     <item
         android:id="@+id/menu_add_friend"
         android:checkable="true"
-        android:icon="@drawable/ic_action_add_person"
+        android:icon="@drawable/ic_add_friend"
         android:orderInCategory="1"
         android:title="@string/friend_list_menu_add_friend"
         app:showAsAction="ifRoom" />

@@ -56,9 +56,10 @@ public class ProfileFriendActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.menu_unfriend:
                 // Confirm with user
-                new AlertDialog.Builder(this)
+                final AlertDialog alert = new AlertDialog.Builder(this)
                         .setMessage(getString(R.string.friend_list_activity_remove_friend_dialog_text_start) + friend.GetUser().GetName() + getString(R.string.friend_list_activity_add_remove_friend_dialog_text_end))
-                        .setPositiveButton(getString(R.string.friend_list_activity_add_friend_confirm_button_text), new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getString(R.string.friend_list_activity_add_friend_cancel_button_text).toUpperCase(), null)
+                        .setNegativeButton(getString(R.string.friend_list_activity_add_friend_confirm_button_text).toUpperCase(), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // Send unfriend request
                                 new HttpHelper.Unfriend(Preferences.GetLoggedInUser(ProfileFriendActivity.this).GetId(), friend.GetUser().GetId()) {
@@ -79,13 +80,22 @@ public class ProfileFriendActivity extends ActionBarActivity {
                                         } else {
                                             // Error removing friend
                                             // Display error toast to user
-                                            Toast.makeText(ProfileFriendActivity.this, getString(R.string.internet_connection_error_message_toast), Toast.LENGTH_LONG).show();
+                                            Toast.makeText(ProfileFriendActivity.this, ErrorCodes.GetErrorMessage(ProfileFriendActivity.this, 102), Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 }.execute();
                             }
                         })
-                        .setNegativeButton(getString(R.string.friend_list_activity_add_friend_cancel_button_text), null).show();
+                        .create();
+                // Set button colour
+                alert.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.runace_red_primary));
+                        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.runace_grey_primary));
+                    }
+                });
+                alert.show();
 
                 return true;
         }
@@ -176,7 +186,7 @@ public class ProfileFriendActivity extends ActionBarActivity {
                                     @Override
                                     public void onClick(View view) {
                                         // Display toast to user
-                                        Toast.makeText(ProfileFriendActivity.this, "Awarded on " + MiscHelper.FormatDateForDisplay(currentBadge.GetDateAwarded()), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ProfileFriendActivity.this, getString(R.string.profile_activity_badge_awarded_toast_text) + MiscHelper.FormatDateForDisplay(currentBadge.GetDateAwarded()), Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
@@ -206,14 +216,14 @@ public class ProfileFriendActivity extends ActionBarActivity {
 
                     // Output statistics
                     OutputStats(JsonHelper.GetStatistics(jsonResult));
+
+                    // Output details
+                    OutputName(friend);
                 } else {
                     // Error retrieving badges
                     // Set error layout
                     setContentView(R.layout.activity_connection_error);
                 }
-
-                // Output details
-                OutputName(friend);
             }
         }.execute();
     }
@@ -221,7 +231,7 @@ public class ProfileFriendActivity extends ActionBarActivity {
     // Method that displays friend name details
     private void OutputName(Friend friend) {
         ((TextView) findViewById(R.id.name)).setText(friend.GetUser().GetName().toUpperCase());
-        ((TextView) findViewById(R.id.date_friends_since)).setText("Friends since: " + MiscHelper.FormatDateForDisplay(friend.GetStatusDate()));
+        ((TextView) findViewById(R.id.date_friends_since)).setText(getString(R.string.profile_activity_friends_since_text) + MiscHelper.FormatDateForDisplay(friend.GetStatusDate()));
     }
 
     // Method that displays the users' statistics
@@ -231,12 +241,12 @@ public class ProfileFriendActivity extends ActionBarActivity {
         ((TextView) findViewById(R.id.stats_total_challenges)).append(Integer.toString((int) statisticsArray[2]));
         ((TextView) findViewById(R.id.stats_total_time)).append(MiscHelper.FormatSecondsToHoursMinutesSeconds((int) statisticsArray[4]));
 
-        if (Preferences.GetSettingDistanceUnit(ProfileFriendActivity.this).equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres_placeholder))) {
+        if (Preferences.GetSettingDistanceUnit(ProfileFriendActivity.this).equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres))) {
             // Kilometres
-            ((TextView) findViewById(R.id.stats_total_distance)).append(statisticsArray[3] + "km");
+            ((TextView) findViewById(R.id.stats_total_distance)).append(statisticsArray[3] + getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres));
         } else {
             // Miles
-            ((TextView) findViewById(R.id.stats_total_distance)).append(statisticsArray[3] + "m");
+            ((TextView) findViewById(R.id.stats_total_distance)).append(statisticsArray[3] + getString(R.string.run_activity_run_complete_activity_distance_unit_miles));
         }
     }
 }

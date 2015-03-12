@@ -63,12 +63,6 @@ public class ChallengeService extends Service {
                     }
                 }
             }.execute();
-
-
-            //todo get friend requests?
-            //MiscHelper.CreateNotification(ChallengeService.this, intent, startId + 1, "test" + (startId + 1));
-
-
         }
 
         // Return sticky to continue running this service until it is explicitly stopped

@@ -1,9 +1,12 @@
 package com.mtickner.runningmotivator;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -31,6 +34,28 @@ public class HomeActivity extends ActionBarActivity {
 
         // Set profile button text to user's name
         ((Button) findViewById(R.id.profile_button)).setText(Preferences.GetLoggedInUser(this).GetName());
+
+        // Change button colour to red
+        findViewById(R.id.start_running_button).getBackground().setColorFilter(getResources().getColor(R.color.runace_red_primary), PorterDuff.Mode.SRC_ATOP);
+
+        //todo below - reset dev to default
+        if (Preferences.GetLoggedInUser(this).GetUserType().GetId() == 1) {
+            SharedPreferences.Editor editor = Preferences.GetSharedPreference(this).edit();
+
+            //editor.putString("com.mtickner.runningmotivator.distance_unit", "0");
+            //editor.putBoolean("com.mtickner.runningmotivator.enable_notifications", true);
+            editor.putBoolean("com.mtickner.runningmotivator.enable_location_logging", false);
+            editor.putBoolean("com.mtickner.runningmotivator.enable_simulated_running", false);
+
+            editor.apply();
+
+            final AlertDialog alert = new AlertDialog.Builder(this)
+                    .setMessage("Developer settings have been reset and disabled.")
+                    .setPositiveButton("OK", null)
+                    .create();
+            alert.show();
+        }
+        //todo above
     }
 
     // Called when the activity starts interacting with the user
@@ -51,6 +76,9 @@ public class HomeActivity extends ActionBarActivity {
         // Get challenges button
         View challengesMenu = menu.findItem(R.id.menu_challenges).getActionView();
         challengesMenuButton = (Button) challengesMenu.findViewById(R.id.challenges_button);
+
+        // Change button colour to white
+        challengesMenuButton.getBackground().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
 
         // Handler for the challenges button
         challengesMenuButton.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +111,7 @@ public class HomeActivity extends ActionBarActivity {
                 } else {
                     // Error retrieving challenges
                     // Display error toast to user
-                    Toast.makeText(HomeActivity.this, getString(R.string.internet_connection_warning_message_toast), Toast.LENGTH_LONG).show();
+                    Toast.makeText(HomeActivity.this, ErrorCodes.GetErrorMessage(HomeActivity.this, 101), Toast.LENGTH_LONG).show();
                 }
             }
         }.execute();
@@ -105,10 +133,19 @@ public class HomeActivity extends ActionBarActivity {
                     e.printStackTrace();
                 }
 
-                new AlertDialog.Builder(this)
+                final AlertDialog alert = new AlertDialog.Builder(this)
                         .setTitle(getString(R.string.app_name) + versionDetails)
                         .setMessage(getString(R.string.home_activity_about_dialog_text))
-                        .setPositiveButton(getString(R.string.home_activity_about_dialog_close_button_text), null).show();
+                        .setPositiveButton(getString(R.string.home_activity_about_dialog_close_button_text).toUpperCase(), null)
+                        .create();
+                // Set button colour
+                alert.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.runace_red_primary));
+                    }
+                });
+                alert.show();
 
                 return true;
             case R.id.menu_privacy_policy:

@@ -9,6 +9,7 @@ public class User {
     private String email;
     private String password;
     private Date dateRegistered;
+    private UserType userType;
 
     // Related public constants
     public final static String USER_GSON = "com.mtickner.runningmotivator.user_gson";
@@ -28,6 +29,16 @@ public class User {
     }
 
     // Constructor for user post-login
+    public User(int id, String name, String email, Date dateRegistered, UserType userType) {
+        SetId(id);
+        SetName(name);
+        SetEmail(email);
+        SetPassword(null);
+        SetDateRegistered(dateRegistered);
+        SetUserType(userType);
+    }
+
+    // Constructor for other constructors
     public User(int id, String name, String email, Date dateRegistered) {
         SetId(id);
         SetName(name);
@@ -80,5 +91,14 @@ public class User {
 
     public void SetDateRegistered(Date dateRegistered) {
         this.dateRegistered = dateRegistered;
+    }
+
+
+    public UserType GetUserType() {
+        return userType;
+    }
+
+    public void SetUserType(UserType userType) {
+        this.userType = userType;
     }
 }

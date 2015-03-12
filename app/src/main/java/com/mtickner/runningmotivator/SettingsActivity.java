@@ -32,7 +32,12 @@ public class SettingsActivity extends PreferenceActivity {
 
     private void SetupSettings() {
         // Add settings from XML
-        addPreferencesFromResource(R.xml.activity_settings_list);
+        addPreferencesFromResource(R.xml.activity_settings_list_general);
+
+        if (Preferences.GetLoggedInUser(this).GetUserType().GetId() == 1) {
+            // Enable developer options
+            addPreferencesFromResource(R.xml.activity_settings_list_developer);
+        }
 
         // Bind the summaries of List preferences
         UpdatePreferenceSummary(findPreference("com.mtickner.runningmotivator.distance_unit"));

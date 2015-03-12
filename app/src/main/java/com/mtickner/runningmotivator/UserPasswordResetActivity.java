@@ -72,7 +72,7 @@ public class UserPasswordResetActivity extends ActionBarActivity {
                     if (JsonHelper.ResultSuccess(jsonResult)) {
                         // Password reset request sent successfully
                         // Display success toast to user
-                        Toast.makeText(UserPasswordResetActivity.this, "An email has been sent to " + email, Toast.LENGTH_LONG).show();
+                        Toast.makeText(UserPasswordResetActivity.this, getString(R.string.user_password_reset_toast_text) + email, Toast.LENGTH_LONG).show();
 
                         // Direct to the login activity
                         Intent intent = new Intent(UserPasswordResetActivity.this, UserLoginActivity.class);
@@ -82,7 +82,7 @@ public class UserPasswordResetActivity extends ActionBarActivity {
                     } else {
                         // Error sending password reset request
                         // Display error toast to user
-                        Toast.makeText(UserPasswordResetActivity.this, getString(R.string.internet_connection_error_message_toast), Toast.LENGTH_LONG).show();
+                        Toast.makeText(UserPasswordResetActivity.this, ErrorCodes.GetErrorMessage(UserPasswordResetActivity.this, 102), Toast.LENGTH_LONG).show();
                     }
                 }
             }.execute();
@@ -93,10 +93,10 @@ public class UserPasswordResetActivity extends ActionBarActivity {
     private void ValidateEmail(EditText email) {
         if (email.getText().toString().matches("^$|\\s+")) {
             formIsValid = false;
-            email.setError(getString(R.string.user_register_activity_login_activity_validation_email_not_entered));
+            email.setError(ErrorCodes.GetErrorMessage(this, 301));
         } else if (!email.getText().toString().matches("^([\\w\\.\\-])+@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$")) {
             formIsValid = false;
-            email.setError(getString(R.string.user_register_activity_login_activity_validation_email_not_valid));
+            email.setError(ErrorCodes.GetErrorMessage(this, 302));
         } else {
             formIsValid = true;
         }

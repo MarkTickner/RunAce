@@ -6,7 +6,7 @@
     <item
         android:id="@+id/menu_unfriend"
         android:orderInCategory="1"
-        android:title="Unfriend"
+        android:title="@string/profile_friend_activity_menu_unfriend"
         app:showAsAction="never" />
 
 </menu>

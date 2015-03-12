@@ -3,6 +3,7 @@ package com.mtickner.runningmotivator;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -39,7 +40,7 @@ public class ChallengeFriendActivity extends ActionBarActivity {
         // Output distance to preferred unit
         String distanceUnit = Preferences.GetSettingDistanceUnit(ChallengeFriendActivity.this);
 
-        if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres_placeholder))) {
+        if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres))) {
             // Kilometres
             ((TextView) findViewById(R.id.distance)).setText(MiscHelper.FormatDouble(run.GetDistanceTotal()));
         } else {
@@ -49,6 +50,9 @@ public class ChallengeFriendActivity extends ActionBarActivity {
 
         // Output distance to preferred unit
         ((TextView) findViewById(R.id.distance_unit)).setText(distanceUnit);
+
+        // Change send challenge button colour to blue
+        findViewById(R.id.send_button).getBackground().setColorFilter(getResources().getColor(R.color.runace_blue_primary), PorterDuff.Mode.SRC_ATOP);
     }
 
     // Called when a launched activity exits, in this case the contacts picker
@@ -68,7 +72,7 @@ public class ChallengeFriendActivity extends ActionBarActivity {
                 findViewById(R.id.friend_container).setVisibility(View.VISIBLE);
 
                 // Display name
-                ((TextView) findViewById(R.id.friend_name)).setText((getString(R.string.challenge_friend_activity_to_user_prefix) + friendUser.GetName()).toUpperCase());
+                ((TextView) findViewById(R.id.friend_name)).setText(friendUser.GetName().toUpperCase());
 
                 // Update button text
                 ((Button) findViewById(R.id.choose_friend_button)).setText(getString(R.string.challenge_friend_activity_change_friend_button_text));
@@ -125,7 +129,7 @@ public class ChallengeFriendActivity extends ActionBarActivity {
                 } else {
                     // Error saving challenge
                     // Display error toast to user
-                    Toast.makeText(ChallengeFriendActivity.this, getString(R.string.internet_connection_error_message_toast), Toast.LENGTH_LONG).show();
+                    Toast.makeText(ChallengeFriendActivity.this, ErrorCodes.GetErrorMessage(ChallengeFriendActivity.this, 102), Toast.LENGTH_LONG).show();
                 }
             }
         }.execute();

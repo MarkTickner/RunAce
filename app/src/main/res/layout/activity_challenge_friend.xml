@@ -1,162 +1,180 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.mtickner.runningmotivator.ChallengeFriendActivity">
 
-    <LinearLayout
-        android:id="@+id/time_container"
+    <ScrollView
+        android:id="@+id/scroll_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:background="@drawable/bg_border_box"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/time_heading"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:gravity="center_horizontal|bottom"
-            android:text="@string/run_activity_run_complete_activity_time_title"
-            android:textAllCaps="true" />
-
-        <TextView
-            android:id="@+id/time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-5dp"
-            android:gravity="center_horizontal"
-            android:text="@string/run_activity_run_complete_activity_time_placeholder"
-            android:textSize="45sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/distance_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/bg_border_box"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/distance_heading"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:gravity="center_horizontal|bottom"
-            android:text="@string/run_activity_run_complete_activity_distance_title"
-            android:textAllCaps="true" />
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
-            android:id="@+id/distance_layout"
+            android:id="@+id/main_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-5dp"
-            android:baselineAligned="false"
-            android:gravity="center_vertical|center_horizontal"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
 
-            <TextView
-                android:id="@+id/distance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/run_activity_run_complete_activity_distance_placeholder"
-                android:textSize="45sp" />
-
-            <TextView
-                android:id="@+id/distance_unit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="10dp"
-                android:text="@string/run_activity_run_complete_activity_distance_unit_kilometres_placeholder"
-                android:textSize="20sp" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/choose_friend_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="ChooseFriend"
-        android:text="@string/challenge_friend_activity_choose_friend_button_text"
-        android:textAllCaps="true" />
-
-    <LinearLayout
-        android:id="@+id/friend_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:id="@+id/message_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp"
-            android:layout_weight="9"
-            android:background="@drawable/bg_border_box"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/friend_name"
+            <LinearLayout
+                android:id="@+id/time_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal|bottom"
-                android:textSize="20sp" />
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:background="@drawable/bg_border_box"
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/message"
+                <TextView
+                    android:id="@+id/time_heading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_horizontal|bottom"
+                    android:text="@string/run_activity_run_complete_activity_time_title"
+                    android:textAllCaps="true" />
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-5dp"
+                    android:gravity="center_horizontal"
+                    android:text="@string/run_activity_run_complete_activity_time_placeholder"
+                    android:textSize="45sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/distance_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_border_box"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/distance_heading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_horizontal|bottom"
+                    android:text="@string/run_activity_run_complete_activity_distance_title"
+                    android:textAllCaps="true" />
+
+                <LinearLayout
+                    android:id="@+id/distance_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-5dp"
+                    android:baselineAligned="false"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/distance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/run_activity_run_complete_activity_distance_placeholder"
+                        android:textSize="45sp" />
+
+                    <TextView
+                        android:id="@+id/distance_unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="10dp"
+                        android:text="@string/run_activity_run_complete_activity_distance_unit_kilometres"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/choose_friend_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="ChooseFriend"
+                android:text="@string/challenge_friend_activity_choose_friend_button_text"
+                android:textAllCaps="true" />
+
+            <LinearLayout
+                android:id="@+id/friend_container"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/bg_border_box"
-                android:gravity="top"
-                android:hint="@string/challenge_friend_activity_hint_message"
-                android:inputType="text|textMultiLine|textCapSentences|textAutoCorrect"
-                android:padding="5dp"
-                android:textStyle="italic" />
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/message_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_weight="0.7"
+                    android:background="@drawable/bg_border_box"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/friend_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_horizontal|bottom"
+                        android:textSize="20sp" />
+
+                    <EditText
+                        android:id="@+id/message"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:background="@color/white"
+                        android:gravity="top"
+                        android:hint="@string/challenge_friend_activity_hint_message"
+                        android:inputType="text|textMultiLine|textCapSentences|textAutoCorrect"
+                        android:padding="5dp"
+                        android:textStyle="italic" />
+
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3" />
+
+                <Button
+                    android:id="@+id/send_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="SendChallenge"
+                    android:text="@string/challenge_friend_activity_button_text_send_challenge"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="25sp" />
+
+                <TextView
+                    android:id="@+id/send_details_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="@string/challenge_friend_activity_detail_text"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_weight="1" />
-
-        <Button
-            android:id="@+id/send_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="SendChallenge"
-            android:text="@string/challenge_friend_activity_button_text_send_challenge"
-            android:textAllCaps="true"
-            android:textSize="25sp" />
-
-        <TextView
-            android:id="@+id/send_details_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/challenge_friend_activity_detail_text"
-            android:textSize="12sp" />
-
-    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

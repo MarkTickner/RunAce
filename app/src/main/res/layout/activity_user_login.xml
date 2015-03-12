@@ -28,16 +28,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="LoginUser"
-        android:text="@string/user_login_activity_login_button_text"
+        android:text="@string/main_activity_login_button_text"
         android:textAllCaps="true" />
 
     <TextView
         android:id="@+id/reset_password_link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="right"
         android:clickable="true"
         android:onClick="ResetPassword"
-        android:text="Trouble logging in?"
-        android:layout_gravity="right" />
+        android:text="@string/user_login_activity_login_trouble_text"
+        android:textColor="@color/runace_grey_dark" />
 
 </LinearLayout>

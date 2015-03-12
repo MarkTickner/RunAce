@@ -5,12 +5,15 @@ import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +51,7 @@ public class RunChallengeCompleteActivity extends ActionBarActivity {
         double paceInMinutesPerKilometre = MiscHelper.CalculatePaceInMinutesPerKilometre(run.GetTotalTime(), run.GetDistanceTotal());
         double targetPaceInMinutesPerKilometre = MiscHelper.CalculatePaceInMinutesPerKilometre(challenge.GetRun().GetTotalTime(), challenge.GetRun().GetDistanceTotal());
 
-        if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres_placeholder))) {
+        if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres))) {
             // Kilometres
             // Run distance
             ((TextView) findViewById(R.id.distance)).setText(MiscHelper.FormatDouble(run.GetDistanceTotal()));
@@ -79,14 +82,30 @@ public class RunChallengeCompleteActivity extends ActionBarActivity {
         // Set pace and distance preferred unit
         SetDistanceUnits(distanceUnit);
 
+        // Change save run and challenge friend buttons colour to blue
+        findViewById(R.id.save_run_button).getBackground().setColorFilter(getResources().getColor(R.color.runace_blue_primary), PorterDuff.Mode.SRC_ATOP);
+        findViewById(R.id.challenge_friend_button).getBackground().setColorFilter(getResources().getColor(R.color.runace_blue_primary), PorterDuff.Mode.SRC_ATOP);
+
         // Display correct message
         if (challengeComplete == 1) {
             challengeSuccess = true;
+
+            // Set icon
+            ImageView image = (ImageView) findViewById(R.id.challenge_success_icon);
+            Drawable tickDrawable = getResources().getDrawable(R.drawable.ic_tick);
+            tickDrawable.setColorFilter(getResources().getColor(R.color.runace_green_dark), PorterDuff.Mode.MULTIPLY);
+            image.setImageDrawable(tickDrawable);
 
             // Hide failed layout
             findViewById(R.id.challenge_failed_layout).setVisibility(View.GONE);
         } else {
             challengeSuccess = false;
+
+            // Set icon
+            ImageView image = (ImageView) findViewById(R.id.challenge_failed_icon);
+            Drawable crossDrawable = getResources().getDrawable(R.drawable.ic_cross);
+            crossDrawable.setColorFilter(getResources().getColor(R.color.runace_red_dark), PorterDuff.Mode.MULTIPLY);
+            image.setImageDrawable(crossDrawable);
 
             // Hide success layout
             findViewById(R.id.challenge_success_layout).setVisibility(View.GONE);
@@ -152,15 +171,25 @@ public class RunChallengeCompleteActivity extends ActionBarActivity {
                 } else {
                     // Error saving run
                     // Display error retry dialog to user
-                    new AlertDialog.Builder(RunChallengeCompleteActivity.this)
+                    final AlertDialog alert = new AlertDialog.Builder(RunChallengeCompleteActivity.this)
                             .setMessage(getString(R.string.run_complete_activity_saving_run_error_text))
-                            .setPositiveButton(getString(R.string.run_complete_activity_saving_run_error_retry_button_text), new DialogInterface.OnClickListener() {
+                            .setPositiveButton(getString(R.string.run_complete_activity_saving_run_error_retry_button_text).toUpperCase(), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // Try saving again
                                     SaveRun(view);
                                 }
                             })
-                            .setNegativeButton(getString(R.string.run_complete_activity_saving_run_error_cancel_button_text), null).show();
+                            .setNegativeButton(getString(R.string.run_complete_activity_saving_run_error_cancel_button_text).toUpperCase(), null)
+                            .create();
+                    // Set button colour
+                    alert.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.runace_red_primary));
+                            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.runace_grey_primary));
+                        }
+                    });
+                    alert.show();
                 }
             }
         }.execute();
@@ -177,20 +206,20 @@ public class RunChallengeCompleteActivity extends ActionBarActivity {
     // Method that sets the run and challenge target pace and distance preferred unit
     private void SetDistanceUnits(String distanceUnit) {
         // Set pace preferred unit
-        if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres_placeholder))) {
+        if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres))) {
             // Kilometres
             // Run pace unit
-            ((TextView) findViewById(R.id.pace_distance_unit)).setText(getString(R.string.run_activity_run_complete_activity_pace_distance_unit_kilometres_placeholder));
+            ((TextView) findViewById(R.id.pace_distance_unit)).setText(getString(R.string.run_activity_run_complete_activity_pace_distance_unit_kilometres));
 
             // Challenge target pace unit
-            ((TextView) findViewById(R.id.pace_target_distance_unit)).setText(getString(R.string.run_activity_run_complete_activity_pace_distance_unit_kilometres_placeholder));
+            ((TextView) findViewById(R.id.pace_target_distance_unit)).setText(getString(R.string.run_activity_run_complete_activity_pace_distance_unit_kilometres));
         } else {
             // Miles
             // Run pace unit
-            ((TextView) findViewById(R.id.pace_distance_unit)).setText(getString(R.string.run_activity_run_complete_activity_pace_distance_unit_miles_placeholder));
+            ((TextView) findViewById(R.id.pace_distance_unit)).setText(getString(R.string.run_activity_run_complete_activity_pace_distance_unit_miles));
 
             // Challenge target pace unit
-            ((TextView) findViewById(R.id.pace_target_distance_unit)).setText(getString(R.string.run_activity_run_complete_activity_pace_distance_unit_miles_placeholder));
+            ((TextView) findViewById(R.id.pace_target_distance_unit)).setText(getString(R.string.run_activity_run_complete_activity_pace_distance_unit_miles));
         }
 
         // Output distance preferred unit
@@ -228,11 +257,20 @@ public class RunChallengeCompleteActivity extends ActionBarActivity {
         }
 
         // Display dialog box for newly awarded badge
-        new AlertDialog.Builder(this)
-                .setTitle("Congratulations!")
-                .setMessage("You have been awarded a badge.")
+        final AlertDialog alert = new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.run_complete_activity_new_badge_heading))
+                .setMessage(getString(R.string.run_complete_activity_new_badge_text))
                 .setView(dialogAwardBadgeLayout)
-                .setPositiveButton("Close", null).show();
+                .setPositiveButton(getString(R.string.run_complete_activity_new_badge_close_button_text).toUpperCase(), null)
+                .create();
+        // Set button colour
+        alert.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.runace_red_primary));
+            }
+        });
+        alert.show();
     }
 
     // Method that returns the user to view the challenge

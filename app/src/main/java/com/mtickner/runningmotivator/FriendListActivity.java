@@ -122,9 +122,9 @@ public class FriendListActivity extends ActionBarActivity {
                 cursor.close();
 
                 // Confirm with user
-                new AlertDialog.Builder(this)
+                final AlertDialog alert = new AlertDialog.Builder(this)
                         .setMessage(getString(R.string.friend_list_activity_add_friend_dialog_text_start) + friendName + getString(R.string.friend_list_activity_add_remove_friend_dialog_text_end))
-                        .setPositiveButton(getString(R.string.friend_list_activity_add_friend_confirm_button_text), new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getString(R.string.friend_list_activity_add_friend_confirm_button_text).toUpperCase(), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 // Send friend request
                                 new HttpHelper.AddFriend(Preferences.GetLoggedInUser(FriendListActivity.this).GetId(), friendEmail) {
@@ -158,13 +158,23 @@ public class FriendListActivity extends ActionBarActivity {
                                         } else {
                                             // Error adding friend
                                             // Display error toast to user
-                                            Toast.makeText(FriendListActivity.this, getString(R.string.internet_connection_error_message_toast), Toast.LENGTH_LONG).show();
+                                            Toast.makeText(FriendListActivity.this, ErrorCodes.GetErrorMessage(FriendListActivity.this, 102), Toast.LENGTH_LONG).show();
                                         }
                                     }
                                 }.execute();
                             }
                         })
-                        .setNegativeButton(getString(R.string.friend_list_activity_add_friend_cancel_button_text), null).show();
+                        .setNegativeButton(getString(R.string.friend_list_activity_add_friend_cancel_button_text).toUpperCase(), null)
+                        .create();
+                // Set button colour
+                alert.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.runace_red_primary));
+                        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.runace_grey_primary));
+                    }
+                });
+                alert.show();
             }
         }
     }

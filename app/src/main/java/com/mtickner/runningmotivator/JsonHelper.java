@@ -50,14 +50,20 @@ public class JsonHelper {
             if (ResultSuccess(resultObject)) {
                 // Logged in successfully, no error in PHP
                 // Get 'Details' array
-                JSONObject resultDetailsArray = resultObject.getJSONObject("Details");
+                JSONObject resultDetailsObject = resultObject.getJSONObject("Details");
+                JSONObject userTypeObject = resultDetailsObject.getJSONObject("USER_TYPE");
 
                 // Get user details
                 loggedInUser = new User(
-                        resultDetailsArray.getInt("ID"),
-                        resultDetailsArray.getString("NAME"),
-                        resultDetailsArray.getString("EMAIL"),
-                        MiscHelper.FormatDateFromDatabase(resultDetailsArray.getString("DATE_REGISTERED"))
+                        resultDetailsObject.getInt("ID"),
+                        resultDetailsObject.getString("NAME"),
+                        resultDetailsObject.getString("EMAIL"),
+                        MiscHelper.FormatDateFromDatabase(resultDetailsObject.getString("DATE_REGISTERED")),
+                        new UserType(
+                                userTypeObject.getInt("ID"),
+                                userTypeObject.getString("NAME"),
+                                userTypeObject.getString("DESCRIPTION")
+                        )
                 );
             }
         } catch (Exception e) {

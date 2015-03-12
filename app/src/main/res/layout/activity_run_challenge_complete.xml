@@ -21,8 +21,7 @@
             android:id="@+id/challenge_success_icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:contentDescription="@string/run_challenge_complete_activity_challenge_success_icon_description_text"
-            android:src="@drawable/ic_tick" />
+            android:contentDescription="@string/run_challenge_complete_activity_challenge_success_icon_description_text" />
 
         <TextView
             android:id="@+id/challenge_success_text"
@@ -45,8 +44,7 @@
             android:id="@+id/challenge_failed_icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:contentDescription="@string/run_challenge_complete_activity_challenge_failed_icon_description_text"
-            android:src="@drawable/ic_challenge" />
+            android:contentDescription="@string/run_challenge_complete_activity_challenge_failed_icon_description_text" />
 
         <TextView
             android:id="@+id/challenge_failed_text"
@@ -99,14 +97,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:text="@string/run_activity_run_complete_activity_target_title"
-                android:textSize="20sp" />
+                android:text="@string/run_activity_run_complete_activity_target_title" />
 
             <TextView
                 android:id="@+id/time_target"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="10dp"
+                android:paddingStart="8dp"
                 android:text="@string/run_activity_run_complete_activity_time_placeholder"
                 android:textSize="20sp" />
 
@@ -154,7 +151,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="15dp"
-                android:text="@string/run_activity_run_complete_activity_distance_unit_kilometres_placeholder"
+                android:text="@string/run_activity_run_complete_activity_distance_unit_kilometres"
                 android:textSize="40sp" />
 
         </LinearLayout>
@@ -174,14 +171,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:text="@string/run_activity_run_complete_activity_target_title"
-                android:textSize="20sp" />
+                android:text="@string/run_activity_run_complete_activity_target_title" />
 
             <TextView
                 android:id="@+id/distance_target"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="10dp"
+                android:paddingStart="8dp"
                 android:text="@string/run_activity_run_complete_activity_pace_distance_placeholder"
                 android:textSize="20sp" />
 
@@ -190,7 +186,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="5dp"
-                android:text="@string/run_activity_run_complete_activity_distance_unit_kilometres_placeholder" />
+                android:text="@string/run_activity_run_complete_activity_distance_unit_kilometres" />
 
         </LinearLayout>
 
@@ -271,7 +267,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="10dp"
-                    android:text="@string/run_activity_run_complete_activity_pace_distance_unit_kilometres_placeholder" />
+                    android:text="@string/run_activity_run_complete_activity_pace_distance_unit_kilometres" />
 
             </LinearLayout>
 
@@ -296,7 +292,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="10dp"
-                    android:text="@string/run_activity_run_complete_activity_pace_distance_unit_kilometres_placeholder" />
+                    android:text="@string/run_activity_run_complete_activity_pace_distance_unit_kilometres" />
 
             </LinearLayout>
 
@@ -311,7 +307,8 @@
         android:onClick="SaveRun"
         android:text="@string/run_complete_activity_save_run_button_text"
         android:textAllCaps="true"
-        android:textSize="30sp" />
+        android:textColor="@color/white"
+        android:textSize="25sp" />
 
     <Button
         android:id="@+id/challenge_friend_button"
@@ -320,7 +317,8 @@
         android:onClick="ChallengeFriend"
         android:text="@string/run_complete_activity_challenge_friend_button_text"
         android:textAllCaps="true"
-        android:textSize="30sp"
+        android:textColor="@color/white"
+        android:textSize="25sp"
         android:visibility="gone" />
 
 </LinearLayout>

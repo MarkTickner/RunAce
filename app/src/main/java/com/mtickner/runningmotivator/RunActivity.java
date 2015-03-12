@@ -3,12 +3,13 @@ package com.mtickner.runningmotivator;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ public class RunActivity extends ActionBarActivity implements
 
     private int challengeComplete = -1;
     private boolean isVisible = true;
+    private boolean isPaused = false;
 
     private static BufferedWriter bufferedWriter;
 
@@ -76,7 +78,7 @@ public class RunActivity extends ActionBarActivity implements
             // Get challenge target pace
             double targetPaceInMinutesPerKilometre = MiscHelper.CalculatePaceInMinutesPerKilometre(currentChallenge.GetRun().GetTotalTime(), currentChallenge.GetRun().GetDistanceTotal());
 
-            if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres_placeholder))) {
+            if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres))) {
                 // Challenge target distance
                 // Kilometres
                 ((TextView) findViewById(R.id.distance)).setText(MiscHelper.FormatDouble(currentChallenge.GetRun().GetDistanceTotal()));
@@ -94,6 +96,10 @@ public class RunActivity extends ActionBarActivity implements
                 ((TextView) findViewById(R.id.pace_target)).setText(MiscHelper.FormatDouble(MiscHelper.ConvertMinutesPerKilometreToMinutesPerMile(targetPaceInMinutesPerKilometre)));
             }
         }
+
+        // Change stop button colour to red and pause button to yellow
+        findViewById(R.id.stop_running_button).getBackground().setColorFilter(getResources().getColor(R.color.runace_red_primary), PorterDuff.Mode.SRC_ATOP);
+        findViewById(R.id.pause_running_button).getBackground().setColorFilter(getResources().getColor(R.color.runace_yellow_primary), PorterDuff.Mode.SRC_ATOP);
 
         // Start location API
         StartRun();
@@ -163,38 +169,42 @@ public class RunActivity extends ActionBarActivity implements
     // Called by LocationListener when the location has changed
     @Override
     public void onLocationChanged(Location location) {
-        // Log current location
-        MiscHelper.AppendLogFile(RunActivity.this, bufferedWriter, Calendar.getInstance().getTimeInMillis() + "," + location.getLatitude() + "," + location.getLongitude());
+        // Check run is not paused
+        if (!isPaused) {
+            // Log current location
+            MiscHelper.AppendLogFile(RunActivity.this, bufferedWriter, Calendar.getInstance().getTimeInMillis() + "," + location.getLatitude() + "," + location.getLongitude());
 
-        // Determine new location accuracy in metres
-        if (location.getAccuracy() <= 20) {
-            if (previousLocation != null) {
-                // Previous location is not null
-                // Calculate distance from previous location to current location
-                float splitDistanceInMetres = previousLocation.distanceTo(location);
+            // Determine new location accuracy in metres
+            if (location.getAccuracy() <= 20) {
+                if (previousLocation != null) {
+                    // Previous location is not null
+                    // Calculate distance from previous location to current location
+                    float splitDistanceInMetres = previousLocation.distanceTo(location);
 
-                // Determine if the user has travelled 5 metres
-                if (splitDistanceInMetres > 5) {
-                    // Metres to kilometres
-                    //distanceTotalInKilometres += (splitDistanceInMetres / 1000);
-                    currentRun.SetDistanceTotal(currentRun.GetDistanceTotal() + (splitDistanceInMetres / 1000));
+                    // Determine if the user has travelled 5 metres
+                    if (splitDistanceInMetres > 5) {
+                        // Metres to kilometres
+                        //distanceTotalInKilometres += (splitDistanceInMetres / 1000);
+                        currentRun.SetDistanceTotal(currentRun.GetDistanceTotal() + (splitDistanceInMetres / 1000));
 
-                    // Set previous location to current location for next time
+                        // Set previous location to current location for next time
+                        previousLocation = location;
+                    }
+                } else {
+                    // Set previous location to initial location
                     previousLocation = location;
                 }
-            } else {
-                // Set previous location to initial location
-                previousLocation = location;
             }
         }
     }
 
-    // Called when the user clicks the 'Stop Run' button
+    // Called when the user presses the 'Stop' button
     public void StopRun(View view) {
         // Confirm with user
-        new AlertDialog.Builder(this)
+        final AlertDialog alert = new AlertDialog.Builder(this)
                 .setMessage(getString(R.string.run_activity_stop_running_dialog_text))
-                .setPositiveButton(getString(R.string.run_activity_stop_running_dialog_stop_running_button_text), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.run_activity_stop_running_dialog_continue_running_button_text).toUpperCase(), null)
+                .setNegativeButton(getString(R.string.run_activity_stop_running_dialog_stop_running_button_text).toUpperCase(), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // End the run
                         EndRun();
@@ -216,20 +226,58 @@ public class RunActivity extends ActionBarActivity implements
                         finish();
                     }
                 })
-                .setNegativeButton(getString(R.string.run_activity_stop_running_dialog_continue_running_button_text), null).show();
+                .create();
+        // Set button colour
+        alert.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.runace_red_primary));
+                alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.runace_grey_primary));
+            }
+        });
+        alert.show();
+    }
+
+    // Called when the user presses the 'Pause' button
+    public void PauseRun(View view) {
+        Button pauseButton = (Button) view;
+
+        if (!isPaused) {
+            // Pause
+            isPaused = true;
+
+            // Set button text, colour and icon
+            pauseButton.setText(getString(R.string.run_activity_resume_running_button_text));
+            pauseButton.getBackground().setColorFilter(getResources().getColor(R.color.runace_green_primary), PorterDuff.Mode.SRC_ATOP);
+            pauseButton.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_play), null, null);
+
+            // Stop timer
+            timerHandler.removeCallbacks(timerRunnable);
+        } else {
+            // Resume
+            isPaused = false;
+
+            // Set button text, colour and icon
+            pauseButton.setText(getString(R.string.run_activity_pause_running_button_text));
+            pauseButton.getBackground().setColorFilter(getResources().getColor(R.color.runace_yellow_primary), PorterDuff.Mode.SRC_ATOP);
+            pauseButton.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_pause), null, null);
+
+            // Restart timer
+            timerHandler.postDelayed(timerRunnable, 1000);
+        }
     }
 
     // Method that sets the pace and distance preferred unit
     private void SetDistanceUnits(String distanceUnit) {
         // Set pace preferred unit
-        if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres_placeholder))) {
+        if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres))) {
             // Kilometres
             // Pace unit
-            ((TextView) findViewById(R.id.pace_distance_unit)).setText(getString(R.string.run_activity_run_complete_activity_pace_distance_unit_kilometres_placeholder));
+            ((TextView) findViewById(R.id.pace_distance_unit)).setText(getString(R.string.run_activity_run_complete_activity_pace_distance_unit_kilometres));
         } else {
             // Miles
             // Pace unit
-            ((TextView) findViewById(R.id.pace_distance_unit)).setText(getString(R.string.run_activity_run_complete_activity_pace_distance_unit_miles_placeholder));
+            ((TextView) findViewById(R.id.pace_distance_unit)).setText(getString(R.string.run_activity_run_complete_activity_pace_distance_unit_miles));
         }
 
         // Output distance preferred unit
@@ -272,7 +320,7 @@ public class RunActivity extends ActionBarActivity implements
                 ((TextView) findViewById(R.id.time)).setText(MiscHelper.FormatSecondsToHoursMinutesSeconds(currentRun.GetTotalTime()));
 
                 // Increment distance
-                if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres_placeholder))) {
+                if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres))) {
                     // Kilometres
                     ((TextView) findViewById(R.id.distance)).setText(MiscHelper.FormatDouble(currentRun.GetDistanceTotal()));
                 } else {
@@ -289,7 +337,7 @@ public class RunActivity extends ActionBarActivity implements
                 if (distanceRemaining < 0) distanceRemaining = 0;
 
                 // Decrement distance
-                if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres_placeholder))) {
+                if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres))) {
                     // Kilometres
                     ((TextView) findViewById(R.id.distance)).setText(MiscHelper.FormatDouble(distanceRemaining));
                 } else {
@@ -337,7 +385,7 @@ public class RunActivity extends ActionBarActivity implements
                 if (Double.isNaN(paceInMinutesPerKilometre)) paceInMinutesPerKilometre = 0;
 
                 // Output pace in preferred unit
-                if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres_placeholder))) {
+                if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres))) {
                     // Minutes per kilometre
                     ((TextView) findViewById(R.id.pace)).setText(MiscHelper.FormatDouble(paceInMinutesPerKilometre));
                 } else {
@@ -349,7 +397,7 @@ public class RunActivity extends ActionBarActivity implements
                     // Set pace to red if the current pace is slower than the target pace
                     double paceInMinutesPerKilometreTarget = MiscHelper.CalculatePaceInMinutesPerKilometre(currentChallenge.GetRun().GetTotalTime(), currentChallenge.GetRun().GetDistanceTotal());
                     if (paceInMinutesPerKilometre > paceInMinutesPerKilometreTarget) {
-                        ((TextView) findViewById(R.id.pace)).setTextColor(Color.parseColor("#ff8e0000"));
+                        ((TextView) findViewById(R.id.pace)).setTextColor(getResources().getColor(R.color.red_warning));
                     }
                 }
             }

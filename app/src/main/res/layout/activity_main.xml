@@ -57,8 +57,11 @@
         android:id="@+id/privacy_policy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="true"
         android:gravity="center_horizontal"
+        android:onClick="GoToPrivacyPolicy"
         android:text="@string/main_activity_login_privacy_policy_text"
+        android:textColor="@color/runace_grey_dark"
         android:textSize="12sp" />
 
 </LinearLayout>

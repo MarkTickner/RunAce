@@ -12,7 +12,6 @@
         android:layout_centerVertical="true"
         android:orientation="vertical">
 
-        <!-- todo https://www.iconfinder.com/icons/174996/error_icon -->
         <ImageView
             android:id="@+id/error_icon"
             android:layout_width="30dp"

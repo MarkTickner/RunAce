@@ -17,7 +17,8 @@
     <color name="runace_green_dark">#738e26</color>
 
     <color name="white">#ffffff</color>
-
-    <!--todo dialog buttons. main activity link text-->
+    <color name="grey">#d6d7d7</color>
+    <color name="black">#000000</color>
+    <color name="red_warning">#8e0000</color>
 
 </resources>

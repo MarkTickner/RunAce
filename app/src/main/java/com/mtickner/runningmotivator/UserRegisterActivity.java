@@ -75,29 +75,31 @@ public class UserRegisterActivity extends ActionBarActivity {
                             // Create JSON object from server response
                             JSONObject resultObject = new JSONObject(jsonResult);
 
-                            // Get 'Details' array from JSON object
-                            JSONArray resultDetailsArray = resultObject.getJSONArray("Details");
-
                             // Get 'OutputType' from JSON object
                             if (resultObject.getString("OutputType").equals("Success")) {
                                 // Registered successfully
-                                // Get user ID
-                                loggedInUser.SetId(resultDetailsArray.getInt(0));
+                                if ((loggedInUser = JsonHelper.GetUserAfterLogin(jsonResult)) != null) {
+                                    // Login user
+                                    Preferences.SetLoggedInUser(UserRegisterActivity.this, loggedInUser);
 
-                                // Login user
-                                Preferences.SetLoggedInUser(UserRegisterActivity.this, loggedInUser);
+                                    // Direct to the main activity
+                                    Intent intent = new Intent(UserRegisterActivity.this, MainActivity.class);
+                                    startActivity(intent);
 
-                                // Direct to the main activity
-                                Intent intent = new Intent(UserRegisterActivity.this, MainActivity.class);
-                                startActivity(intent);
-
-                                finish();
+                                    finish();
+                                } else {
+                                    // Error sending registration
+                                    // Display error toast to user
+                                    Toast.makeText(UserRegisterActivity.this, ErrorCodes.GetErrorMessage(UserRegisterActivity.this, 102), Toast.LENGTH_LONG).show();
+                                }
                             } else {
                                 // Check if email is already registered
+                                // Get 'Details' array from JSON array
+                                JSONArray resultDetailsArray = resultObject.getJSONArray("Details");
                                 for (int i = 0; i < resultDetailsArray.length(); i++) {
                                     if (resultDetailsArray.getString(i).equals("307")) {
                                         // Email is already registered
-                                        ((EditText) findViewById(R.id.email)).setError(getString(R.string.user_register_activity_validation_email_already_registered));
+                                        ((EditText) findViewById(R.id.email)).setError(ErrorCodes.GetErrorMessage(UserRegisterActivity.this, 307));
                                     }
                                 }
                             }
@@ -105,12 +107,10 @@ public class UserRegisterActivity extends ActionBarActivity {
                             // Catches exceptions including JSONException when creating JSON objects
                             e.printStackTrace();
                         }
-
-
                     } else {
                         // Error sending registration
                         // Display error toast to user
-                        Toast.makeText(UserRegisterActivity.this, getString(R.string.internet_connection_error_message_toast), Toast.LENGTH_LONG).show();
+                        Toast.makeText(UserRegisterActivity.this, ErrorCodes.GetErrorMessage(UserRegisterActivity.this, 102), Toast.LENGTH_LONG).show();
                     }
                 }
             }.execute();
@@ -160,7 +160,7 @@ public class UserRegisterActivity extends ActionBarActivity {
     private void ValidateName(EditText name) {
         if (name.getText().toString().matches("^\\s*$")) {
             formIsValid = false;
-            name.setError(getString(R.string.user_register_activity_validation_name_not_entered));
+            name.setError(ErrorCodes.GetErrorMessage(this, 305));
         } else {
             formIsValid = true;
         }
@@ -170,10 +170,10 @@ public class UserRegisterActivity extends ActionBarActivity {
     private void ValidateEmail(EditText email) {
         if (email.getText().toString().matches("^$|\\s+")) {
             formIsValid = false;
-            email.setError(getString(R.string.user_register_activity_login_activity_validation_email_not_entered));
+            email.setError(ErrorCodes.GetErrorMessage(this, 301));
         } else if (!email.getText().toString().matches("^([\\w\\.\\-])+@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$")) {
             formIsValid = false;
-            email.setError(getString(R.string.user_register_activity_login_activity_validation_email_not_valid));
+            email.setError(ErrorCodes.GetErrorMessage(this, 302));
         } else {
             formIsValid = true;
         }
@@ -183,10 +183,10 @@ public class UserRegisterActivity extends ActionBarActivity {
     private void ValidatePassword(EditText password) {
         if (password.getText().toString().matches("^$|\\s+")) {
             formIsValid = false;
-            password.setError(getString(R.string.user_register_activity_login_activity_validation_password_not_entered));
+            password.setError(ErrorCodes.GetErrorMessage(this, 303));
         } else if (password.length() < 8) {
             formIsValid = false;
-            password.setError(getString(R.string.user_register_activity_validation_password_too_short));
+            password.setError(ErrorCodes.GetErrorMessage(this, 306));
         } else {
             formIsValid = true;
         }

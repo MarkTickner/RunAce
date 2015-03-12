@@ -2,7 +2,9 @@ package com.mtickner.runningmotivator;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -129,7 +131,7 @@ public class ChallengeListActivity extends ActionBarActivity {
             // Get preferred distance unit
             String distanceUnit = Preferences.GetSettingDistanceUnit(ChallengeListActivity.this);
 
-            if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres_placeholder))) {
+            if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres))) {
                 // Kilometres
                 contentText += MiscHelper.FormatDouble(challenge.GetRun().GetDistanceTotal());
             } else {
@@ -145,11 +147,10 @@ public class ChallengeListActivity extends ActionBarActivity {
 
             // Show if challenge is completed
             if (challenge.GetDateCompleted() != null) {
-                // Completed. todo Image source: https://www.iconfinder.com/icons/308461/accept_success_tick_icon
-                image.setImageResource(R.drawable.ic_tick);
-            } else {
-                // Not completed
-                image.setImageResource(R.drawable.ic_challenge);
+                // Completed
+                Drawable tickDrawable = getResources().getDrawable(R.drawable.ic_tick);
+                tickDrawable.setColorFilter(getResources().getColor(R.color.runace_green_dark), PorterDuff.Mode.MULTIPLY);
+                image.setImageDrawable(tickDrawable);
             }
 
             title.setText(getString(R.string.challenge_list_activity_challenge_service_notification_content_name_prefix_text) + challenge.GetRun().GetUser().GetName());

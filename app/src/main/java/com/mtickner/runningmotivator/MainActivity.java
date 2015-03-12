@@ -53,4 +53,10 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(this, UserLoginActivity.class);
         startActivity(intent);
     }
+
+    // Handler for the 'Privacy Policy' text
+    public void GoToPrivacyPolicy(View view) {
+        Intent privacyPolicyIntent = new Intent(this, PrivacyPolicyActivity.class);
+        startActivity(privacyPolicyIntent);
+    }
 }

@@ -43,9 +43,9 @@ public class Preferences {
         int distanceUnit = Integer.parseInt(GetSharedPreference(context).getString("com.mtickner.runningmotivator.distance_unit", "0"));
 
         if (distanceUnit == 1) {
-            return context.getString(R.string.run_activity_run_complete_activity_distance_unit_miles_placeholder);
+            return context.getString(R.string.run_activity_run_complete_activity_distance_unit_miles);
         } else {
-            return context.getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres_placeholder);
+            return context.getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres);
         }
     }
 

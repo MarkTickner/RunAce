@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -39,7 +40,7 @@ public class RunCompleteActivity extends ActionBarActivity {
         // Output distance and pace to preferred unit
         double paceInMinutesPerKilometre = MiscHelper.CalculatePaceInMinutesPerKilometre(run.GetTotalTime(), run.GetDistanceTotal());
 
-        if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres_placeholder))) {
+        if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres))) {
             // Kilometres
             ((TextView) findViewById(R.id.distance)).setText(MiscHelper.FormatDouble(run.GetDistanceTotal()));
 
@@ -54,6 +55,10 @@ public class RunCompleteActivity extends ActionBarActivity {
         }
 
         SetDistanceUnits(distanceUnit);
+
+        // Change save run and challenge friend buttons colour to blue
+        findViewById(R.id.save_run_button).getBackground().setColorFilter(getResources().getColor(R.color.runace_blue_primary), PorterDuff.Mode.SRC_ATOP);
+        findViewById(R.id.challenge_friend_button).getBackground().setColorFilter(getResources().getColor(R.color.runace_blue_primary), PorterDuff.Mode.SRC_ATOP);
     }
 
     // Called whenever an item in the options menu is selected
@@ -117,15 +122,25 @@ public class RunCompleteActivity extends ActionBarActivity {
                 } else {
                     // Error saving run
                     // Display error retry dialog to user
-                    new AlertDialog.Builder(RunCompleteActivity.this)
+                    final AlertDialog alert = new AlertDialog.Builder(RunCompleteActivity.this)
                             .setMessage(getString(R.string.run_complete_activity_saving_run_error_text))
-                            .setPositiveButton(getString(R.string.run_complete_activity_saving_run_error_retry_button_text), new DialogInterface.OnClickListener() {
+                            .setPositiveButton(getString(R.string.run_complete_activity_saving_run_error_retry_button_text).toUpperCase(), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // Try saving again
                                     SaveRun(view);
                                 }
                             })
-                            .setNegativeButton(getString(R.string.run_complete_activity_saving_run_error_cancel_button_text), null).show();
+                            .setNegativeButton(getString(R.string.run_complete_activity_saving_run_error_cancel_button_text).toUpperCase(), null)
+                            .create();
+                    // Set button colour
+                    alert.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.runace_red_primary));
+                            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.runace_grey_primary));
+                        }
+                    });
+                    alert.show();
                 }
             }
         }.execute();
@@ -141,14 +156,14 @@ public class RunCompleteActivity extends ActionBarActivity {
     // Method that sets the pace and distance preferred unit
     private void SetDistanceUnits(String distanceUnit) {
         // Set pace preferred unit
-        if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres_placeholder))) {
+        if (distanceUnit.equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres))) {
             // Kilometres
             // Pace unit
-            ((TextView) findViewById(R.id.pace_distance_unit)).setText(getString(R.string.run_activity_run_complete_activity_pace_distance_unit_kilometres_placeholder));
+            ((TextView) findViewById(R.id.pace_distance_unit)).setText(getString(R.string.run_activity_run_complete_activity_pace_distance_unit_kilometres));
         } else {
             // Miles
             // Pace unit
-            ((TextView) findViewById(R.id.pace_distance_unit)).setText(getString(R.string.run_activity_run_complete_activity_pace_distance_unit_miles_placeholder));
+            ((TextView) findViewById(R.id.pace_distance_unit)).setText(getString(R.string.run_activity_run_complete_activity_pace_distance_unit_miles));
         }
 
         // Output distance preferred unit
@@ -186,11 +201,20 @@ public class RunCompleteActivity extends ActionBarActivity {
         }
 
         // Display dialog box for newly awarded badge
-        new AlertDialog.Builder(this)
-                .setTitle("Congratulations!")
-                .setMessage("You have been awarded a badge.")
+        final AlertDialog alert = new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.run_complete_activity_new_badge_heading))
+                .setMessage(getString(R.string.run_complete_activity_new_badge_text))
                 .setView(dialogAwardBadgeLayout)
-                .setPositiveButton("Close", null).show();
+                .setPositiveButton(getString(R.string.run_complete_activity_new_badge_close_button_text).toUpperCase(), null)
+                .create();
+        // Set button colour
+        alert.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.runace_red_primary));
+            }
+        });
+        alert.show();
     }
 
     // Display a progress dialog after a 500ms delay, so it does not show if there is a quick connection. Source: http://stackoverflow.com/a/10947069/1164058

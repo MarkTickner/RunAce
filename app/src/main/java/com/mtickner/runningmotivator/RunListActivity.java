@@ -81,25 +81,22 @@ public class RunListActivity extends ActionBarActivity {
             TextView pace = (TextView) convertView.findViewById(R.id.pace);
             TextView date = (TextView) convertView.findViewById(R.id.date);
 
-            //todo Image source: https://www.iconfinder.com/icons/296209/action_avatar_go_human_male_man_men_people_person_profile_run_running_running_man_user_users_icon#size=512
-            image.setImageResource(R.drawable.ic_run);
-
             // Output pace in preferred unit
             double paceInMinutesPerKilometre = MiscHelper.CalculatePaceInMinutesPerKilometre(run.GetTotalTime(), run.GetDistanceTotal());
 
             // Output time and output distance and pace in preferred unit
-            if (Preferences.GetSettingDistanceUnit(RunListActivity.this).equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres_placeholder))) {
+            if (Preferences.GetSettingDistanceUnit(RunListActivity.this).equals(getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres))) {
                 // Kilometres
-                distanceTime.setText(MiscHelper.FormatDouble(run.GetDistanceTotal()) + " " + getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres_placeholder) + " " + getString(R.string.run_list_activity_list_item_title_separator) + " " + MiscHelper.FormatSecondsToHoursMinutesSeconds(run.GetTotalTime()));
+                distanceTime.setText(MiscHelper.FormatDouble(run.GetDistanceTotal()) + " " + getString(R.string.run_activity_run_complete_activity_distance_unit_kilometres) + " " + getString(R.string.run_list_activity_list_item_title_separator) + " " + MiscHelper.FormatSecondsToHoursMinutesSeconds(run.GetTotalTime()));
 
                 // Minutes per kilometre
-                pace.setText(getString(R.string.run_activity_run_complete_activity_pace_title) + " " + MiscHelper.FormatDouble(paceInMinutesPerKilometre) + " " + getString(R.string.run_activity_run_complete_activity_pace_distance_unit_kilometres_placeholder));
+                pace.setText(getString(R.string.run_activity_run_complete_activity_pace_title) + " " + MiscHelper.FormatDouble(paceInMinutesPerKilometre) + " " + getString(R.string.run_activity_run_complete_activity_pace_distance_unit_kilometres));
             } else {
                 // Miles
-                distanceTime.setText(MiscHelper.FormatDouble(MiscHelper.ConvertKilometresToMiles(run.GetDistanceTotal())) + " " + getString(R.string.run_activity_run_complete_activity_distance_unit_miles_placeholder) + " " + getString(R.string.run_list_activity_list_item_title_separator) + " " + MiscHelper.FormatSecondsToHoursMinutesSeconds(run.GetTotalTime()));
+                distanceTime.setText(MiscHelper.FormatDouble(MiscHelper.ConvertKilometresToMiles(run.GetDistanceTotal())) + " " + getString(R.string.run_activity_run_complete_activity_distance_unit_miles) + " " + getString(R.string.run_list_activity_list_item_title_separator) + " " + MiscHelper.FormatSecondsToHoursMinutesSeconds(run.GetTotalTime()));
 
                 // Minutes per mile
-                pace.setText(getString(R.string.run_activity_run_complete_activity_pace_title) + " " + MiscHelper.FormatDouble(MiscHelper.ConvertMinutesPerKilometreToMinutesPerMile(paceInMinutesPerKilometre)) + " " + getString(R.string.run_activity_run_complete_activity_pace_distance_unit_miles_placeholder));
+                pace.setText(getString(R.string.run_activity_run_complete_activity_pace_title) + " " + MiscHelper.FormatDouble(MiscHelper.ConvertMinutesPerKilometreToMinutesPerMile(paceInMinutesPerKilometre)) + " " + getString(R.string.run_activity_run_complete_activity_pace_distance_unit_miles));
             }
 
             date.setText(MiscHelper.FormatDateForDisplay(run.GetDateRun()));
@@ -124,60 +121,68 @@ public class RunListActivity extends ActionBarActivity {
                     // Clear the list view
                     clear();
 
-                    runArrayList = JsonHelper.GetRuns(jsonResult);
+                    // Check server connection was successful
+                    if (jsonResult != null) {
+                        // Runs retrieved successfully
+                        runArrayList = JsonHelper.GetRuns(jsonResult);
 
-                    // Determine if this is the first time the method has been called
-                    if (firstDisplay) {
-                        // Set main layout
-                        setContentView(R.layout.activity_run_list);
+                        // Determine if this is the first time the method has been called
+                        if (firstDisplay) {
+                            // Set main layout
+                            setContentView(R.layout.activity_run_list);
 
-                        // Add refresh listener to swipe layout. Source: http://antonioleiva.com/swiperefreshlayout/
-                        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.run_list_swipe_container);
-                        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                            // Handler for when a swipe triggers a refresh
-                            @Override
-                            public void onRefresh() {
-                                refresh();
-                            }
-                        });
+                            // Add refresh listener to swipe layout. Source: http://antonioleiva.com/swiperefreshlayout/
+                            swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.run_list_swipe_container);
+                            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                                // Handler for when a swipe triggers a refresh
+                                @Override
+                                public void onRefresh() {
+                                    refresh();
+                                }
+                            });
 
-                        // Populate the list view with run list items. Source: http://www.codelearn.org/android-tutorial/android-listview
-                        final ListView listView = (ListView) findViewById(R.id.run_list_view);
-                        listView.addHeaderView(MiscHelper.CreateListViewHeader(RunListActivity.this, getString(R.string.run_list_activity_header)), null, false);
-                        listView.setEmptyView(findViewById(R.id.empty_list_item));
-                        listView.setAdapter(runListViewAdaptor);
-                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            // Handler for when an item in the list view is pressed
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                // Get pressed run, compensating for header
-                                Run run = getItem(position - 1);
+                            // Populate the list view with run list items. Source: http://www.codelearn.org/android-tutorial/android-listview
+                            final ListView listView = (ListView) findViewById(R.id.run_list_view);
+                            listView.addHeaderView(MiscHelper.CreateListViewHeader(RunListActivity.this, getString(R.string.run_list_activity_header)), null, false);
+                            listView.setEmptyView(findViewById(R.id.empty_list_item));
+                            listView.setAdapter(runListViewAdaptor);
+                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                // Handler for when an item in the list view is pressed
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    // Get pressed run, compensating for header
+                                    Run run = getItem(position - 1);
 
-                                // Open challenge friend
-                                Intent intent = new Intent(RunListActivity.this, ChallengeFriendActivity.class);
-                                intent.putExtra(Run.RUN_GSON, new Gson().toJson(run));
-                                startActivity(intent);
-                            }
-                        });
-                        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-                            @Override
-                            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                            }
+                                    // Open challenge friend
+                                    Intent intent = new Intent(RunListActivity.this, ChallengeFriendActivity.class);
+                                    intent.putExtra(Run.RUN_GSON, new Gson().toJson(run));
+                                    startActivity(intent);
+                                }
+                            });
+                            listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                                @Override
+                                public void onScrollStateChanged(AbsListView view, int scrollState) {
+                                }
 
-                            @Override
-                            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                                // Scroll fix to allow list view to scroll to top before swipe to refresh shows
-                                // Source: http://nlopez.io/swiperefreshlayout-with-listview-done-right/
-                                int topRowVerticalPosition = (listView.getChildCount() == 0) ? 0 : listView.getChildAt(0).getTop();
-                                swipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
-                            }
-                        });
+                                @Override
+                                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                                    // Scroll fix to allow list view to scroll to top before swipe to refresh shows
+                                    // Source: http://nlopez.io/swiperefreshlayout-with-listview-done-right/
+                                    int topRowVerticalPosition = (listView.getChildCount() == 0) ? 0 : listView.getChildAt(0).getTop();
+                                    swipeRefreshLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
+                                }
+                            });
 
-                        firstDisplay = false;
+                            firstDisplay = false;
+                        } else {
+                            notifyDataSetChanged();
+
+                            swipeRefreshLayout.setRefreshing(false);
+                        }
                     } else {
-                        notifyDataSetChanged();
-
-                        swipeRefreshLayout.setRefreshing(false);
+                        // Error retrieving challenges
+                        // Set error layout
+                        setContentView(R.layout.activity_connection_error);
                     }
                 }
             }.execute();

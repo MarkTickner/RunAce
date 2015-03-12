@@ -6,12 +6,12 @@
     tools:context="com.mtickner.runningmotivator.ProfileFriendActivity">
 
     <ScrollView
-        android:id="@+id/badges_scroll_layout"
+        android:id="@+id/profile_scroll_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/badges_layout"
+            android:id="@+id/profile_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -34,7 +34,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal|bottom"
-                    android:text="NAME SURNAME"
                     android:textSize="20sp" />
 
                 <TextView
@@ -43,7 +42,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:gravity="center_horizontal"
-                    android:text="Friends since: 31 January 2015 at 15:20"
                     android:textStyle="italic" />
 
             </LinearLayout>
@@ -64,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal|bottom"
-                    android:text="@string/profile_friend_activity_score_heading"
+                    android:text="@string/profile_activity_score_heading"
                     android:textAllCaps="true" />
 
                 <TextView
@@ -73,7 +71,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-15dp"
                     android:gravity="center_horizontal"
-                    android:text="2530"
                     android:textSize="75sp" />
 
             </LinearLayout>
@@ -94,7 +91,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal|bottom"
-                    android:text="@string/profile_friend_activity_stats_heading"
+                    android:text="@string/profile_activity_stats_heading"
                     android:textAllCaps="true" />
 
                 <LinearLayout
@@ -108,26 +105,62 @@
                         android:id="@+id/stats_container_column_left"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.5"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_weight="0.4"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/stats_total_runs"
+                        <LinearLayout
+                            android:id="@+id/stats_container_total_runs"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
-                            android:gravity="center_horizontal"
-                            android:text="Runs: " />
+                            android:gravity="right"
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/stats_total_challenges"
+                            <TextView
+                                android:id="@+id/stats_total_runs_heading"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:gravity="right"
+                                android:text="@string/profile_activity_statistics_runs_heading"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/stats_total_runs"
+                                android:layout_width="15dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="right" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/stats_container_total_challenges"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
-                            android:gravity="center_horizontal"
-                            android:text="Challenges: " />
+                            android:gravity="right"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/stats_total_challenges_heading"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:gravity="right"
+                                android:text="@string/profile_activity_statistics_challenges_heading"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/stats_total_challenges"
+                                android:layout_width="15dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="right" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -135,26 +168,62 @@
                         android:id="@+id/stats_container_column_right"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.5"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_weight="0.6"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/stats_total_distance"
+                        <LinearLayout
+                            android:id="@+id/stats_container_total_distance"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
-                            android:gravity="center_horizontal"
-                            android:text="Distance: " />
+                            android:gravity="right"
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/stats_total_time"
+                            <TextView
+                                android:id="@+id/stats_total_distance_heading"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:gravity="right"
+                                android:text="@string/profile_activity_statistics_distance_heading"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/stats_total_distance"
+                                android:layout_width="70dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="right" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/stats_container_total_time"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
                             android:layout_marginTop="5dp"
-                            android:gravity="center_horizontal"
-                            android:text="Time: " />
+                            android:gravity="right"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/stats_total_time_heading"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:gravity="right"
+                                android:text="@string/profile_activity_statistics_time_heading"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/stats_total_time"
+                                android:layout_width="70dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="right" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -179,7 +248,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal|bottom"
-                    android:text="@string/profile_friend_activity_badges_heading"
+                    android:text="@string/profile_activity_badges_heading"
                     android:textAllCaps="true" />
 
             </LinearLayout>
