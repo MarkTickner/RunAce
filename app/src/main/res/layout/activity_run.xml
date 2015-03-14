@@ -194,12 +194,11 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginRight="10dp"
-            android:drawableTop="@drawable/ic_pause"
+            android:drawableTop="@drawable/ic_pause_dark"
             android:onClick="PauseRun"
             android:paddingTop="35dp"
             android:text="@string/run_activity_pause_running_button_text"
             android:textAllCaps="true"
-            android:textColor="@color/white"
             android:textSize="30sp" />
 
         <Space
@@ -212,12 +211,11 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginLeft="10dp"
-            android:drawableTop="@drawable/ic_stop"
+            android:drawableTop="@drawable/ic_stop_dark"
             android:onClick="StopRun"
             android:paddingTop="35dp"
             android:text="@string/run_activity_stop_running_button_text"
             android:textAllCaps="true"
-            android:textColor="@color/white"
             android:textSize="30sp" />
 
     </LinearLayout>

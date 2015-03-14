@@ -16,9 +16,15 @@
     <color name="runace_green_primary">#90b22f</color>
     <color name="runace_green_dark">#738e26</color>
 
+    <color name="runace_purple_primary">#bf1652</color>
+    <color name="runace_purple_dark">#991241</color>
+
     <color name="white">#ffffff</color>
+    <color name="white_transparent">#eeffffff</color>
+    
     <color name="grey">#d6d7d7</color>
     <color name="black">#000000</color>
+    
     <color name="red_warning">#8e0000</color>
 
 </resources>

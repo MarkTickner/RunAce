@@ -307,7 +307,6 @@
         android:onClick="SaveRun"
         android:text="@string/run_complete_activity_save_run_button_text"
         android:textAllCaps="true"
-        android:textColor="@color/white"
         android:textSize="25sp" />
 
     <Button
@@ -317,7 +316,6 @@
         android:onClick="ChallengeFriend"
         android:text="@string/run_complete_activity_challenge_friend_button_text"
         android:textAllCaps="true"
-        android:textColor="@color/white"
         android:textSize="25sp"
         android:visibility="gone" />
 

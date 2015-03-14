@@ -107,7 +107,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
-                        android:layout_weight="0.4"
+                        android:layout_weight="0.45"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -130,7 +130,7 @@
 
                             <TextView
                                 android:id="@+id/stats_total_runs"
-                                android:layout_width="15dp"
+                                android:layout_width="25dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="right" />
 
@@ -156,7 +156,7 @@
 
                             <TextView
                                 android:id="@+id/stats_total_challenges"
-                                android:layout_width="15dp"
+                                android:layout_width="25dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="right" />
 
@@ -170,7 +170,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
-                        android:layout_weight="0.6"
+                        android:layout_weight="0.55"
                         android:orientation="vertical">
 
                         <LinearLayout

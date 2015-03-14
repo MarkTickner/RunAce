@@ -238,7 +238,6 @@
         android:onClick="AcceptChallenge"
         android:text="@string/challenge_view_activity_accept_button_text"
         android:textAllCaps="true"
-        android:textColor="@color/white"
         android:textSize="25sp" />
 
 </LinearLayout>

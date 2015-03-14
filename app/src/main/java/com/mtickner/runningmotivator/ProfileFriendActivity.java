@@ -159,10 +159,10 @@ public class ProfileFriendActivity extends ActionBarActivity {
                                 LinearLayout badgeLayout = (LinearLayout) badgeLayoutContainer.findViewById(R.id.badgeLayout);
                                 switch (currentBadge.GetType()) {
                                     case CHALLENGE:
-                                        badgeLayout.setBackground(getResources().getDrawable(R.drawable.bg_badge_blue));
+                                        badgeLayout.setBackground(getResources().getDrawable(R.drawable.bg_badge_green));
                                         break;
                                     case RUN:
-                                        badgeLayout.setBackground(getResources().getDrawable(R.drawable.bg_badge_red));
+                                        badgeLayout.setBackground(getResources().getDrawable(R.drawable.bg_badge_purple));
                                         break;
                                 }
 

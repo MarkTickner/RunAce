@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -83,8 +84,16 @@ public class RunChallengeCompleteActivity extends ActionBarActivity {
         SetDistanceUnits(distanceUnit);
 
         // Change save run and challenge friend buttons colour to blue
-        findViewById(R.id.save_run_button).getBackground().setColorFilter(getResources().getColor(R.color.runace_blue_primary), PorterDuff.Mode.SRC_ATOP);
-        findViewById(R.id.challenge_friend_button).getBackground().setColorFilter(getResources().getColor(R.color.runace_blue_primary), PorterDuff.Mode.SRC_ATOP);
+        Button saveRunBtn = (Button) findViewById(R.id.save_run_button);
+        Button challengeFriendBtn = (Button) findViewById(R.id.challenge_friend_button);
+
+        saveRunBtn.getBackground().setColorFilter(getResources().getColor(R.color.runace_blue_primary), PorterDuff.Mode.SRC_ATOP);
+        challengeFriendBtn.getBackground().setColorFilter(getResources().getColor(R.color.runace_blue_primary), PorterDuff.Mode.SRC_ATOP);
+
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            saveRunBtn.setTextColor(getResources().getColor(R.color.white));
+            challengeFriendBtn.setTextColor(getResources().getColor(R.color.white));
+        }
 
         // Display correct message
         if (challengeComplete == 1) {
@@ -235,10 +244,10 @@ public class RunChallengeCompleteActivity extends ActionBarActivity {
         LinearLayout badgeLayout = (LinearLayout) dialogAwardBadgeLayout.findViewById(R.id.badgeLayout);
         switch (badge.GetType()) {
             case CHALLENGE:
-                badgeLayout.setBackground(getResources().getDrawable(R.drawable.bg_badge_blue));
+                badgeLayout.setBackground(getResources().getDrawable(R.drawable.bg_badge_green));
                 break;
             case RUN:
-                badgeLayout.setBackground(getResources().getDrawable(R.drawable.bg_badge_red));
+                badgeLayout.setBackground(getResources().getDrawable(R.drawable.bg_badge_purple));
                 break;
         }
 

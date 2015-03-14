@@ -28,10 +28,8 @@ public class MainActivity extends Activity {
     // Called when the activity starts interacting with the user
     @Override
     protected void onResume() {
-        User loggedInUser = Preferences.GetLoggedInUser(this);
-
         // Detect if user is logged in
-        if (loggedInUser != null) {
+        if (Preferences.GetLoggedInUser(this) != null) {
             // User is logged in, direct to the home activity
             Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);

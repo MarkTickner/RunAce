@@ -98,8 +98,19 @@ public class RunActivity extends ActionBarActivity implements
         }
 
         // Change stop button colour to red and pause button to yellow
-        findViewById(R.id.stop_running_button).getBackground().setColorFilter(getResources().getColor(R.color.runace_red_primary), PorterDuff.Mode.SRC_ATOP);
-        findViewById(R.id.pause_running_button).getBackground().setColorFilter(getResources().getColor(R.color.runace_yellow_primary), PorterDuff.Mode.SRC_ATOP);
+        Button stopRunningBtn = (Button) findViewById(R.id.stop_running_button);
+        stopRunningBtn.getBackground().setColorFilter(getResources().getColor(R.color.runace_red_primary), PorterDuff.Mode.SRC_ATOP);
+
+        Button pauseRunningBtn = (Button) findViewById(R.id.pause_running_button);
+        pauseRunningBtn.getBackground().setColorFilter(getResources().getColor(R.color.runace_yellow_primary), PorterDuff.Mode.SRC_ATOP);
+
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            stopRunningBtn.setTextColor(getResources().getColor(R.color.white));
+            pauseRunningBtn.setTextColor(getResources().getColor(R.color.white));
+
+            stopRunningBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_stop), null, null);
+            pauseRunningBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_pause), null, null);
+        }
 
         // Start location API
         StartRun();
@@ -240,16 +251,21 @@ public class RunActivity extends ActionBarActivity implements
 
     // Called when the user presses the 'Pause' button
     public void PauseRun(View view) {
-        Button pauseButton = (Button) view;
+        Button pauseRunningBtn = (Button) view;
+
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            pauseRunningBtn.setTextColor(getResources().getColor(R.color.white));
+            pauseRunningBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_pause), null, null);
+        }
 
         if (!isPaused) {
             // Pause
             isPaused = true;
 
             // Set button text, colour and icon
-            pauseButton.setText(getString(R.string.run_activity_resume_running_button_text));
-            pauseButton.getBackground().setColorFilter(getResources().getColor(R.color.runace_green_primary), PorterDuff.Mode.SRC_ATOP);
-            pauseButton.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_play), null, null);
+            pauseRunningBtn.setText(getString(R.string.run_activity_resume_running_button_text));
+            pauseRunningBtn.getBackground().setColorFilter(getResources().getColor(R.color.runace_green_primary), PorterDuff.Mode.SRC_ATOP);
+            pauseRunningBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_play_dark), null, null);
 
             // Stop timer
             timerHandler.removeCallbacks(timerRunnable);
@@ -258,9 +274,9 @@ public class RunActivity extends ActionBarActivity implements
             isPaused = false;
 
             // Set button text, colour and icon
-            pauseButton.setText(getString(R.string.run_activity_pause_running_button_text));
-            pauseButton.getBackground().setColorFilter(getResources().getColor(R.color.runace_yellow_primary), PorterDuff.Mode.SRC_ATOP);
-            pauseButton.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_pause), null, null);
+            pauseRunningBtn.setText(getString(R.string.run_activity_pause_running_button_text));
+            pauseRunningBtn.getBackground().setColorFilter(getResources().getColor(R.color.runace_yellow_primary), PorterDuff.Mode.SRC_ATOP);
+            pauseRunningBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_pause_dark), null, null);
 
             // Restart timer
             timerHandler.postDelayed(timerRunnable, 1000);

@@ -19,11 +19,11 @@ public class ErrorCodes {
         // Initialise hash map of error codes and messages
         HashMap<Integer, String> errorCodes = new HashMap<>();
 
-
         // Codes starting with 1 are request related
         errorCodes.put(100, context.getString(R.string.error_message_100)); // Unauthorised request
         errorCodes.put(101, context.getString(R.string.error_message_101)); // Internet connection warning
         errorCodes.put(102, context.getString(R.string.error_message_102)); // Internet connection error
+        errorCodes.put(103, context.getString(R.string.error_message_103)); // Generic app error
 
         // Codes starting with 2 are database related
         errorCodes.put(200, context.getString(R.string.error_message_200)); // Database connection error occurred

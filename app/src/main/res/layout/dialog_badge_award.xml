@@ -2,14 +2,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center">
-    
-    <!--todo artwork-->
 
     <LinearLayout
         android:id="@+id/badgeLayout"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:background="@drawable/bg_badge_blue"
+        android:background="@drawable/bg_badge_green"
         android:gravity="center"
         android:orientation="vertical">
 

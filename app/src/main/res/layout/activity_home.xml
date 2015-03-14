@@ -1,96 +1,102 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.mtickner.runningmotivator.HomeActivity">
-
-    <!--todo change logo-->
 
     <ImageView
         android:id="@+id/runace_text_image"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
-        android:contentDescription="@string/home_activity_runace_text_image_description"
+        android:contentDescription="@string/home_activity_runace_logo_image_description"
+        android:scaleType="fitStart"
         android:src="@drawable/runace_logo_text" />
 
     <LinearLayout
-        android:id="@+id/navigation_layout"
-        style="?android:attr/buttonBarButtonStyle"
+        android:id="@+id/button_layout"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:background="@drawable/bg_border_box"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+
+        <LinearLayout
+            android:id="@+id/navigation_layout"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:background="@drawable/bg_border_box_transparent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/friends_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.28"
+                android:onClick="GoToFriendsList"
+                android:text="@string/home_activity_friends_button_text"
+                android:textAllCaps="true"
+                android:textSize="16sp" />
+
+            <View
+                android:id="@+id/divide_1"
+                android:layout_width="1dp"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/grey" />
+
+            <Button
+                android:id="@+id/profile_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.44"
+                android:onClick="GoToProfile"
+                android:text="@string/home_activity_profile_button_placeholder_text"
+                android:textAllCaps="true"
+                android:textSize="22sp" />
+
+            <View
+                android:id="@+id/divide_2"
+                android:layout_width="1dp"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/grey" />
+
+            <Button
+                android:id="@+id/runs_button"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.28"
+                android:onClick="GoToRunList"
+                android:text="@string/home_activity_run_history_button_text"
+                android:textAllCaps="true"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
         <Button
-            android:id="@+id/friends_button"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.28"
-            android:onClick="GoToFriendsList"
-            android:text="@string/home_activity_friends_button_text"
+            android:id="@+id/start_running_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_play_dark"
+            android:onClick="StartRun"
+            android:text="@string/home_activity_start_button_text"
             android:textAllCaps="true"
-            android:textSize="16sp" />
-
-        <View
-            android:id="@+id/divide_1"
-            android:layout_width="1dp"
-            android:layout_height="fill_parent"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/grey" />
-
-        <Button
-            android:id="@+id/profile_button"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.44"
-            android:onClick="GoToProfile"
-            android:text="@string/home_activity_profile_button_placeholder_text"
-            android:textAllCaps="true"
-            android:textSize="22sp" />
-
-        <View
-            android:id="@+id/divide_2"
-            android:layout_width="1dp"
-            android:layout_height="fill_parent"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:background="@color/grey" />
-
-        <Button
-            android:id="@+id/runs_button"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.28"
-            android:onClick="GoToRunList"
-            android:text="@string/home_activity_run_history_button_text"
-            android:textAllCaps="true"
-            android:textSize="16sp" />
+            android:textSize="50sp" />
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/start_running_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/ic_play"
-        android:onClick="StartRun"
-        android:text="@string/home_activity_start_button_text"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textSize="50sp" />
-
-</LinearLayout>
+</RelativeLayout>

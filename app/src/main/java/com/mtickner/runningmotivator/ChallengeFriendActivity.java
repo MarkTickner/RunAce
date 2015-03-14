@@ -52,7 +52,12 @@ public class ChallengeFriendActivity extends ActionBarActivity {
         ((TextView) findViewById(R.id.distance_unit)).setText(distanceUnit);
 
         // Change send challenge button colour to blue
-        findViewById(R.id.send_button).getBackground().setColorFilter(getResources().getColor(R.color.runace_blue_primary), PorterDuff.Mode.SRC_ATOP);
+        Button sendBtn = (Button) findViewById(R.id.send_button);
+        sendBtn.getBackground().setColorFilter(getResources().getColor(R.color.runace_blue_primary), PorterDuff.Mode.SRC_ATOP);
+
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            sendBtn.setTextColor(getResources().getColor(R.color.white));
+        }
     }
 
     // Called when a launched activity exits, in this case the contacts picker
@@ -116,6 +121,7 @@ public class ChallengeFriendActivity extends ActionBarActivity {
                 }
 
                 // Check server connection was successful
+                //todo errors
                 if (JsonHelper.ResultSuccess(jsonResult)) {
                     // Challenge saved successfully
                     // Display success toast to user

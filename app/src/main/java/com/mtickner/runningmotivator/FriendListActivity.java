@@ -1,6 +1,7 @@
 package com.mtickner.runningmotivator;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -69,8 +70,16 @@ public class FriendListActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.menu_add_friend:
                 // Launch the contacts picker activity
-                Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Email.CONTENT_URI);
-                startActivityForResult(intent, 1);
+                try {
+                    Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Email.CONTENT_URI);
+                    startActivityForResult(intent, 1);
+                } catch (ActivityNotFoundException e) {
+                    // todo Contacts picker not found (Sony devices)
+                    e.printStackTrace();
+
+                    // Display error toast to user
+                    Toast.makeText(this, ErrorCodes.GetErrorMessage(this, 103), Toast.LENGTH_LONG).show();
+                }
 
                 return true;
             case R.id.menu_include_pending:

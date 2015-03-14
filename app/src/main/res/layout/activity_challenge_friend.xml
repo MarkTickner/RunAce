@@ -160,7 +160,6 @@
                     android:onClick="SendChallenge"
                     android:text="@string/challenge_friend_activity_button_text_send_challenge"
                     android:textAllCaps="true"
-                    android:textColor="@color/white"
                     android:textSize="25sp" />
 
                 <TextView

@@ -5,6 +5,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -69,7 +70,12 @@ public class ChallengeViewActivity extends ActionBarActivity {
                         findViewById(R.id.challenge_success_layout).setVisibility(View.GONE);
 
                         // Change button colour to green
-                        findViewById(R.id.accept_button).getBackground().setColorFilter(getResources().getColor(R.color.runace_green_primary), PorterDuff.Mode.SRC_ATOP);
+                        Button acceptBtn = (Button) findViewById(R.id.accept_button);
+                        acceptBtn.getBackground().setColorFilter(getResources().getColor(R.color.runace_green_primary), PorterDuff.Mode.SRC_ATOP);
+
+                        if (android.os.Build.VERSION.SDK_INT >= 21) {
+                            acceptBtn.setTextColor(getResources().getColor(R.color.white));
+                        }
                     }
 
                     // Output challenge user
