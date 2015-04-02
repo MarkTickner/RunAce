@@ -51,27 +51,6 @@ public class HomeActivity extends ActionBarActivity {
 
         // Refresh the options menu to update challenge count
         invalidateOptionsMenu();
-
-
-        //todo below
-        try {
-            if (Preferences.GetLoggedInUser(this).GetUserType().GetId() == 1) {
-                UserType a = Preferences.GetLoggedInUser(this).GetUserType();
-            }
-        } catch (Exception e) {
-            new AlertDialog.Builder(this)
-                    .setMessage("Please log back in again.")
-                    .setPositiveButton("OK", null)
-                    .show();
-
-            Preferences.ClearLoggedInUser(this);
-
-            Intent mainIntent = new Intent(this, MainActivity.class);
-            startActivity(mainIntent);
-
-            finish();
-        }
-        //todo above
     }
 
     // Initialise the contents of the Activity's standard options menu
@@ -135,7 +114,7 @@ public class HomeActivity extends ActionBarActivity {
                 try {
                     // Source: http://envyandroid.com/archives/94/get-android-versioncode-and-versionname
                     PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-                    versionDetails = " " + packageInfo.versionName + getString(R.string.home_activity_about_dialog_version_text) + packageInfo.versionCode + ")";
+                    versionDetails = " " + packageInfo.versionName;
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }

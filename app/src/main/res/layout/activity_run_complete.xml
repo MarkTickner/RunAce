@@ -150,6 +150,15 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/run_restriction_error_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textColor="@color/red_warning"
+        android:textSize="12sp"
+        android:visibility="gone" />
+
     <Button
         android:id="@+id/save_run_button"
         android:layout_width="match_parent"
@@ -158,7 +167,6 @@
         android:text="@string/run_complete_activity_save_run_button_text"
         android:textAllCaps="true"
         android:textSize="25sp" />
-
 
     <Button
         android:id="@+id/challenge_friend_button"

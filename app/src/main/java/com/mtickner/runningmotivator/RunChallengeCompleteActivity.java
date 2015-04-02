@@ -95,6 +95,27 @@ public class RunChallengeCompleteActivity extends ActionBarActivity {
             challengeFriendBtn.setTextColor(getResources().getColor(R.color.white));
         }
 
+        // Minimum distance and pace restrictions
+        TextView runRestrictionErrorText = (TextView) findViewById(R.id.run_restriction_error_text);
+
+        if (run.GetDistanceTotal() < 0.48) {
+            // Minimum distance not reached. Slightly less than 0.5 km to allow for 0.3 miles
+            // Hide the save run button
+            saveRunBtn.setVisibility(View.GONE);
+
+            // Set error message
+            runRestrictionErrorText.setVisibility(View.VISIBLE);
+            runRestrictionErrorText.setText(getString(R.string.a));
+        } else if (paceInMinutesPerKilometre < 2) {
+            // Pace was quicker than the minimum threshold. Set at 2 min/km as that is current world record
+            // Hide the save run button
+            saveRunBtn.setVisibility(View.GONE);
+
+            // Set error message
+            runRestrictionErrorText.setVisibility(View.VISIBLE);
+            runRestrictionErrorText.setText(getString(R.string.b));
+        }
+
         // Display correct message
         if (challengeComplete == 1) {
             challengeSuccess = true;

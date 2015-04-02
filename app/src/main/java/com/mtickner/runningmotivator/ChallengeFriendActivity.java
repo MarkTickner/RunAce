@@ -121,7 +121,6 @@ public class ChallengeFriendActivity extends ActionBarActivity {
                 }
 
                 // Check server connection was successful
-                //todo errors
                 if (JsonHelper.ResultSuccess(jsonResult)) {
                     // Challenge saved successfully
                     // Display success toast to user

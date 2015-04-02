@@ -78,7 +78,6 @@
     <string name="home_activity_friends_button_text">Friends</string>
     <string name="home_activity_run_history_button_text">Runs</string>
     <string name="home_activity_start_button_text">Start</string>
-    <string name="home_activity_about_dialog_version_text">" (Build: "</string>
     <string name="home_activity_about_dialog_text">Created by Mark Tickner\n\nSubmitted in partial fulfilment of the University of Greenwich BSc (Hons) Computer Science undergraduate degree programme COMP1682.</string>
     <string name="home_activity_about_dialog_close_button_text">Close</string>
     <string name="home_activity_user_logged_out_toast">You are now logged out</string>
@@ -200,5 +199,7 @@
 
     <string name="profile_friend_activity_menu_unfriend">Unfriend</string>
     <string name="profile_friend_activity_badges_none_text">No badges earned</string>
+    <string name="a">You cannot save this run as you have not reached the minimum distance of 0.5 kilometres / 0.3 miles</string>
+    <string name="b">You cannot save this run as your pace has not reached the minimum threshold</string>
 
 </resources>

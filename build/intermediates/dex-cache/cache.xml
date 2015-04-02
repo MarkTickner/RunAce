@@ -4,42 +4,42 @@
     <item
         jar="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/classes.jar"
         jumboMode="false"
-        revision="21.1.1"
+        revision="21.1.2"
         sha1="dd9247ea0fabe8ee479638c4b4a23e93752be256">
         <dex dex="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/build/intermediates/pre-dexed/debug/classes-fe23055a02814a9c03135fa092782189c7ee88ba.jar" />
     </item>
     <item
         jar="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/21.0.3/classes.jar"
         jumboMode="false"
-        revision="21.1.1"
+        revision="21.1.2"
         sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
         <dex dex="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/build/intermediates/pre-dexed/debug/classes-e2b23027fa15d17add98fe09bf40c2585afd0e40.jar" />
     </item>
     <item
         jar="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
         jumboMode="false"
-        revision="21.1.1"
+        revision="21.1.2"
         sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
         <dex dex="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/build/intermediates/pre-dexed/debug/classes-16923ea5ded1d8effb6b5e0b48a482aa8d6f9e39.jar" />
     </item>
     <item
         jar="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
         jumboMode="false"
-        revision="21.1.1"
+        revision="21.1.2"
         sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
         <dex dex="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-708115f05f6812b5906954b363c70bc01d1f4a3b.jar" />
     </item>
     <item
         jar="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/libs/gson-2.3.1.jar"
         jumboMode="false"
-        revision="21.1.1"
+        revision="21.1.2"
         sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
         <dex dex="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/build/intermediates/pre-dexed/debug/gson-2.3.1-f73da7b2b84751a5a48f204607f2bdf52a964493.jar" />
     </item>
     <item
         jar="/Applications/Eclipse/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
         jumboMode="false"
-        revision="21.1.1"
+        revision="21.1.2"
         sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
         <dex dex="/Users/MarkTickner/Documents/AndroidStudioProjects/RunningMotivator/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-ceee983f4f08a9fa2558915ad07b7c4a37960621.jar" />
     </item>

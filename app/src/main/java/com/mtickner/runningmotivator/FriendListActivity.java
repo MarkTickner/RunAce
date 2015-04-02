@@ -74,7 +74,7 @@ public class FriendListActivity extends ActionBarActivity {
                     Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Email.CONTENT_URI);
                     startActivityForResult(intent, 1);
                 } catch (ActivityNotFoundException e) {
-                    // todo Contacts picker not found (Sony devices)
+                    // Catch exception thrown when contacts picker is not found (Sony devices)
                     e.printStackTrace();
 
                     // Display error toast to user
