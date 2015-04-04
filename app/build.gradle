@@ -7,8 +7,8 @@ android {
         applicationId "com.mtickner.runningmotivator"
         minSdkVersion 19
         targetSdkVersion 21
-        versionName '1.0'
-        versionCode 47
+        versionName '1.01'
+        versionCode 48
     }
     buildTypes {
         release {

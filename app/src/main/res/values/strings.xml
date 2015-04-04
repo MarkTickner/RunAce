@@ -120,7 +120,7 @@
     <string name="run_activity_resume_running_button_text">Resume</string>
     <string name="run_activity_stop_running_dialog_text">Are you sure you want to end the run? If you are completing a challenge all progress will be lost.</string>
     <string name="run_activity_stop_running_dialog_stop_running_button_text">End Run</string>
-    <string name="run_activity_stop_running_dialog_continue_running_button_text">Continue</string>
+    <string name="run_activity_stop_running_dialog_continue_running_button_text">Keep Running</string>
     <string name="run_activity_challenge_finished_notification_text">Challenge finished, stop running!</string>
 
     <string name="run_activity_run_complete_activity_time_title">Time</string>
