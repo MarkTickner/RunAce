@@ -265,7 +265,12 @@ public class RunActivity extends ActionBarActivity implements
             // Set button text, colour and icon
             pauseRunningBtn.setText(getString(R.string.run_activity_resume_running_button_text));
             pauseRunningBtn.getBackground().setColorFilter(getResources().getColor(R.color.runace_green_primary), PorterDuff.Mode.SRC_ATOP);
-            pauseRunningBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_play_dark), null, null);
+
+            if (android.os.Build.VERSION.SDK_INT >= 21) {
+                pauseRunningBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_play), null, null);
+            } else {
+                pauseRunningBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_play_dark), null, null);
+            }
 
             // Stop timer
             timerHandler.removeCallbacks(timerRunnable);
@@ -276,7 +281,12 @@ public class RunActivity extends ActionBarActivity implements
             // Set button text, colour and icon
             pauseRunningBtn.setText(getString(R.string.run_activity_pause_running_button_text));
             pauseRunningBtn.getBackground().setColorFilter(getResources().getColor(R.color.runace_yellow_primary), PorterDuff.Mode.SRC_ATOP);
-            pauseRunningBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_pause_dark), null, null);
+
+            if (android.os.Build.VERSION.SDK_INT >= 21) {
+                pauseRunningBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_pause), null, null);
+            } else {
+                pauseRunningBtn.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.drawable.ic_pause_dark), null, null);
+            }
 
             // Restart timer
             timerHandler.postDelayed(timerRunnable, 1000);
