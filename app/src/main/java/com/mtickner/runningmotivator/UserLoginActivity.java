@@ -35,6 +35,8 @@ public class UserLoginActivity extends ActionBarActivity {
 
     // Method which is called when the 'Login' button is pressed
     public void LoginUser(View view) {
+        // TODO crash when logging in with no internet connection
+
         try {
             // Hide the soft keyboard
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
