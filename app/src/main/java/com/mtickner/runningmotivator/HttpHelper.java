@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class HttpHelper {
     // Asynchronous methods. Source: http://www.vogella.com/tutorials/AndroidBackgroundProcessing/article.html
 
-    private static final String urlPrefix = "https://stuweb.cms.gre.ac.uk/~tm112/project/services/";
+    private static final String urlPrefix = "http://www.mtickner.co.uk/runace-online/services/";
 
     // Method that POSTs data to the specified URI and returns an encoded JSON string
     public static String DoPost(String postUri, ArrayList<NameValuePair> postData) {
