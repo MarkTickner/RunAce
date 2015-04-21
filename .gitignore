@@ -1,0 +1,15 @@
+.idea/
+gradle/
+
+*.properties
+*.bat
+*.iml
+*.gradle
+
+gradlew
+
+build/
+
+app/build
+app/manifest-merger-release-report.txt
+app/libs/*
