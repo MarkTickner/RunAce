@@ -78,7 +78,7 @@
     <string name="home_activity_friends_button_text">Friends</string>
     <string name="home_activity_run_history_button_text">Runs</string>
     <string name="home_activity_start_button_text">Start</string>
-    <string name="home_activity_about_dialog_text">Created by Mark Tickner\n\nSubmitted in partial fulfilment of the University of Greenwich BSc (Hons) Computer Science undergraduate degree programme COMP1682.</string>
+    <string name="home_activity_about_dialog_text">Created by Mark Tickner.</string>
     <string name="home_activity_about_dialog_close_button_text">Close</string>
     <string name="home_activity_user_logged_out_toast">You are now logged out</string>
 
