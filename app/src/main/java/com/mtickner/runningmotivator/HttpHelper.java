@@ -7,6 +7,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
@@ -24,7 +25,10 @@ public class HttpHelper {
 
         try {
             // Create objects to execute POST over HTTPS
-            HttpClient httpClient = CustomSSLSocketFactory.CreateCustomHttpClient();
+            //HttpClient httpClient = CustomSSLSocketFactory.CreateCustomHttpClient();
+
+            // Create objects to execute POST
+            HttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(postUri);
 
             // Set POST data
