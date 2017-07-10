@@ -1,15 +1,13 @@
-.idea/
-gradle/
-
-*.properties
-*.bat
+.idea
 *.iml
-*.gradle
 
-gradlew
+.gradle
+gradle.properties
+local.properties
 
-build/
+.DS_Store
 
-app/build
+build
+
 app/manifest-merger-release-report.txt
-app/libs/*
+app/libs
