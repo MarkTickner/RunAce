@@ -6,13 +6,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request.Method;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.mtickner.runningmotivator.HttpHelper.urlPrefix;
+
 public class UserLoginActivity extends ActionBarActivity {
 
+    private static final String TAG = "UserLoginActivity";
     private boolean formIsValid = true;
     private ProgressDialog loggingInProgressDialog;
 
@@ -60,11 +74,15 @@ public class UserLoginActivity extends ActionBarActivity {
             // Display progress dialog to user
             progressHandler.postDelayed(progressRunnable, 500);
 
+            final String postUri = urlPrefix + "user-login.php";
+
             // Login user
-            new HttpHelper.LoginUser(email.getText().toString(), password.getText().toString()) {
-                // Called after the background task finishes
+            RequestQueue queue = Volley.newRequestQueue(UserLoginActivity.this);
+            queue.add(new StringRequest(Method.POST, postUri, new Response.Listener<String>() {
                 @Override
-                protected void onPostExecute(String jsonResult) {
+                public void onResponse(String response) {
+                    Log.d(TAG, response);
+
                     // Dismiss progress dialog
                     progressHandler.removeCallbacks(progressRunnable);
                     if (loggingInProgressDialog != null) {
@@ -72,9 +90,10 @@ public class UserLoginActivity extends ActionBarActivity {
                     }
 
                     // Check server connection was successful
-                    if (jsonResult != null) {
+                    if (response != null) {
                         // Authentication check was successful
-                        if ((loggedInUser = JsonHelper.GetUserAfterLogin(jsonResult)) != null) {
+                        User loggedInUser;
+                        if ((loggedInUser = JsonHelper.GetUserAfterLogin(response)) != null) {
                             // Authentication was successful
                             // Login user
                             Preferences.SetLoggedInUser(UserLoginActivity.this, loggedInUser);
@@ -98,7 +117,22 @@ public class UserLoginActivity extends ActionBarActivity {
                         Toast.makeText(UserLoginActivity.this, ErrorCodes.GetErrorMessage(UserLoginActivity.this, 102), Toast.LENGTH_LONG).show();
                     }
                 }
-            }.execute();
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, error.getLocalizedMessage());
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("requestFromApplication", "true");
+                    params.put("email", email.getText().toString());
+                    params.put("password", password.getText().toString());
+
+                    return params;
+                }
+            });
         }
     }
 

@@ -17,16 +17,13 @@ import java.util.ArrayList;
 public class HttpHelper {
     // Asynchronous methods. Source: http://www.vogella.com/tutorials/AndroidBackgroundProcessing/article.html
 
-    private static final String urlPrefix = "http://www.mtickner.co.uk/runace-online/services/";
+    static final String urlPrefix = "http://www.mtickner.co.uk/RunAceOnline/services/";
 
     // Method that POSTs data to the specified URI and returns an encoded JSON string
     public static String DoPost(String postUri, ArrayList<NameValuePair> postData) {
         String result;
 
         try {
-            // Create objects to execute POST over HTTPS
-            //HttpClient httpClient = CustomSSLSocketFactory.CreateCustomHttpClient();
-
             // Create objects to execute POST
             HttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(postUri);
@@ -45,79 +42,6 @@ public class HttpHelper {
         }
 
         return result;
-    }
-
-
-    // Asynchronous inner class that registers a user online and returns the user ID
-    public static class RegisterUser extends AsyncTask<Void, Void, String> {
-
-        User loggedInUser;
-
-        // Constructor to instantiate object
-        public RegisterUser(String name, String email, String password) {
-            loggedInUser = new User(name, email, password);
-        }
-
-        // Method which executes the background task
-        @Override
-        protected String doInBackground(Void... params) {
-            // Create POST data
-            ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>() {{
-                add(new BasicNameValuePair("requestFromApplication", "true"));
-                add(new BasicNameValuePair("name", loggedInUser.GetName()));
-                add(new BasicNameValuePair("email", loggedInUser.GetEmail()));
-                add(new BasicNameValuePair("password", loggedInUser.GetPassword()));
-            }};
-
-            return DoPost(urlPrefix + "user-register.php", postData);
-        }
-    }
-
-    // Asynchronous inner class that authenticates a user online and returns the user details
-    public static class LoginUser extends AsyncTask<Void, Void, String> {
-
-        User loggedInUser;
-
-        // Constructor to instantiate object
-        public LoginUser(String email, String password) {
-            loggedInUser = new User(email, password);
-        }
-
-        // Method which executes the background task
-        @Override
-        protected String doInBackground(Void... params) {
-            // Create POST data
-            ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>() {{
-                add(new BasicNameValuePair("requestFromApplication", "true"));
-                add(new BasicNameValuePair("email", loggedInUser.GetEmail()));
-                add(new BasicNameValuePair("password", loggedInUser.GetPassword()));
-            }};
-
-            return DoPost(urlPrefix + "user-login.php", postData);
-        }
-    }
-
-    // Asynchronous inner class that sends a password reset request
-    public static class ResetPassword extends AsyncTask<Void, Void, String> {
-
-        String email;
-
-        // Constructor to instantiate object
-        public ResetPassword(String email) {
-            this.email = email;
-        }
-
-        // Method which executes the background task
-        @Override
-        protected String doInBackground(Void... params) {
-            // Create POST data
-            ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>() {{
-                add(new BasicNameValuePair("requestFromApplication", "true"));
-                add(new BasicNameValuePair("email", email));
-            }};
-
-            return DoPost(urlPrefix + "user-password-reset.php", postData);
-        }
     }
 
 
