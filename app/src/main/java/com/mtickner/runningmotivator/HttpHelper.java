@@ -181,32 +181,6 @@ public class HttpHelper {
     }
 
 
-    // Asynchronous inner class that returns a challenge
-    public static class GetChallenge extends AsyncTask<Void, Void, String> {
-
-        int challengeId;
-        boolean setRead;
-
-        // Constructor
-        public GetChallenge(int challengeId, boolean setRead) {
-            this.challengeId = challengeId;
-            this.setRead = setRead;
-        }
-
-        // Method which executes the background task
-        @Override
-        protected String doInBackground(Void... params) {
-            // Create POST data
-            ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>() {{
-                add(new BasicNameValuePair("requestFromApplication", "true"));
-                add(new BasicNameValuePair("challengeId", Integer.toString(challengeId)));
-                add(new BasicNameValuePair("setRead", Boolean.toString(setRead)));
-            }};
-
-            return DoPost(urlPrefix + "challenge-get.php", postData);
-        }
-    }
-
     // Asynchronous inner class that returns a user's challenges
     public static class GetChallenges extends AsyncTask<Void, Void, String> {
 
@@ -230,36 +204,6 @@ public class HttpHelper {
             }};
 
             return DoPost(urlPrefix + "challenges-get.php", postData);
-        }
-    }
-
-    // Asynchronous inner class that saves a challenge
-    public static class SaveChallenge extends AsyncTask<Void, Void, String> {
-
-        int userId, friendUserId, runId;
-        String message;
-
-        // Constructor to instantiate object
-        public SaveChallenge(int userId, int friendUserId, int runId, String message) {
-            this.userId = userId;
-            this.friendUserId = friendUserId;
-            this.runId = runId;
-            this.message = message;
-        }
-
-        // Method which executes the background task
-        @Override
-        protected String doInBackground(Void... params) {
-            // Create POST data
-            ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>() {{
-                add(new BasicNameValuePair("requestFromApplication", "true"));
-                add(new BasicNameValuePair("userId", Integer.toString(userId)));
-                add(new BasicNameValuePair("friendUserId", Integer.toString(friendUserId)));
-                add(new BasicNameValuePair("runId", Integer.toString(runId)));
-                add(new BasicNameValuePair("message", message));
-            }};
-
-            return DoPost(urlPrefix + "challenge-save.php", postData);
         }
     }
 

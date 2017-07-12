@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,12 +21,23 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.Request.Method;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.mtickner.runningmotivator.HttpHelper.urlPrefix;
 
 public class ChallengeListActivity extends ActionBarActivity {
 
+    private static final String TAG = "ChallengeListActivity";
     private ArrayList<Challenge> challengeArrayList = new ArrayList<>();
     private boolean completedCurrentlyShown = true;
     private final ChallengeListViewAdaptor challengeListViewAdaptor = new ChallengeListViewAdaptor();
@@ -176,18 +188,22 @@ public class ChallengeListActivity extends ActionBarActivity {
         public void refresh(final boolean showCompleted) {
             completedCurrentlyShown = showCompleted;
 
+            final String postUri = urlPrefix + "challenges-get.php";
+
             // Get challenges
-            new HttpHelper.GetChallenges((Preferences.GetLoggedInUser(ChallengeListActivity.this)).GetId(), false) {
-                // Called after the background task finishes
+            RequestQueue queue = Volley.newRequestQueue(ChallengeListActivity.this);
+            queue.add(new StringRequest(Method.POST, postUri, new Response.Listener<String>() {
                 @Override
-                protected void onPostExecute(String jsonResult) {
+                public void onResponse(String response) {
+                    Log.d(TAG, response);
+
                     // Clear the list view
                     clear();
 
                     // Check server connection was successful
-                    if (jsonResult != null) {
+                    if (response != null) {
                         // Challenges retrieved successfully
-                        challengeArrayList = JsonHelper.GetChallenges(jsonResult, showCompleted);
+                        challengeArrayList = JsonHelper.GetChallenges(response, showCompleted);
 
                         // Determine if this is the first time the method has been called
                         if (firstDisplay) {
@@ -248,7 +264,22 @@ public class ChallengeListActivity extends ActionBarActivity {
                         setContentView(R.layout.activity_connection_error);
                     }
                 }
-            }.execute();
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, error.getLocalizedMessage());
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("requestFromApplication", "true");
+                    params.put("userId", Integer.toString((Preferences.GetLoggedInUser(ChallengeListActivity.this)).GetId()));
+                    params.put("requestFromService", Boolean.toString(false));
+
+                    return params;
+                }
+            });
         }
     }
 }
