@@ -8,18 +8,30 @@ import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.volley.Request.Method;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.mtickner.runningmotivator.HttpHelper.urlPrefix;
 
 public class HomeActivity extends ActionBarActivity {
 
+    private static final String TAG = "HomeActivity";
     private static Button challengesMenuButton;
 
     // Called when the activity is first created
@@ -75,15 +87,19 @@ public class HomeActivity extends ActionBarActivity {
             }
         });
 
+        final String postUri = urlPrefix + "challenges-get.php";
+
         // Set challenges badge count
-        new HttpHelper.GetChallenges((Preferences.GetLoggedInUser(HomeActivity.this)).GetId(), false) {
-            // Called after the background task finishes
+        RequestQueue queue = Volley.newRequestQueue(HomeActivity.this);
+        queue.add(new StringRequest(Method.POST, postUri, new Response.Listener<String>() {
             @Override
-            protected void onPostExecute(String jsonResult) {
+            public void onResponse(String response) {
+                Log.d(TAG, response);
+
                 // Check server connection was successful
-                if (jsonResult != null) {
+                if (response != null) {
                     // Challenges retrieved successfully
-                    ArrayList<Challenge> challengeArrayList = JsonHelper.GetChallenges(jsonResult, false);
+                    ArrayList<Challenge> challengeArrayList = JsonHelper.GetChallenges(response, false);
 
                     int unreadChallengeCount = 0;
 
@@ -100,7 +116,22 @@ public class HomeActivity extends ActionBarActivity {
                     Toast.makeText(HomeActivity.this, ErrorCodes.GetErrorMessage(HomeActivity.this, 101), Toast.LENGTH_LONG).show();
                 }
             }
-        }.execute();
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.getLocalizedMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("requestFromApplication", "true");
+                params.put("userId", Integer.toString((Preferences.GetLoggedInUser(HomeActivity.this)).GetId()));
+                params.put("requestFromService", Boolean.toString(false));
+
+                return params;
+            }
+        });
 
         return true;
     }

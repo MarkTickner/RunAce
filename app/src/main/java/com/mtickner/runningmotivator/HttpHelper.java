@@ -181,33 +181,6 @@ public class HttpHelper {
     }
 
 
-    // Asynchronous inner class that returns a user's challenges
-    public static class GetChallenges extends AsyncTask<Void, Void, String> {
-
-        int userId;
-        boolean requestFromService;
-
-        // Constructor to instantiate object
-        public GetChallenges(int userId, boolean requestFromService) {
-            this.userId = userId;
-            this.requestFromService = requestFromService;
-        }
-
-        // Method which executes the background task
-        @Override
-        protected String doInBackground(Void... params) {
-            // Create POST data
-            ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>() {{
-                add(new BasicNameValuePair("requestFromApplication", "true"));
-                add(new BasicNameValuePair("userId", Integer.toString(userId)));
-                add(new BasicNameValuePair("requestFromService", Boolean.toString(requestFromService)));
-            }};
-
-            return DoPost(urlPrefix + "challenges-get.php", postData);
-        }
-    }
-
-
     // Asynchronous inner class that returns a user's badges
     public static class GetBadges extends AsyncTask<Void, Void, String> {
 
