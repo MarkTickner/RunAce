@@ -45,32 +45,6 @@ public class HttpHelper {
     }
 
 
-    // Asynchronous inner class that unfriends the specified users
-    public static class Unfriend extends AsyncTask<Void, Void, String> {
-
-        int user1Id, user2Id;
-
-        // Constructor to instantiate object
-        public Unfriend(int user1Id, int user2Id) {
-            this.user1Id = user1Id;
-            this.user2Id = user2Id;
-        }
-
-        // Method which executes the background task
-        @Override
-        protected String doInBackground(Void... params) {
-            // Create POST data
-            ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>() {{
-                add(new BasicNameValuePair("requestFromApplication", "true"));
-                add(new BasicNameValuePair("user1Id", Integer.toString(user1Id)));
-                add(new BasicNameValuePair("user2Id", Integer.toString(user2Id)));
-            }};
-
-            return DoPost(urlPrefix + "friend-remove.php", postData);
-        }
-    }
-
-
     // Asynchronous inner class that returns a user's runs
     public static class GetRuns extends AsyncTask<Void, Void, String> {
 
@@ -124,30 +98,6 @@ public class HttpHelper {
             }};
 
             return DoPost(urlPrefix + "run-save.php", postData);
-        }
-    }
-
-
-    // Asynchronous inner class that returns a user's badges
-    public static class GetBadges extends AsyncTask<Void, Void, String> {
-
-        int userId;
-
-        // Constructor to instantiate object
-        public GetBadges(int userId) {
-            this.userId = userId;
-        }
-
-        // Method which executes the background task
-        @Override
-        protected String doInBackground(Void... params) {
-            // Create POST data
-            ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>() {{
-                add(new BasicNameValuePair("requestFromApplication", "true"));
-                add(new BasicNameValuePair("userId", Integer.toString(userId)));
-            }};
-
-            return DoPost(urlPrefix + "profile-get.php", postData);
         }
     }
 }
