@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,12 +24,23 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request.Method;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.mtickner.runningmotivator.HttpHelper.urlPrefix;
 
 public class FriendListActivity extends ActionBarActivity {
 
+    private static final String TAG = "FriendListActivity";
     private ArrayList<Friend> friendArrayList = new ArrayList<>();
     private Friend.Status friendsCurrentlyDisplayed = Friend.Status.ACCEPTED;
     private final FriendListViewAdaptor friendListViewAdaptor = new FriendListViewAdaptor();
@@ -135,15 +147,19 @@ public class FriendListActivity extends ActionBarActivity {
                         .setMessage(getString(R.string.friend_list_activity_add_friend_dialog_text_start) + friendName + getString(R.string.friend_list_activity_add_remove_friend_dialog_text_end))
                         .setPositiveButton(getString(R.string.friend_list_activity_add_friend_confirm_button_text).toUpperCase(), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                final String postUri = urlPrefix + "friend-add.php";
+
                                 // Send friend request
-                                new HttpHelper.AddFriend(Preferences.GetLoggedInUser(FriendListActivity.this).GetId(), friendEmail) {
-                                    // Called after the background task finishes
+                                RequestQueue queue = Volley.newRequestQueue(FriendListActivity.this);
+                                queue.add(new StringRequest(Method.POST, postUri, new Response.Listener<String>() {
                                     @Override
-                                    protected void onPostExecute(String jsonResult) {
+                                    public void onResponse(String response) {
+                                        Log.d(TAG, response);
+
                                         String friendAddStatus;
 
                                         // Check server connection was successful
-                                        if ((friendAddStatus = JsonHelper.GetAddFriendStatus(jsonResult)) != null) {
+                                        if ((friendAddStatus = JsonHelper.GetAddFriendStatus(response)) != null) {
                                             // Get friend add status
                                             switch (friendAddStatus) {
                                                 case "Sent":
@@ -170,7 +186,25 @@ public class FriendListActivity extends ActionBarActivity {
                                             Toast.makeText(FriendListActivity.this, ErrorCodes.GetErrorMessage(FriendListActivity.this, 102), Toast.LENGTH_LONG).show();
                                         }
                                     }
-                                }.execute();
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.e(TAG, error.getLocalizedMessage());
+                                    }
+                                }) {
+                                    @Override
+                                    protected Map<String, String> getParams() {
+                                        // Generate verification string
+                                        final String verificationString = MiscHelper.GenerateRandomString(20);
+
+                                        Map<String, String> params = new HashMap<>();
+                                        params.put("requestFromApplication", "true");
+                                        params.put("userId", Integer.toString((Preferences.GetLoggedInUser(FriendListActivity.this)).GetId()));
+                                        params.put("friendEmail", friendEmail);
+                                        params.put("verificationString", verificationString);
+                                        return params;
+                                    }
+                                });
                             }
                         })
                         .setNegativeButton(getString(R.string.friend_list_activity_add_friend_cancel_button_text).toUpperCase(), null)
@@ -242,18 +276,21 @@ public class FriendListActivity extends ActionBarActivity {
         public void refresh(final Friend.Status friendsToDisplay) {
             friendsCurrentlyDisplayed = friendsToDisplay;
 
+            final String postUri = urlPrefix + "friends-get.php";
+
             // Get friends
-            new HttpHelper.GetFriends((Preferences.GetLoggedInUser(FriendListActivity.this)).GetId()) {
-                // Called after the background task finishes
+            RequestQueue queue = Volley.newRequestQueue(FriendListActivity.this);
+            queue.add(new StringRequest(Method.POST, postUri, new Response.Listener<String>() {
                 @Override
-                protected void onPostExecute(String jsonResult) {
+                public void onResponse(String response) {
+                    Log.d(TAG, response);
                     // Clear the list view
                     clear();
 
                     // Check server connection was successful
-                    if (jsonResult != null) {
+                    if (response != null) {
                         // Friends retrieved successfully
-                        friendArrayList = JsonHelper.GetFriends(jsonResult, friendsToDisplay);
+                        friendArrayList = JsonHelper.GetFriends(response, friendsToDisplay);
 
                         // Determine if this is the first time the method has been called
                         if (firstDisplay) {
@@ -319,7 +356,21 @@ public class FriendListActivity extends ActionBarActivity {
                         setContentView(R.layout.activity_connection_error);
                     }
                 }
-            }.execute();
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, error.getLocalizedMessage());
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("requestFromApplication", "true");
+                    params.put("userId", Integer.toString((Preferences.GetLoggedInUser(FriendListActivity.this)).GetId()));
+
+                    return params;
+                }
+            });
         }
     }
 }

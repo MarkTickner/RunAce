@@ -45,59 +45,6 @@ public class HttpHelper {
     }
 
 
-    // Asynchronous inner class that returns a user's friends
-    public static class GetFriends extends AsyncTask<Void, Void, String> {
-
-        int userId;
-
-        // Constructor to instantiate object
-        public GetFriends(int userId) {
-            this.userId = userId;
-        }
-
-        // Method which executes the background task
-        @Override
-        protected String doInBackground(Void... params) {
-            // Create POST data
-            ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>() {{
-                add(new BasicNameValuePair("requestFromApplication", "true"));
-                add(new BasicNameValuePair("userId", Integer.toString(userId)));
-            }};
-
-            return DoPost(urlPrefix + "friends-get.php", postData);
-        }
-    }
-
-    // Asynchronous inner class that sends a friend request
-    public static class AddFriend extends AsyncTask<Void, Void, String> {
-
-        int userId;
-        String friendEmail;
-
-        // Constructor to instantiate object
-        public AddFriend(int userId, String friendEmail) {
-            this.userId = userId;
-            this.friendEmail = friendEmail;
-        }
-
-        // Method which executes the background task
-        @Override
-        protected String doInBackground(Void... params) {
-            // Generate verification string
-            final String verificationString = MiscHelper.GenerateRandomString(20);
-
-            // Create POST data
-            ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>() {{
-                add(new BasicNameValuePair("requestFromApplication", "true"));
-                add(new BasicNameValuePair("userId", Integer.toString(userId)));
-                add(new BasicNameValuePair("friendEmail", friendEmail));
-                add(new BasicNameValuePair("verificationString", verificationString));
-            }};
-
-            return DoPost(urlPrefix + "friend-add.php", postData);
-        }
-    }
-
     // Asynchronous inner class that unfriends the specified users
     public static class Unfriend extends AsyncTask<Void, Void, String> {
 
