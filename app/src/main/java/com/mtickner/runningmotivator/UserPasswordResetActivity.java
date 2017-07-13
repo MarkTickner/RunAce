@@ -91,7 +91,7 @@ public class UserPasswordResetActivity extends ActionBarActivity {
                     if (JsonHelper.ResultSuccess(response)) {
                         // Password reset request sent successfully
                         // Display success toast to user
-                        Toast.makeText(UserPasswordResetActivity.this, getString(R.string.user_password_reset_toast_text) + email, Toast.LENGTH_LONG).show();
+                        Toast.makeText(UserPasswordResetActivity.this, getString(R.string.user_password_reset_toast_text) + email.getText(), Toast.LENGTH_LONG).show();
 
                         // Direct to the login activity
                         Intent intent = new Intent(UserPasswordResetActivity.this, UserLoginActivity.class);
