@@ -6,17 +6,31 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request.Method;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.mtickner.runningmotivator.HttpHelper.urlPrefix;
+
 public class UserRegisterActivity extends ActionBarActivity {
 
+    private static final String TAG = "UserRegisterActivity";
     private boolean formIsValid = true;
     private ProgressDialog registeringProgressDialog;
 
@@ -57,11 +71,15 @@ public class UserRegisterActivity extends ActionBarActivity {
             // Display progress dialog to user
             progressHandler.postDelayed(progressRunnable, 500);
 
+            final String postUri = urlPrefix + "user-register.php";
+
             // Register user
-            new HttpHelper.RegisterUser(name.getText().toString(), email.getText().toString(), password.getText().toString()) {
-                // Called after the background task finishes
+            RequestQueue queue = Volley.newRequestQueue(UserRegisterActivity.this);
+            queue.add(new StringRequest(Method.POST, postUri, new Response.Listener<String>() {
                 @Override
-                protected void onPostExecute(String jsonResult) {
+                public void onResponse(String response) {
+                    Log.d(TAG, response);
+
                     // Dismiss progress dialog
                     progressHandler.removeCallbacks(progressRunnable);
                     if (registeringProgressDialog != null) {
@@ -69,16 +87,17 @@ public class UserRegisterActivity extends ActionBarActivity {
                     }
 
                     // Check server connection was successful
-                    if (jsonResult != null) {
+                    if (response != null) {
                         // Registration sent successfully
                         try {
                             // Create JSON object from server response
-                            JSONObject resultObject = new JSONObject(jsonResult);
+                            JSONObject resultObject = new JSONObject(response);
 
                             // Get 'OutputType' from JSON object
                             if (resultObject.getString("OutputType").equals("Success")) {
                                 // Registered successfully
-                                if ((loggedInUser = JsonHelper.GetUserAfterLogin(jsonResult)) != null) {
+                                User loggedInUser;
+                                if ((loggedInUser = JsonHelper.GetUserAfterLogin(response)) != null) {
                                     // Login user
                                     Preferences.SetLoggedInUser(UserRegisterActivity.this, loggedInUser);
 
@@ -113,7 +132,23 @@ public class UserRegisterActivity extends ActionBarActivity {
                         Toast.makeText(UserRegisterActivity.this, ErrorCodes.GetErrorMessage(UserRegisterActivity.this, 102), Toast.LENGTH_LONG).show();
                     }
                 }
-            }.execute();
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, error.getLocalizedMessage());
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("requestFromApplication", "true");
+                    params.put("name", name.getText().toString());
+                    params.put("email", email.getText().toString());
+                    params.put("password", password.getText().toString());
+
+                    return params;
+                }
+            });
         }
     }
 

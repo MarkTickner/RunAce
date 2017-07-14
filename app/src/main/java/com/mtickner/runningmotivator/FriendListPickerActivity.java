@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,23 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.Request.Method;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.mtickner.runningmotivator.HttpHelper.urlPrefix;
 
 public class FriendListPickerActivity extends ActionBarActivity {
 
+    private static final String TAG = "FriendListPicker";
     private ArrayList<Friend> friendArrayList = new ArrayList<>();
     private final FriendListViewAdaptor friendListViewAdaptor = new FriendListViewAdaptor();
 
@@ -78,15 +90,19 @@ public class FriendListPickerActivity extends ActionBarActivity {
 
         // Refresh the contents of the list view
         public void refresh() {
+            final String postUri = urlPrefix + "friends-get.php";
+
             // Get friends
-            new HttpHelper.GetFriends((Preferences.GetLoggedInUser(FriendListPickerActivity.this)).GetId()) {
-                // Called after the background task finishes
+            RequestQueue queue = Volley.newRequestQueue(FriendListPickerActivity.this);
+            queue.add(new StringRequest(Method.POST, postUri, new Response.Listener<String>() {
                 @Override
-                protected void onPostExecute(String jsonResult) {
+                public void onResponse(String response) {
+                    Log.d(TAG, response);
+
                     // Check server connection was successful
-                    if (jsonResult != null) {
+                    if (response != null) {
                         // Friends retrieved successfully
-                        friendArrayList = JsonHelper.GetFriends(jsonResult, Friend.Status.ACCEPTED);
+                        friendArrayList = JsonHelper.GetFriends(response, Friend.Status.ACCEPTED);
 
                         // Set main layout
                         setContentView(R.layout.activity_friend_list_picker);
@@ -116,7 +132,21 @@ public class FriendListPickerActivity extends ActionBarActivity {
                         setContentView(R.layout.activity_connection_error);
                     }
                 }
-            }.execute();
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, error.getLocalizedMessage());
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("requestFromApplication", "true");
+                    params.put("userId", Integer.toString((Preferences.GetLoggedInUser(FriendListPickerActivity.this)).GetId()));
+
+                    return params;
+                }
+            });
         }
     }
 }

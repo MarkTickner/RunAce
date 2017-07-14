@@ -4,15 +4,28 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request.Method;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.mtickner.runningmotivator.HttpHelper.urlPrefix;
 
 public class ChallengeViewActivity extends ActionBarActivity {
 
+    private static final String TAG = "ChallengeViewActivity";
     private Challenge challenge;
 
     // Called when the activity starts interacting with the user
@@ -28,15 +41,19 @@ public class ChallengeViewActivity extends ActionBarActivity {
         String challengeGson = intent.getStringExtra(Challenge.CHALLENGE_GSON);
         challenge = new Gson().fromJson(challengeGson, Challenge.class);
 
+        final String postUri = urlPrefix + "challenge-get.php";
+
         // Get challenge
-        new HttpHelper.GetChallenge(challenge.GetId(), true) {
-            // Called after the background task finishes
+        RequestQueue queue = Volley.newRequestQueue(ChallengeViewActivity.this);
+        queue.add(new StringRequest(Method.POST, postUri, new Response.Listener<String>() {
             @Override
-            protected void onPostExecute(String jsonResult) {
+            public void onResponse(String response) {
+                Log.d(TAG, response);
+
                 // Check server connection was successful
-                if (jsonResult != null) {
+                if (response != null) {
                     // Challenges retrieved successfully
-                    challenge = JsonHelper.GetChallenge(jsonResult);
+                    challenge = JsonHelper.GetChallenge(response);
 
                     // Display main layout
                     setContentView(R.layout.activity_challenge_view);
@@ -123,7 +140,22 @@ public class ChallengeViewActivity extends ActionBarActivity {
                     setContentView(R.layout.activity_connection_error);
                 }
             }
-        }.execute();
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.getLocalizedMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("requestFromApplication", "true");
+                params.put("challengeId", Integer.toString(challenge.GetId()));
+                params.put("setRead", Boolean.toString(true));
+
+                return params;
+            }
+        });
     }
 
     // Called when the activity has detected the user's press of the back key

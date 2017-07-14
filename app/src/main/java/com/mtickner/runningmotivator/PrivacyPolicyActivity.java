@@ -15,7 +15,7 @@ public class PrivacyPolicyActivity extends ActionBarActivity {
 
         // Load privacy policy into the web view
         WebView webView = (WebView) findViewById(R.id.webview);
-        webView.loadUrl("http://www.mtickner.co.uk/runace-online/privacy-policy.php?inApp=true");
+        webView.loadUrl("http://www.mtickner.co.uk/RunAceOnline/privacy-policy.php?inApp=true");
 
         // Disable vibration and text selection so the user is not aware that it is a web page
         webView.setHapticFeedbackEnabled(false);

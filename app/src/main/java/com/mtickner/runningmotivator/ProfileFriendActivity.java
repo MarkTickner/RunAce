@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,12 +17,23 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request.Method;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.mtickner.runningmotivator.HttpHelper.urlPrefix;
 
 public class ProfileFriendActivity extends ActionBarActivity {
 
+    private static final String TAG = "ProfileFriendActivity";
     private Friend friend;
     private ArrayList<Badge> badgeArrayList = new ArrayList<>();
 
@@ -61,13 +73,17 @@ public class ProfileFriendActivity extends ActionBarActivity {
                         .setPositiveButton(getString(R.string.friend_list_activity_add_friend_cancel_button_text).toUpperCase(), null)
                         .setNegativeButton(getString(R.string.friend_list_activity_add_friend_confirm_button_text).toUpperCase(), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                final String postUri = urlPrefix + "friend-remove.php";
+
                                 // Send unfriend request
-                                new HttpHelper.Unfriend(Preferences.GetLoggedInUser(ProfileFriendActivity.this).GetId(), friend.GetUser().GetId()) {
-                                    // Called after the background task finishes
+                                RequestQueue queue = Volley.newRequestQueue(ProfileFriendActivity.this);
+                                queue.add(new StringRequest(Method.POST, postUri, new Response.Listener<String>() {
                                     @Override
-                                    protected void onPostExecute(String jsonResult) {
+                                    public void onResponse(String response) {
+                                        Log.d(TAG, response);
+
                                         // Check server connection was successful
-                                        if (JsonHelper.ResultSuccess(jsonResult)) {
+                                        if (JsonHelper.ResultSuccess(response)) {
                                             // Friend removed successfully
                                             // Display success toast to user
                                             Toast.makeText(ProfileFriendActivity.this, getString(R.string.friend_list_activity_friend_removed_toast_text), Toast.LENGTH_SHORT).show();
@@ -83,7 +99,22 @@ public class ProfileFriendActivity extends ActionBarActivity {
                                             Toast.makeText(ProfileFriendActivity.this, ErrorCodes.GetErrorMessage(ProfileFriendActivity.this, 102), Toast.LENGTH_LONG).show();
                                         }
                                     }
-                                }.execute();
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.e(TAG, error.getLocalizedMessage());
+                                    }
+                                }) {
+                                    @Override
+                                    protected Map<String, String> getParams() {
+                                        Map<String, String> params = new HashMap<>();
+                                        params.put("requestFromApplication", "true");
+                                        params.put("user1Id", Integer.toString((Preferences.GetLoggedInUser(ProfileFriendActivity.this)).GetId()));
+                                        params.put("user2Id", Integer.toString(friend.GetUser().GetId()));
+
+                                        return params;
+                                    }
+                                });
                             }
                         })
                         .create();
@@ -105,15 +136,18 @@ public class ProfileFriendActivity extends ActionBarActivity {
 
     // Method that creates a table of badges
     private void CreateBadgesTable(final Friend friend) {
+        final String postUri = urlPrefix + "profile-get.php";
+
         // Get badges
-        new HttpHelper.GetBadges(friend.GetUser().GetId()) {
-            // Called after the background task finishes
+        RequestQueue queue = Volley.newRequestQueue(ProfileFriendActivity.this);
+        queue.add(new StringRequest(Method.POST, postUri, new Response.Listener<String>() {
             @Override
-            protected void onPostExecute(String jsonResult) {
-                // Check server connection was successful
-                if (jsonResult != null) {
+            public void onResponse(String response) {
+                Log.d(TAG, response);
+
+                if (response != null) {
                     // Badges retrieved successfully
-                    badgeArrayList = JsonHelper.GetBadges(jsonResult);
+                    badgeArrayList = JsonHelper.GetBadges(response);
 
                     // Set main layout
                     setContentView(R.layout.activity_profile);
@@ -215,7 +249,7 @@ public class ProfileFriendActivity extends ActionBarActivity {
                     }
 
                     // Output statistics
-                    OutputStats(JsonHelper.GetStatistics(jsonResult));
+                    OutputStats(JsonHelper.GetStatistics(response));
 
                     // Output details
                     OutputName(friend);
@@ -225,7 +259,21 @@ public class ProfileFriendActivity extends ActionBarActivity {
                     setContentView(R.layout.activity_connection_error);
                 }
             }
-        }.execute();
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.getLocalizedMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("requestFromApplication", "true");
+                params.put("userId", Integer.toString(friend.GetUser().GetId()));
+
+                return params;
+            }
+        });
     }
 
     // Method that displays friend name details

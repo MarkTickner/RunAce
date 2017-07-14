@@ -3,6 +3,7 @@ package com.mtickner.runningmotivator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +13,23 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request.Method;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.mtickner.runningmotivator.HttpHelper.urlPrefix;
 
 public class ProfileActivity extends ActionBarActivity {
 
+    private static final String TAG = "ProfileActivity";
     private ArrayList<Badge> badgeArrayList = new ArrayList<>();
 
     // Called when the activity is first created
@@ -38,15 +50,18 @@ public class ProfileActivity extends ActionBarActivity {
 
     // Method that creates a table of badges
     private void CreateBadgesTable(final User user) {
+        final String postUri = urlPrefix + "profile-get.php";
+
         // Get badges
-        new HttpHelper.GetBadges((Preferences.GetLoggedInUser(ProfileActivity.this)).GetId()) {
-            // Called after the background task finishes
+        RequestQueue queue = Volley.newRequestQueue(ProfileActivity.this);
+        queue.add(new StringRequest(Method.POST, postUri, new Response.Listener<String>() {
             @Override
-            protected void onPostExecute(String jsonResult) {
-                // Check server connection was successful
-                if (jsonResult != null) {
+            public void onResponse(String response) {
+                Log.d(TAG, response);
+
+                if (response != null) {
                     // Badges retrieved successfully
-                    badgeArrayList = JsonHelper.GetBadges(jsonResult);
+                    badgeArrayList = JsonHelper.GetBadges(response);
 
                     // Set main layout
                     setContentView(R.layout.activity_profile);
@@ -148,7 +163,7 @@ public class ProfileActivity extends ActionBarActivity {
                     }
 
                     // Output statistics
-                    OutputStats(JsonHelper.GetStatistics(jsonResult));
+                    OutputStats(JsonHelper.GetStatistics(response));
 
                     // Output details
                     OutputName(user);
@@ -158,7 +173,21 @@ public class ProfileActivity extends ActionBarActivity {
                     setContentView(R.layout.activity_connection_error);
                 }
             }
-        }.execute();
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.getLocalizedMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("requestFromApplication", "true");
+                params.put("userId", Integer.toString((Preferences.GetLoggedInUser(ProfileActivity.this)).GetId()));
+
+                return params;
+            }
+        });
     }
 
     // Method that displays friend name details

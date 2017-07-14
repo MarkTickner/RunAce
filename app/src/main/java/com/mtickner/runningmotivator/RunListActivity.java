@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,23 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.Request.Method;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.mtickner.runningmotivator.HttpHelper.urlPrefix;
 
 public class RunListActivity extends ActionBarActivity {
 
+    private static final String TAG = "RunListActivity";
     private ArrayList<Run> runArrayList = new ArrayList<>();
     private final RunListViewAdaptor runListViewAdaptor = new RunListViewAdaptor();
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -113,18 +125,22 @@ public class RunListActivity extends ActionBarActivity {
 
         // Refresh the contents of the list view
         public void refresh() {
+            final String postUri = urlPrefix + "runs-get.php";
+
             // Get runs
-            new HttpHelper.GetRuns((Preferences.GetLoggedInUser(RunListActivity.this)).GetId()) {
-                // Called after the background task finishes
+            RequestQueue queue = Volley.newRequestQueue(RunListActivity.this);
+            queue.add(new StringRequest(Method.POST, postUri, new Response.Listener<String>() {
                 @Override
-                protected void onPostExecute(String jsonResult) {
+                public void onResponse(String response) {
+                    Log.d(TAG, response);
+
                     // Clear the list view
                     clear();
 
                     // Check server connection was successful
-                    if (jsonResult != null) {
+                    if (response != null) {
                         // Runs retrieved successfully
-                        runArrayList = JsonHelper.GetRuns(jsonResult);
+                        runArrayList = JsonHelper.GetRuns(response);
 
                         // Determine if this is the first time the method has been called
                         if (firstDisplay) {
@@ -185,7 +201,21 @@ public class RunListActivity extends ActionBarActivity {
                         setContentView(R.layout.activity_connection_error);
                     }
                 }
-            }.execute();
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.e(TAG, error.getLocalizedMessage());
+                }
+            }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("requestFromApplication", "true");
+                    params.put("userId", Integer.toString((Preferences.GetLoggedInUser(RunListActivity.this)).GetId()));
+
+                    return params;
+                }
+            });
         }
     }
 }

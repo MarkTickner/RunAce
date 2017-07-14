@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,12 +17,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request.Method;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.mtickner.runningmotivator.HttpHelper.urlPrefix;
 
 public class RunCompleteActivity extends ActionBarActivity {
 
+    private static final String TAG = "RunCompleteActivity";
     private ProgressDialog savingRunProgressDialog;
     private Run run;
 
@@ -118,11 +130,15 @@ public class RunCompleteActivity extends ActionBarActivity {
         // Display progress dialog to user
         progressHandler.postDelayed(progressRunnable, 500);
 
+        final String postUri = urlPrefix + "run-save.php";
+
         // Save run
-        new HttpHelper.SaveRun((Preferences.GetLoggedInUser(RunCompleteActivity.this)).GetId(), run.GetDistanceTotal(), run.GetTotalTime(), 0, false) {
-            // Called after the background task finishes
+        RequestQueue queue = Volley.newRequestQueue(RunCompleteActivity.this);
+        queue.add(new StringRequest(Method.POST, postUri, new Response.Listener<String>() {
             @Override
-            protected void onPostExecute(String jsonResult) {
+            public void onResponse(String response) {
+                Log.d(TAG, response);
+
                 // Dismiss progress dialog
                 progressHandler.removeCallbacks(progressRunnable);
                 if (savingRunProgressDialog != null) {
@@ -130,10 +146,10 @@ public class RunCompleteActivity extends ActionBarActivity {
                 }
 
                 // Check server connection was successful
-                if (JsonHelper.GetRun(jsonResult) != null) {
+                if (JsonHelper.GetRun(response) != null) {
                     // Run saved successfully
                     // Get newly awarded badges
-                    ArrayList<Badge> awardedBadgeArrayList = JsonHelper.GetNewlyAwardedBadges(jsonResult);
+                    ArrayList<Badge> awardedBadgeArrayList = JsonHelper.GetNewlyAwardedBadges(response);
                     if (awardedBadgeArrayList.size() > 0) {
                         // Loop over every newly awarded badge. Loop is reversed as alerts are stacked from bottom to top
                         for (int i = awardedBadgeArrayList.size() - 1; i >= 0; i--) {
@@ -143,7 +159,7 @@ public class RunCompleteActivity extends ActionBarActivity {
                     }
 
                     // Display success toast to user
-                    int points = JsonHelper.GetPoints(jsonResult);
+                    int points = JsonHelper.GetPoints(response);
                     Toast.makeText(RunCompleteActivity.this, getString(R.string.run_complete_activity_saving_run_saved_toast) + points + getString(R.string.run_complete_activity_saving_run_points_toast), Toast.LENGTH_LONG).show();
 
                     // Remove the save run button and show challenge friend button
@@ -173,7 +189,25 @@ public class RunCompleteActivity extends ActionBarActivity {
                     alert.show();
                 }
             }
-        }.execute();
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.getLocalizedMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("requestFromApplication", "true");
+                params.put("userId", Integer.toString((Preferences.GetLoggedInUser(RunCompleteActivity.this)).GetId()));
+                params.put("distanceTotal", MiscHelper.FormatDouble(run.GetDistanceTotal()));
+                params.put("totalTime", Integer.toString(run.GetTotalTime()));
+                params.put("challengeId", Integer.toString(0));
+                params.put("challengeSuccess", Boolean.toString(false));
+
+                return params;
+            }
+        });
     }
 
     // Method that is called when the challenge friend button is pressed

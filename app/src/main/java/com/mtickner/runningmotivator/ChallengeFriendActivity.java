@@ -7,6 +7,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -14,10 +15,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request.Method;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.mtickner.runningmotivator.HttpHelper.urlPrefix;
 
 public class ChallengeFriendActivity extends ActionBarActivity {
 
+    private static final String TAG = "ChallengeFriendActivity";
     private Run run;
     private User friendUser;
     private ProgressDialog sendingChallengeProgressDialog;
@@ -104,16 +117,20 @@ public class ChallengeFriendActivity extends ActionBarActivity {
         }
 
         // Get message
-        EditText message = (EditText) findViewById(R.id.message);
+        final EditText message = (EditText) findViewById(R.id.message);
 
         // Display progress dialog to user
         progressHandler.postDelayed(progressRunnable, 500);
 
+        final String postUri = urlPrefix + "challenge-save.php";
+
         // Save challenge
-        new HttpHelper.SaveChallenge((Preferences.GetLoggedInUser(ChallengeFriendActivity.this)).GetId(), friendUser.GetId(), run.GetId(), message.getText().toString()) {
-            // Called after the background task finishes
+        RequestQueue queue = Volley.newRequestQueue(ChallengeFriendActivity.this);
+        queue.add(new StringRequest(Method.POST, postUri, new Response.Listener<String>() {
             @Override
-            protected void onPostExecute(String jsonResult) {
+            public void onResponse(String response) {
+                Log.d(TAG, response);
+
                 // Dismiss progress dialog
                 progressHandler.removeCallbacks(progressRunnable);
                 if (sendingChallengeProgressDialog != null) {
@@ -121,7 +138,7 @@ public class ChallengeFriendActivity extends ActionBarActivity {
                 }
 
                 // Check server connection was successful
-                if (JsonHelper.ResultSuccess(jsonResult)) {
+                if (JsonHelper.ResultSuccess(response)) {
                     // Challenge saved successfully
                     // Display success toast to user
                     Toast.makeText(ChallengeFriendActivity.this, getString(R.string.challenge_friend_activity_challenge_sent_toast_text), Toast.LENGTH_SHORT).show();
@@ -137,7 +154,24 @@ public class ChallengeFriendActivity extends ActionBarActivity {
                     Toast.makeText(ChallengeFriendActivity.this, ErrorCodes.GetErrorMessage(ChallengeFriendActivity.this, 102), Toast.LENGTH_LONG).show();
                 }
             }
-        }.execute();
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, error.getLocalizedMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("requestFromApplication", "true");
+                params.put("userId", Integer.toString((Preferences.GetLoggedInUser(ChallengeFriendActivity.this)).GetId()));
+                params.put("friendUserId", Integer.toString(friendUser.GetId()));
+                params.put("runId", Integer.toString(run.GetId()));
+                params.put("message", message.getText().toString());
+
+                return params;
+            }
+        });
     }
 
     // Display a progress dialog after a 500ms delay, so it does not show if there is a quick connection. Source: http://stackoverflow.com/a/10947069/1164058
